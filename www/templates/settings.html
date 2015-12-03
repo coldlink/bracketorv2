@@ -1,0 +1,36 @@
+<ion-view view-title="Settings">
+  <ion-content>
+    <div class="row">
+      <div class="col">
+        <div class="item item-input-inset">
+          <button ng-click="openModal();" class="button button-icon icon ion-help-circled padding-right"></button>
+          <label class="item-input-wrapper">
+            <span class="input-label">API Key:</span>
+            <input ng-model="API_KEY" placeholder="API Key" type="password">
+          </label>
+          <button class="button button-clear button-small" ng-click="saveKey(API_KEY)">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
+<script id="setting-api-modal.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <button class="button button-icon button-clear ion-chevron-down" ng-click="closeModal()"></button>
+      <h1 class="title">API Key</h1>
+    </ion-header-bar>
+    <ion-content overflow-scroll="true">
+      <div class="row responsive-sm">
+        <div class="col">
+          <p>
+            Get your API key by logging into Challonge and copying your API key from the Developer API Settings:
+          </p>
+        </div>
+      </div>
+      <iframe src="https://challonge.com/settings/developer" style="width: 100vw; height: 100vh">Your device does not support iframes. Get your API Key from <a href="https://challonge.com/settings/developer">Challonge</a>.</iframe>
+    </ion-content>
+  </ion-modal-view>
+</script>

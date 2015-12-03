@@ -1,0 +1,111 @@
+<ion-view view-title="Browse Tournaments">
+  <ion-content>
+    <div ng-if="!API_KEY">
+      <div class="list card">
+        <div class="item item-icon-left assertive">
+          <i class="icon ion-alert-circled"></i>
+          No API Key Found!
+        </div>
+        <div class="item item-body">
+          <p>API key is required to be set before tournaments can be viewed.</p>
+          <p>Set the API key in the settings menu.</p>
+        </div>
+        <a class="item item-icon-left assertive" href="#/app/settings">
+          <i class="icon ion-gear-b"></i>
+          Go to Settings
+        </a>
+      </div>
+    </div>
+    <div ng-if="API_KEY">
+      <div class="list card">
+        <a class="item item-icon-left" ng-click="open('created')">
+          <i class="icon" ng-class="expand === 'created' ? 'ion-chevron-down' : 'ion-chevron-right'"></i>
+          Created Tournaments
+        </a>
+        <a class="item item-icon-left" ng-click="open('subdomain')">
+          <i class="icon" ng-class="expand === 'subdomain' ? 'ion-chevron-down' : 'ion-chevron-right'"></i>
+          Tournaments by Organization
+        </a>
+        <a class="item item-icon-left" ng-click="open('single')">
+          <i class="icon" ng-class="expand === 'single' ? 'ion-chevron-down' : 'ion-chevron-right'"></i>
+          Single Tournament
+        </a>
+        <a class="item item-icon-left" ng-click="open('history')">
+          <i class="icon" ng-class="expand === 'history' ? 'ion-chevron-down' : 'ion-chevron-right'"></i>
+          History/Bookmarked
+        </a>
+      </div>
+      <div class="list card" ng-if="expand === 'created'">
+        <div class="item">
+          <h2>Created Tournaments</h2>
+        </div>
+        <div class="item item-body">
+          <p>View and edit tournaments that you have created.</p>
+        </div>
+        <a class="item item-icon-left assertive" ng-click="click('created')">
+          <i class="icon ion-log-in"></i>
+          Get tournaments
+        </a>
+      </div>
+      <div class="list card" ng-if="expand === 'subdomain'">
+        <div class="item">
+          <h2>Tournaments by organization</h2>
+        </div>
+        <div class="item item-body">
+          <div class="content">
+            <p>Find tournaments created by any organization using a Challonge subdomain.</p>
+          </div>
+          <div class="list list-inset">
+            <label class="item item-input">
+              <input ng-model="subdomain" placeholder="Insert Organization Here" type="text">
+            </label>
+          </div>
+          <code>
+            >
+            {{subdomain ? subdomain : '{Organization}'}}.challonge.com
+          </code>
+        </div>
+        <a class="item item-icon-left assertive" ng-click="click('subdomain', subdomain)">
+          <i class="icon ion-log-in"></i>
+          Get tournaments
+        </a>
+      </div>
+      <div class="list card" ng-if="expand === 'single'">
+        <div class="item">
+          <h2>Single Tournament</h2>
+        </div>
+        <div class="item item-body">
+          <div class="content">
+            <p>Find a single tournament from a Challonge URL.</p>
+          </div>
+          <ul class="list">
+            <li class="item item-checkbox">
+              <label class="checkbox">
+                <input ng-model="incSubdomain" type="checkbox">
+              </label>
+              Include Organization
+            </li>
+            <li>
+              <label class="item item-input" ng-show="incSubdomain">
+                <input ng-model="subdomain" placeholder="Insert Organization Here" type="text">
+              </label>
+            </li>
+            <li>
+              <label class="item item-input">
+                <input ng-model="url" placeholder="Insert URL Here" type="text">
+              </label>
+            </li>
+          </ul>
+          <code>
+            >
+            {{incSubdomain ? (subdomain ? subdomain + '.' : '{Organization}.') : ''}}challonge.com/{{url ? url : '{URL}'}}
+          </code>
+        </div>
+        <a class="item item-icon-left assertive" ng-click="click('single', subdomain, url, incSubdomain)">
+          <i class="icon ion-log-in"></i>
+          Get tournament
+        </a>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
