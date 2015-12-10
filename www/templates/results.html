@@ -1,0 +1,60 @@
+<ion-view view-title="Results">
+  <ion-content>
+    <ion-refresher ng-if="!loading" on-refresh="checkConnection()" pulling-text="Pull to refresh..."></ion-refresher>
+    <div class="row" ng-if="loading">
+      <div class="col text-center" style="margin-top: 10px">
+        <ion-spinner></ion-spinner>
+      </div>
+    </div>
+    <div class="list card" ng-repeat="tournament in tournaments" ng-if="!tournament.tournament.group_stages_enabled">
+      <a class="item item-icon-left" ng-click="open(tournament.tournament.id)">
+        <i class="icon" ng-class="active === tournament.tournament.id ? 'ion-chevron-down' : 'ion-chevron-right'"></i>
+        {{tournament.tournament.name}}
+      </a>
+      <div class="item item-body" ng-if="active === tournament.tournament.id">
+        <div class="row">
+          <div class="col text-center">
+            <h2>
+              <b>{{tournament.tournament.participants_count}}</b>
+            </h2>
+            <small>Participants</small>
+          </div>
+          <div class="col text-center">
+            <h2>
+              <b>{{typeToTwo(tournament.tournament.tournament_type)}}</b>
+            </h2>
+            <small>Type</small>
+          </div>
+          <div class="col text-center">
+            <h2>
+              <b>
+                <i class="icon" ng-class="stateToIcon(tournament.tournament.state)"></i>
+              </b>
+            </h2>
+            <small>State</small>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-center">
+            <progress max="100" value="{{tournament.tournament.progress_meter}}">{{tournament.tournament.progress_meter}}%</progress>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+          <h3>{{tournament.tournament.updated_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</h3>
+          <small>Last Updated</small>
+        </div>
+      </div>
+      <!-- <div class="row">
+        <div class="col">
+          <div ng-bind-html="tournament.tournament.description"></div>
+        </div>
+      </div> -->
+    </div>
+    <a class="item item-icon-left assertive" ng-click="goToTournament(tournament.tournament.id)" ng-if="active === tournament.tournament.id">
+      <i class="icon ion-log-in"></i>
+      View tournament
+    </a>
+  </div>
+</ion-content>
+</ion-view>

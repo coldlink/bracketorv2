@@ -1,4 +1,10 @@
 {
   "name": "challongerv2",
-  "app_id": ""
+  "app_id": "171c9778",
+  "proxies": [
+    {
+      "path": "/api/",
+      "proxyUrl": "https://api.challonge.com/v1/"
+    }
+  ]
 }

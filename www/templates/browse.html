@@ -49,7 +49,7 @@
       </div>
       <div class="list card" ng-if="expand === 'subdomain'">
         <div class="item">
-          <h2>Tournaments by organization</h2>
+          <h2>Tournaments by Organization</h2>
         </div>
         <div class="item item-body">
           <div class="content">
@@ -81,7 +81,7 @@
           <ul class="list">
             <li class="item item-checkbox">
               <label class="checkbox">
-                <input ng-model="incSubdomain" type="checkbox">
+                <ion-checkbox ng-model="incSubdomain">Include Organization</ion-checkbox>
               </label>
               Include Organization
             </li>
@@ -104,6 +104,27 @@
         <a class="item item-icon-left assertive" ng-click="click('single', subdomain, url, incSubdomain)">
           <i class="icon ion-log-in"></i>
           Get tournament
+        </a>
+      </div>
+      <div class="list card" ng-if="expand === 'history'">
+        <div class="item">
+          <h2>History &amp; Bookmarked</h2>
+        </div>
+        <a class="item item-icon-left" ng-click="click('single', subdomain, url, incSubdomain)">
+          <i class="icon ion-clock"></i>
+          Tournament History
+        </a>
+        <a class="item item-icon-left" ng-click="click('single', subdomain, url, incSubdomain)">
+          <i class="icon ion-heart"></i>
+          Bookmarked Tournaments
+        </a>
+        <a class="item item-icon-left" ng-click="click('single', subdomain, url, incSubdomain)">
+          <i class="icon ion-clock"></i>
+          Organizations History
+        </a>
+        <a class="item item-icon-left" ng-click="click('single', subdomain, url, incSubdomain)">
+          <i class="icon ion-heart"></i>
+          Bookmarked Organizations
         </a>
       </div>
     </div>

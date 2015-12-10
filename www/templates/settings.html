@@ -2,15 +2,20 @@
   <ion-content>
     <div class="row">
       <div class="col">
-        <div class="item item-input-inset">
-          <button ng-click="openModal();" class="button button-icon icon ion-help-circled padding-right"></button>
-          <label class="item-input-wrapper">
-            <span class="input-label">API Key:</span>
-            <input ng-model="API_KEY" placeholder="API Key" type="password">
-          </label>
-          <button class="button button-clear button-small" ng-click="saveKey(API_KEY)">
-            Save
-          </button>
+        <div class="card">
+          <div class="item item-input-inset">
+            <button class="button button-icon icon ion-help-circled padding-right" ng-click="openModal();"></button>
+            <label class="item-input-wrapper">
+              <span class="input-label">API Key:</span>
+              <input ng-model="API_KEY" placeholder="API Key" type="password">
+            </label>
+            <button class="button button-clear button-small" ng-click="saveKey(API_KEY)">
+              Save
+            </button>
+          </div>
+          <div ng-if="apiError" ng-class="apiError.type ? apiError.type : 'assertive'" class="item item-text-wrap text-center">
+            {{apiError.message}}
+          </div>
         </div>
       </div>
     </div>
@@ -30,7 +35,8 @@
           </p>
         </div>
       </div>
-      <iframe src="https://challonge.com/settings/developer" style="width: 100vw; height: 100vh">Your device does not support iframes. Get your API Key from <a href="https://challonge.com/settings/developer">Challonge</a>.</iframe>
+      <iframe src="https://challonge.com/settings/developer" style="width: 100vw; height: 100vh">Your device does not support iframes. Get your API Key from
+        <a href="https://challonge.com/settings/developer">Challonge</a>.</iframe>
     </ion-content>
   </ion-modal-view>
 </script>

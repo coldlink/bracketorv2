@@ -1,0 +1,187 @@
+<ion-view>
+  <ion-nav-title>
+    {{tournament.tournament.name}}
+  </ion-nav-title>
+  <ion-tabs class="tabs-positive tabs-icon-only">
+    <ion-tab icon="ion-ios-information" title="Information">
+      <ion-view title="Information">
+        <ion-content>
+          <ion-refresher ng-if="!loading" on-refresh="checkConnection()" pulling-text="Pull to refresh..."></ion-refresher>
+          <div class="row">
+            <div class="col text-center" style="margin-top: 10px">
+              <ion-spinner ng-if="loading"></ion-spinner>
+            </div>
+          </div>
+          <div ng-if="!loading">
+            <div class="bar bar-header bar-light">
+              <h1 class="title">Information</h1>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.name}}</h2>
+                <p>Tournament Name</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{state(tournament.tournament.state)}}</h2>
+                <p>Tournament State</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournamentType(tournament.tournament.tournament_type)}}</h2>
+                <p>Tournament State</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.game_name ? tournament.tournament.game_name : 'N/A'}}</h2>
+                <p>Game Name</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2 ng-if="!tournament.tournament.description">N/A</h2>
+                <h2 ng-bind-html="tournament.tournament.description" ng-if="tournament.tournament.description"></h2>
+                <p>Description</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.subdomain ? tournament.tournament.subdomain : 'N/A'}}</h2>
+                <p>Organization</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.participants_count}}</h2>
+                <p>Participants Count</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.signup_cap ? tournament.tournament.signup_cap : 'N/A'}}</h2>
+                <p>Sign Up Cap</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.updated_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</h2>
+                <p>Last Updated</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.created_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</h2>
+                <p>Created At</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.full_challonge_url}}</h2>
+                <p>Challonge URL</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.sign_up_url ? tournament.tournament.sign_up_url : 'N/A'}}</h2>
+                <p>Sign Up URL</p>
+              </div>
+            </div>
+            <div class="list card">
+              <div class="item item-text-wrap">
+                <h2>{{tournament.tournament.live_image_url}}</h2>
+                <p>Live Image URL</p>
+              </div>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </ion-tab>
+
+    <ion-tab icon="ion-ios-game-controller-a" title="Matches">
+      <ion-view title="Matches">
+        <ion-content>
+          <ion-refresher ng-if="!loading" on-refresh="checkConnection()" pulling-text="Pull to refresh..."></ion-refresher>
+          <div class="row">
+            <div class="col text-center" style="margin-top: 10px">
+              <ion-spinner ng-if="loading"></ion-spinner>
+            </div>
+          </div>
+          <div ng-if="!loading">
+            <div class="bar bar-header bar-light">
+              <h1 class="title">Matches</h1>
+            </div>
+            <div class="list card" ng-repeat="match in tournament.tournament.matches">
+              <div class="item item-text-wrap row">
+                <div class="col">
+                  <h2>{{match.match.id}}</h2>
+                  <p>Match ID</p>
+                </div>
+                <div class="col">
+                  <h2>{{match.match.id}}</h2>
+                  <p>Match ID</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </ion-tab>
+
+    <ion-tab icon="ion-ios-people" title="Participants">
+      <ion-view title="Participants">
+        <ion-content>
+          <ion-refresher ng-if="!loading" on-refresh="checkConnection()" pulling-text="Pull to refresh..."></ion-refresher>
+          <div class="row">
+            <div class="col text-center" style="margin-top: 10px">
+              <ion-spinner ng-if="loading"></ion-spinner>
+            </div>
+          </div>
+          <div ng-if="!loading">
+            <div class="bar bar-header bar-light">
+              <h1 class="title">Participants</h1>
+            </div>
+            <br>
+            <ion-list>
+              <ion-item class="item item-avatar-left item-icon-right" ng-repeat="participant in tournament.tournament.participants">
+                <img ng-src="{{participant.participant.attached_participatable_portrait_url ? participant.participant.attached_participatable_portrait_url : 'https://i2.wp.com/challonge.com/assets/gravatar.png'}}">
+                <h2>{{participant.participant.display_name}}</h2>
+                <p>{{participant.participant.challonge_username}}</p>
+                <i class="icon">{{participant.participant.seed}}</i>
+              </ion-item>
+            </ion-list>
+          </div>
+        </ion-content>
+      </ion-view>
+    </ion-tab>
+
+    <ion-tab icon="ion-podium" ng-if="tournament.tournament.state === 'complete'" title="Final Standings">
+      <ion-view title="Final Standings">
+        <ion-content>
+          <ion-refresher ng-if="!loading" on-refresh="checkConnection()" pulling-text="Pull to refresh..."></ion-refresher>
+          <div class="row">
+            <div class="col text-center" style="margin-top: 10px">
+              <ion-spinner ng-if="loading"></ion-spinner>
+            </div>
+          </div>
+          <div ng-if="!loading">
+            <div class="bar bar-header bar-light">
+              <h1 class="title">Final Standings</h1>
+            </div>
+            <br>
+            <ion-list>
+              <ion-item class="item item-avatar-left item-icon-right" ng-repeat="participant in tournament.tournament.participants | orderBy:'participant.final_rank'">
+                <img ng-src="{{participant.participant.attached_participatable_portrait_url ? participant.participant.attached_participatable_portrait_url : 'https://i2.wp.com/challonge.com/assets/gravatar.png'}}">
+                <h2>{{participant.participant.display_name}}</h2>
+                <p>{{participant.participant.challonge_username}}</p>
+                <i class="icon">{{participant.participant.final_rank}}</i>
+              </ion-item>
+            </ion-list>
+          </div>
+        </ion-content>
+      </ion-view>
+    </ion-tab>
+  </ion-tabs>
+</ion-view>

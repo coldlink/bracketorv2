@@ -13,7 +13,6 @@ angular.module('challonger', ['ionic', 'challonger.controllers'])
 		if (window.cordova && window.cordova.plugins.Keyboard) {
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 			cordova.plugins.Keyboard.disableScroll(true);
-
 		}
 		if (window.StatusBar) {
 			// org.apache.cordova.statusbar required
@@ -52,30 +51,41 @@ angular.module('challonger', ['ionic', 'challonger.controllers'])
 	})
 
 	.state('app.browse', {
-			url: '/browse',
-			views: {
-				'menuContent': {
-					templateUrl: 'templates/browse.html',
-					controller: 'BrowseCtrl'
-				}
-			}
-		})
-		.state('app.home', {
-			url: '/home',
-			views: {
-				'menuContent': {
-					templateUrl: 'templates/home.html',
-					controller: 'HomeCtrl'
-				}
-			}
-		})
-
-	.state('app.single', {
-		url: '/playlists/:playlistId',
+		url: '/browse',
 		views: {
 			'menuContent': {
-				templateUrl: 'templates/playlist.html',
-				controller: 'PlaylistCtrl'
+				templateUrl: 'templates/browse.html',
+				controller: 'BrowseCtrl'
+			}
+		}
+	})
+
+	.state('app.home', {
+		url: '/home',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/home.html',
+				controller: 'HomeCtrl'
+			}
+		}
+	})
+
+	.state('app.results', {
+		url: '/results/:url',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/results.html',
+				controller: 'ResultsCtrl'
+			}
+		}
+	})
+
+	.state('app.tournament', {
+		url: '/tournament/:id',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/tournament.html',
+				controller: 'TournamentCtrl'
 			}
 		}
 	});
@@ -100,10 +110,42 @@ angular.module('challonger', ['ionic', 'challonger.controllers'])
 	};
 })
 
-.factory('gURL', function() {
+.factory('$connection', function ($ionicPopup, $ionicHistory) {
 	return {
-        get: function () {
-            return 'https://api.challonge.com/v1/';
-        }
-    };
+		isConnected: function () {
+			if (window.Connection) {
+				if (navigator.connection.type === window.Connection.NONE) {
+					return false;
+				} else {
+					return true;
+				}
+			} else {
+				return true;
+			}
+		},
+		noInternet: function (scope) {
+			scope.showAlert = function () {
+				var alertPopup = $ionicPopup.alert({
+					title: 'No internet connention detected.',
+					template: 'No internet connection was detected, please check your internet connection and try again.'
+				});
+				alertPopup.then(function () {
+					$ionicHistory.goBack();
+				});
+			};
+			scope.showAlert();
+		}
+	};
+})
+
+.factory('$API', function() {
+	return {
+		url: function () {
+			if (window.Connection) {
+				return 'https://api.challonge.com/v1/';
+			} else {
+				return 'http://localhost:8100/api/';
+			}
+		}
+	};
 });
