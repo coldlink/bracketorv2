@@ -10,8 +10,8 @@ angular.module('challonger.controllers', [])
 	//});
 })
 
-.controller('HomeCtrl', function($scope) {
-	//nothing here
+.controller('HomeCtrl', function($scope, $ionicPlatform) {
+	//Nothing here!
 })
 
 .controller('BrowseCtrl', function($scope, $API, $localStorage, $state) {
@@ -132,9 +132,9 @@ angular.module('challonger.controllers', [])
 	$scope.checkConnection();
 })
 
-.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage) {
-
+.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $cordovaToast, $ionicPlatform) {
 	$scope.loading = true;
+	$scope.editEnabled = false;
 	var API_KEY = $localStorage.get('API_KEY');
 
 	$scope.checkConnection = function() {
@@ -145,24 +145,39 @@ angular.module('challonger.controllers', [])
 		}
 	};
 
-	$scope.doRefresh = function () {
-		$http.get($API.url() + 'tournaments/' + $stateParams.id +'.json?api_key=' + API_KEY + '&include_participants=1&include_matches=1')
-		.success(function (response) {
-			console.log(response);
-			$scope.tournament = response;
-		})
-		.error(function (err) {
-			console.log(err);
-		})
-		.finally(function() {
-			$scope.listParticipants = {};
-			for (var i = 0; i < $scope.tournament.tournament.participants.length; i++) {
-				$scope.listParticipants[$scope.tournament.tournament.participants[i].participant.id] = $scope.tournament.tournament.participants[i].participant;
-			}
-			console.log($scope.listParticipants);
-			$scope.loading = false;
-			$scope.$broadcast('scroll.refreshComplete');
-		});
+	$scope.doRefresh = function() {
+		$http.get($API.url() + 'tournaments/' + $stateParams.id + '.json?api_key=' + API_KEY + '&include_participants=1&include_matches=1')
+			.success(function(response) {
+				console.log(response);
+				$scope.tournament = response;
+			})
+			.error(function(err) {
+				console.log(err);
+			})
+			.finally(function() {
+				$scope.listParticipants = {};
+				for (var i = 0; i < $scope.tournament.tournament.participants.length; i++) {
+					$scope.listParticipants[$scope.tournament.tournament.participants[i].participant.id] = $scope.tournament.tournament.participants[i].participant;
+				}
+
+				$scope.matchScores = {};
+				$scope.tournament.tournament.matches.forEach(function(match) {
+					var tempScr = match.match.scores_csv.split(',');
+					$scope.matchScores[match.match.id] = [];
+					for (var i = 0; i < tempScr.length; i++) {
+						var tempSet = tempScr[i].split('-');
+						tempSetObj = {
+							p1: tempSet[0],
+							p2: tempSet[1]
+						};
+						$scope.matchScores[match.match.id].push(tempSetObj);
+					}
+				});
+				console.log($scope.listParticipants);
+				console.log($scope.matchScores);
+				$scope.loading = false;
+				$scope.$broadcast('scroll.refreshComplete');
+			});
 	};
 
 	$scope.state = function(state) {
@@ -178,7 +193,7 @@ angular.module('challonger.controllers', [])
 		}
 	};
 
-	$scope.tournamentType = function (type) {
+	$scope.tournamentType = function(type) {
 		switch (type) {
 			case 'single elimination':
 				return 'Single Elimination';
@@ -188,6 +203,38 @@ angular.module('challonger.controllers', [])
 				return 'Swiss Style';
 			case 'round robin':
 				return 'Round Robin';
+		}
+	};
+
+	$scope.menu = function() {
+		if ($scope.editEnabled) {
+			var hideSheet = $ionicActionSheet.show({
+				buttons: [{
+					text: 'Disable Editing'
+				}],
+				cancelText: 'Cancel',
+				cancel: function() {
+					hideSheet();
+				},
+				buttonClicked: function(index) {
+					$scope.editEnabled = false;
+					return true;
+				}
+			});
+		} else {
+			var hideSheet = $ionicActionSheet.show({
+				buttons: [{
+					text: 'Enable Editing'
+				}],
+				cancelText: 'Cancel',
+				cancel: function() {
+					hideSheet();
+				},
+				buttonClicked: function(index) {
+					$scope.editEnabled = true;
+					return true;
+				}
+			});
 		}
 	};
 

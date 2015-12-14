@@ -6,7 +6,7 @@
         <ion-spinner></ion-spinner>
       </div>
     </div>
-    <div class="list card" ng-repeat="tournament in tournaments" ng-if="!tournament.tournament.group_stages_enabled">
+    <div class="list card" ng-if="!tournament.tournament.group_stages_enabled" ng-repeat="tournament in tournaments | orderBy: tournament.created_at : false">
       <a class="item item-icon-left" ng-click="open(tournament.tournament.id)">
         <i class="icon" ng-class="active === tournament.tournament.id ? 'ion-chevron-down' : 'ion-chevron-right'"></i>
         {{tournament.tournament.name}}
@@ -40,6 +40,10 @@
         </div>
       </div>
       <div class="row">
+        <div class="col text-center">
+          <h3>{{tournament.tournament.created_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</h3>
+          <small>Created At</small>
+        </div>
         <div class="col text-center">
           <h3>{{tournament.tournament.updated_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</h3>
           <small>Last Updated</small>

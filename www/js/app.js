@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('challonger', ['ionic', 'challonger.controllers'])
+angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 
 .run(function($ionicPlatform) {
 	$ionicPlatform.ready(function() {
@@ -24,7 +24,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers'])
 .config(function($stateProvider, $urlRouterProvider) {
 	$stateProvider
 
-		.state('app', {
+	.state('app', {
 		url: '/app',
 		abstract: true,
 		templateUrl: 'templates/menu.html',
@@ -110,9 +110,9 @@ angular.module('challonger', ['ionic', 'challonger.controllers'])
 	};
 })
 
-.factory('$connection', function ($ionicPopup, $ionicHistory) {
+.factory('$connection', function($ionicPopup, $ionicHistory) {
 	return {
-		isConnected: function () {
+		isConnected: function() {
 			if (window.Connection) {
 				if (navigator.connection.type === window.Connection.NONE) {
 					return false;
@@ -123,13 +123,13 @@ angular.module('challonger', ['ionic', 'challonger.controllers'])
 				return true;
 			}
 		},
-		noInternet: function (scope) {
-			scope.showAlert = function () {
+		noInternet: function(scope) {
+			scope.showAlert = function() {
 				var alertPopup = $ionicPopup.alert({
 					title: 'No internet connention detected.',
 					template: 'No internet connection was detected, please check your internet connection and try again.'
 				});
-				alertPopup.then(function () {
+				alertPopup.then(function() {
 					$ionicHistory.goBack();
 				});
 			};
@@ -140,7 +140,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers'])
 
 .factory('$API', function() {
 	return {
-		url: function () {
+		url: function() {
 			if (window.Connection) {
 				return 'https://api.challonge.com/v1/';
 			} else {
