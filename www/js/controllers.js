@@ -75,6 +75,10 @@ angular.module('challonger.controllers', [])
 		noFavTour: {
 			title: 'No Bookmarks',
 			msg: 'No bookmarked tournaments were found. A tournament can be added to the bookmarks by viewing the tournament and selecting \'Add Bookmark\' from the menu.'
+		},
+		noHisTour: {
+			title: 'No History',
+			msg: 'No previously viewed tournaments were found. Browse tournaments for them to be automatically added to the history. Max 25 tournaments.'
 		}
 	};
 
@@ -114,6 +118,21 @@ angular.module('challonger.controllers', [])
 					}
 				} else {
 					$alert.generic($scope, alerts.noFavTour.title, alerts.noFavTour.msg);
+				}
+				break;
+			case 'hisTour':
+				if ($localStorage.getObject('hisTour')) {
+					var temp = $localStorage.getObject('hisTour');
+					if (temp.length === 0) {
+						$alert.generic($scope, alerts.noHisTour.title, alerts.noHisTour.msg);
+					} else {
+						getTbyId(0, temp, function() {
+							$scope.loading = false;
+							$scope.$broadcast('scroll.refreshComplete');
+						});
+					}
+				} else {
+					$alert.generic($scope, alerts.noHisTour.title, alerts.noHisTour.msg);
 				}
 				break;
 			default:
@@ -228,6 +247,26 @@ angular.module('challonger.controllers', [])
 				});
 				console.log($scope.listParticipants);
 				console.log($scope.matchScores);
+
+				var temp = [];
+				if ($localStorage.getObject('hisTour')) {
+					temp = $localStorage.getObject('hisTour');
+
+					if (temp.indexOf($scope.tournament.tournament.id) !== -1) {
+						temp.splice(temp.indexOf($scope.tournament.tournament.id), 1);
+					} else {
+						if (temp.length === 25) {
+							temp.splice(0, 1);
+						}
+					}
+				} else {
+					if (temp.length === 25) {
+						temp.splice(0, 1);
+					}
+				}
+				temp.push($scope.tournament.tournament.id);
+				$localStorage.setObject('hisTour', temp);
+
 				$scope.loading = false;
 				$scope.$broadcast('scroll.refreshComplete');
 			});
