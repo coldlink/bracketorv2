@@ -105,7 +105,11 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 			$window.localStorage[k] = JSON.stringify(o);
 		},
 		getObject: function(k) {
-			return JSON.parse($window.localStorage[k]) || {};
+			if ($window.localStorage[k]) {
+				return JSON.parse($window.localStorage[k]);
+			} else {
+				return false;
+			}
 		}
 	};
 })
@@ -146,6 +150,23 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 			} else {
 				return 'http://localhost:8100/api/';
 			}
+		}
+	};
+})
+
+.factory('$alert', function ($ionicPopup, $ionicHistory) {
+	return {
+		generic: function (scope, title, msg) {
+			scope.showAlert = function () {
+				var alertPopup = $ionicPopup.alert({
+					title: title,
+					template: msg
+				});
+				alertPopup.then(function () {
+					$ionicHistory.goBack();
+				});
+			};
+			scope.showAlert();
 		}
 	};
 });

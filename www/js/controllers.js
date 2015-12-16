@@ -52,6 +52,12 @@ angular.module('challonger.controllers', [])
 				}
 				url += 'tournaments/' + tournament + '.json?api_key=' + API_KEY;
 				break;
+			case 'favTour':
+				url = 'favTour';
+				break;
+			case 'hisTour':
+				url = 'hisTour';
+				break;
 			default:
 				break;
 		}
@@ -61,24 +67,69 @@ angular.module('challonger.controllers', [])
 	};
 })
 
-.controller('ResultsCtrl', function($scope, $stateParams, $http, $connection, $state) {
+.controller('ResultsCtrl', function($scope, $stateParams, $http, $connection, $state, $API, $localStorage, $alert) {
 	$scope.loading = true;
-	$scope.tournaments = [];
 	$scope.active = null;
 
+	var alerts = {
+		noFavTour: {
+			title: 'No Bookmarks',
+			msg: 'No bookmarked tournaments were found. A tournament can be added to the bookmarks by viewing the tournament and selecting \'Add Bookmark\' from the menu.'
+		}
+	};
+
+	function getTbyId(i, ids, cb) {
+		if (i < ids.length) {
+			$http.get($API.url() + 'tournaments/' + ids[i] + '.json?api_key=' + $localStorage.get('API_KEY'))
+				.success(function(response) {
+					console.log(response);
+					$scope.tournaments.push(response);
+				})
+				.error(function(err) {
+					console.log(err);
+				})
+				.finally(function() {
+					return getTbyId(i + 1, ids, cb);
+				});
+		} else {
+			if (cb) {
+				cb();
+			}
+		}
+	}
+
 	$scope.doRefresh = function() {
-		$http.get($stateParams.url)
-			.success(function(response) {
-				console.log(response);
-				$scope.tournaments = response;
-			})
-			.error(function(err) {
-				console.log(err);
-			})
-			.finally(function() {
-				$scope.loading = false;
-				$scope.$broadcast('scroll.refreshComplete');
-			});
+		$scope.tournaments = [];
+		switch ($stateParams.url) {
+			case 'favTour':
+				if ($localStorage.getObject('favTour')) {
+					var temp = $localStorage.getObject('favTour');
+					if (temp.length === 0) {
+						$alert.generic($scope, alerts.noFavTour.title, alerts.noFavTour.msg);
+					} else {
+						getTbyId(0, temp, function() {
+							$scope.loading = false;
+							$scope.$broadcast('scroll.refreshComplete');
+						});
+					}
+				} else {
+					$alert.generic($scope, alerts.noFavTour.title, alerts.noFavTour.msg);
+				}
+				break;
+			default:
+				$http.get($stateParams.url)
+					.success(function(response) {
+						console.log(response);
+						$scope.tournaments = response;
+					})
+					.error(function(err) {
+						console.log(err);
+					})
+					.finally(function() {
+						$scope.loading = false;
+						$scope.$broadcast('scroll.refreshComplete');
+					});
+		}
 	};
 
 	$scope.open = function(id) {
@@ -209,35 +260,67 @@ angular.module('challonger.controllers', [])
 	};
 
 	$scope.menu = function() {
+		var buttons = [];
+
 		if ($scope.editEnabled) {
-			var hideSheet = $ionicActionSheet.show({
-				buttons: [{
-					text: 'Disable Editing'
-				}],
-				cancelText: 'Cancel',
-				cancel: function() {
-					hideSheet();
-				},
-				buttonClicked: function(index) {
-					$scope.editEnabled = false;
-					return true;
-				}
+			buttons.push({
+				text: 'Disable Editing'
 			});
 		} else {
-			var hideSheet = $ionicActionSheet.show({
-				buttons: [{
-					text: 'Enable Editing'
-				}],
-				cancelText: 'Cancel',
-				cancel: function() {
-					hideSheet();
-				},
-				buttonClicked: function(index) {
-					$scope.editEnabled = true;
-					return true;
-				}
+			buttons.push({
+				text: 'Enable Editing'
 			});
 		}
+
+		if ($localStorage.getObject('favTour')) {
+			var temp = $localStorage.getObject('favTour');
+
+			if (temp.indexOf($scope.tournament.tournament.id) !== -1) {
+				buttons.push({
+					text: 'Remove Bookmark'
+				});
+			} else {
+				buttons.push({
+					text: 'Add Bookmark'
+				});
+			}
+		} else {
+			buttons.push({
+				text: 'Add Bookmark'
+			});
+		}
+
+		var hideSheet = $ionicActionSheet.show({
+			buttons: buttons,
+			cancelText: 'Cancel',
+			cancel: function() {
+				hideSheet();
+			},
+			buttonClicked: function(index) {
+				switch (index) {
+					case 0:
+						$scope.editEnabled = !$scope.editEnabled;
+						return true;
+					case 1:
+						var temp = [];
+						if ($localStorage.getObject('favTour')) {
+							temp = $localStorage.getObject('favTour');
+
+							if (temp.indexOf($scope.tournament.tournament.id) !== -1) {
+								temp.splice(temp.indexOf($scope.tournament.tournament.id), 1);
+							} else {
+								temp.push($scope.tournament.tournament.id);
+							}
+						} else {
+							temp.push($scope.tournament.tournament.id);
+						}
+						$localStorage.setObject('favTour', temp);
+						return true;
+					default:
+						return false;
+				}
+			}
+		});
 	};
 
 	$scope.scrBtn = {

@@ -139,7 +139,7 @@
                   <h2>{{match.match.player2_id ? listParticipants[match.match.player2_id].display_name : (match.match.player2_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player2_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player2_prereq_match_id].ident))}}</h2>
                 </div>
               </div>
-              <div class="item row row-center" ng-if="!tournament.tournament.quick_advance && match.match.state !== 'pending'" ng-repeat="score in matchScores[match.match.id] track by $index">
+              <div class="item row row-center" ng-if="match.match.state !== 'pending'" ng-repeat="score in matchScores[match.match.id] track by $index">
                 <div class="col text-center item-text-wrap">
                   <button class="button button-clear" ng-class="score.p1 > score.p2 ? 'button-assertive' : 'button-dark'" ng-click="scrBtn.click(match.match.id, 'p1', $index)" on-hold="scrBtn.longClick(match.match.id, 'p1', $index)">
                     {{score.p1}}
@@ -152,17 +152,6 @@
                   <button class="button button-clear" ng-class="score.p2 > score.p1 ? 'button-assertive' : 'button-dark'" ng-click="scrBtn.click(match.match.id, 'p2', $index)" on-hold="scrBtn.longClick(match.match.id, 'p2', $index)">
                     {{score.p2}}
                   </button>
-                </div>
-              </div>
-              <div class="item row row-center" ng-if="tournament.tournament.quick_advance && match.match.state !== 'pending'" ng-repeat="score in matchScores[match.match.id]">
-                <div class="col text-center item-text-wrap" ng-class="score.p1 > score.p2 ? 'checkbox-assertive' : 'checkbox-dark'">
-                  <input ng-disabled="!editEnabled" ng-false-value="'0'" ng-model="score.p1" ng-true-value="'1'" type="checkbox">
-                </div>
-                <div class="col col-10 text-center">
-                  -
-                </div>
-                <div class="col text-center item-text-wrap" ng-class="score.p2 > score.p1 ? 'checkbox-assertive' : 'checkbox-dark'">
-                  <input ng-disabled="!editEnabled" ng-false-value="'0'" ng-model="score.p2" ng-true-value="'1'" type="checkbox">
                 </div>
               </div>
               <div ng-if="editEnabled && match.match.state !== 'pending'">
@@ -192,14 +181,18 @@
           <div ng-if="!loading">
             <div class="bar bar-header bar-light">
               <h1 class="title">Participants</h1>
+              <button ng-if="editEnabled" class="button button-clear icon ion-plus-circled"></button>
             </div>
             <br>
-            <ion-list>
+            <ion-list show-reorder="editEnabled">
               <ion-item class="item item-avatar-left item-icon-right" ng-repeat="participant in tournament.tournament.participants">
                 <img ng-src="{{participant.participant.attached_participatable_portrait_url ? participant.participant.attached_participatable_portrait_url : 'https://i2.wp.com/challonge.com/assets/gravatar.png'}}">
                 <h2>{{participant.participant.display_name}}</h2>
                 <p>{{participant.participant.challonge_username}}</p>
                 <i class="icon">{{participant.participant.seed}}</i>
+                <ion-reorder-button on-reorder="">{{participant.participant.seed}}&emsp;
+                  <i class="ion-navicon"></i>
+                </ion-reorder-button>
               </ion-item>
             </ion-list>
           </div>
