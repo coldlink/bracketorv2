@@ -167,10 +167,12 @@ angular.module('challonger.controllers', [])
 					for (var i = 0; i < tempScr.length; i++) {
 						var tempSet = tempScr[i].split('-');
 						tempSetObj = {
-							p1: tempSet[0],
-							p2: tempSet[1]
+							p1: tempSet[0] ? tempSet[0] : 0,
+							p2: tempSet[1] ? tempSet[1] : 0,
 						};
 						$scope.matchScores[match.match.id].push(tempSetObj);
+						$scope.matchScores[match.match.id].dirty = false;
+						$scope.matchScores[match.match.id].ident = match.match.identifier;
 					}
 				});
 				console.log($scope.listParticipants);
@@ -235,6 +237,32 @@ angular.module('challonger.controllers', [])
 					return true;
 				}
 			});
+		}
+	};
+
+	$scope.scrBtn = {
+		click: function(matchId, player, index) {
+			if ($scope.editEnabled) {
+				$scope.matchScores[matchId][index][player]++;
+				$scope.matchScores[matchId].dirty = true;
+			}
+		},
+		longClick: function(matchId, player, index) {
+			if ($scope.editEnabled) {
+				$scope.matchScores[matchId][index][player]--;
+				$scope.matchScores[matchId].dirty = true;
+			}
+		},
+		addSet: function(matchId) {
+			$scope.matchScores[matchId].push({
+				p1: 0,
+				p2: 0,
+			});
+			$scope.matchScores[matchId].dirty = true;
+		},
+		rmSet: function(matchId) {
+			$scope.matchScores[matchId].pop();
+			$scope.matchScores[matchId].dirty = true;
 		}
 	};
 
