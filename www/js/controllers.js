@@ -17,6 +17,25 @@ angular.module('challonger.controllers', [])
 .controller('BrowseCtrl', function($scope, $API, $localStorage, $state) {
 	var API_KEY;
 	$scope.API_KEY = true;
+	$scope.error = null;
+	var errors = {
+		noSub: {
+			message: 'No organization entered.'
+		},
+		noUrl: {
+			message: 'No URL entered.'
+		},
+		noSubUrl: {
+			message: 'No URL or organization entered.'
+		},
+		subRegEx: {
+			message: 'Organization must be composed of letters, numbers, and dashes only.'
+		},
+		urlRegEx: {
+			message: 'URL must be composed of letters, numbers, and underscores only.'
+		}
+	};
+
 	$scope.$on('$ionicView.enter', function(e) {
 		API_KEY = $localStorage.get('API_KEY');
 		if (!API_KEY) {
@@ -27,6 +46,7 @@ angular.module('challonger.controllers', [])
 	});
 
 	$scope.open = function(type) {
+		$scope.error = null;
 		if ($scope.expand === type) {
 			$scope.expand = false;
 		} else {
@@ -41,13 +61,56 @@ angular.module('challonger.controllers', [])
 				url += 'tournaments.json?api_key=' + API_KEY;
 				break;
 			case 'subdomain':
+				if (!subdomain) {
+					$scope.error = errors.noSub;
+					return false;
+				}
+				if (subdomain.search(/[^A-Za-z0-9\-]/) !== -1) {
+					$scope.error = errors.subRegEx;
+					return false;
+				}
 				url += 'tournaments.json?api_key=' + API_KEY + '&subdomain=' + subdomain;
 				break;
 			case 'single':
 				var tournament;
 				if (!isub) {
+					if (!eurl) {
+						$scope.error = errors.noUrl;
+						return false;
+					}
+
+					if (eurl.search(/[^A-Za-z0-9\-]/) !== -1) {
+						$scope.error = errors.urlRegEx;
+						return false;
+					}
+
 					tournament = eurl;
 				} else {
+					if (!subdomain && !eurl) {
+						$scope.error = errors.noSubUrl;
+						return false;
+					}
+
+					if (!subdomain) {
+						$scope.error = errors.noSub;
+						return false;
+					}
+
+					if (subdomain.search(/[^A-Za-z0-9\-]/) !== -1) {
+						$scope.error = errors.subRegEx;
+						return false;
+					}
+
+					if (!eurl) {
+						$scope.error = errors.noUrl;
+						return false;
+					}
+
+					if (eurl.search(/[^A-Za-z0-9\_]/) !== -1) {
+						$scope.error = errors.urlRegEx;
+						return false;
+					}
+
 					tournament = subdomain + '-' + eurl;
 				}
 				url += 'tournaments/' + tournament + '.json?api_key=' + API_KEY;
@@ -142,7 +205,7 @@ angular.module('challonger.controllers', [])
 						$scope.tournaments = response;
 					})
 					.error(function(err) {
-						console.log(err);
+						$alert.generic($scope, 'Error', err.errors[0]);
 					})
 					.finally(function() {
 						$scope.loading = false;
@@ -202,7 +265,7 @@ angular.module('challonger.controllers', [])
 	$scope.checkConnection();
 })
 
-.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $cordovaToast, $ionicPlatform) {
+.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $cordovaToast, $ionicPlatform, $tournament, $q) {
 	$scope.loading = true;
 	$scope.editEnabled = false;
 	var API_KEY = $localStorage.get('API_KEY');
@@ -243,6 +306,7 @@ angular.module('challonger.controllers', [])
 						$scope.matchScores[match.match.id].push(tempSetObj);
 						$scope.matchScores[match.match.id].dirty = false;
 						$scope.matchScores[match.match.id].ident = match.match.identifier;
+						$scope.matchScores[match.match.id].winner_id = match.match.winner_id;
 					}
 				});
 				console.log($scope.listParticipants);
@@ -375,6 +439,9 @@ angular.module('challonger.controllers', [])
 				$scope.matchScores[matchId].dirty = true;
 			}
 		},
+		winSelect: function (matchId, winnerId) {
+			$scope.matchScores[matchId].winner_id = winnerId;
+		},
 		addSet: function(matchId) {
 			$scope.matchScores[matchId].push({
 				p1: 0,
@@ -385,6 +452,31 @@ angular.module('challonger.controllers', [])
 		rmSet: function(matchId) {
 			$scope.matchScores[matchId].pop();
 			$scope.matchScores[matchId].dirty = true;
+		},
+		saveMatch: function (matchId) {
+			var tmpScr = '';
+			var sameScrFlag = false;
+			for (var i = 0; i < $scope.matchScores[matchId].length; i++) {
+				tmpScr += $scope.matchScores[matchId][i].p1 + '-' + $scope.matchScores[matchId][i].p2 + ',';
+
+				if ($scope.matchScores[matchId][i].p1 === $scope.matchScores[matchId][i].p2) {
+					sameScrFlag = true;
+				}
+			}
+			tmpScr = tmpScr.slice(0, -1);
+			console.log(tmpScr);
+
+			if (sameScrFlag) {
+				//alert for same score stuff
+			}
+		},
+		edit: {
+			value: function (tid, value) {
+				$tournament.tournament.update.value(tid, value, $scope);
+			},
+			description: function (tid, description) {
+				$tournament.tournament.update.description(tid, description, $scope);
+			}
 		}
 	};
 

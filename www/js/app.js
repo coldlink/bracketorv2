@@ -24,7 +24,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 .config(function($stateProvider, $urlRouterProvider) {
 	$stateProvider
 
-	.state('app', {
+		.state('app', {
 		url: '/app',
 		abstract: true,
 		templateUrl: 'templates/menu.html',
@@ -154,19 +154,173 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 	};
 })
 
-.factory('$alert', function ($ionicPopup, $ionicHistory) {
+.factory('$alert', function($ionicPopup, $ionicHistory) {
 	return {
-		generic: function (scope, title, msg) {
-			scope.showAlert = function () {
+		generic: function(scope, title, msg) {
+			scope.showAlert = function() {
 				var alertPopup = $ionicPopup.alert({
 					title: title,
 					template: msg
 				});
-				alertPopup.then(function () {
+				alertPopup.then(function() {
 					$ionicHistory.goBack();
 				});
 			};
 			scope.showAlert();
+		},
+		input: function(scope, title, subtitle, value, callback) {
+			scope.prevDef = false;
+			scope.popErr = null;
+			scope.showAlert = function() {
+				console.log(value);
+				scope.current = value.value;
+				scope.changeCurrent = function(newCurrent) {
+					scope.current = newCurrent;
+				};
+				var alertPopup = $ionicPopup.alert({
+					template: '<input type="text" ng-model="current" ng-change="changeCurrent(current)"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					title: title,
+					subTitle: subtitle,
+					scope: scope,
+					buttons: [{
+						text: 'Cancel',
+						onTap: function(e) {
+							callback();
+							return false;
+						}
+					}, {
+						text: '<b>Save</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							if (!scope.current) {
+								if (value.required) {
+									scope.prevDef = true;
+									e.preventDefault();
+								} else {
+									callback(scope.current);
+									return false;
+								}
+							} else {
+								callback(scope.current);
+								return false;
+							}
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		},
+		inputArea: function(scope, title, subtitle, value, callback) {
+			scope.prevDef = false;
+			scope.popErr = null;
+			scope.showAlert = function() {
+				scope.current = value;
+				scope.changeCurrent = function(newCurrent) {
+					scope.current = newCurrent;
+				};
+				var alertPopup = $ionicPopup.alert({
+					template: '<textarea ng-model="current" ng-change="changeCurrent(current)"></textarea><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					title: title,
+					subTitle: subtitle,
+					scope: scope,
+					buttons: [{
+						text: 'Cancel',
+						onTap: function(e) {
+							callback();
+							return false;
+						}
+					}, {
+						text: '<b>Save</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							callback(scope.current);
+							return false;
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		}
+	};
+})
+
+.factory('$tournament', function($http, $alert, $API, $localStorage) {
+	return {
+		tournament: {
+			update: {
+				value: function(tId, current, scope) {
+					var title, subtitle;
+					switch (current.type) {
+						case 'name':
+							title = 'Edit Tournament Name:';
+							subtitle = 'Your event\'s name/title (Max: 60 characters)';
+							break;
+						case 'url':
+							title = 'Edit Tournament URL:';
+							subtitle = '(Letters, numbers, and underscores only)';
+							break;
+						case 'subdomain':
+							title = 'Edit Tournament Organization:';
+							subtitle = '(Requires write access to the specified subdomain)';
+							break;
+					}
+					$alert.input(scope, title, subtitle, current, function(newValue) {
+						if (newValue === undefined) {
+							console.log('no value');
+							return false;
+						}
+						console.log(newValue);
+						var data;
+						switch (current.type) {
+							case 'name':
+								data = {
+									name: newValue
+								};
+								break;
+							case 'url':
+								data = {
+									url: newValue
+								};
+								break;
+							case 'subdomain':
+								data = {
+									subdomain: newValue
+								};
+								break;
+						}
+						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), data)
+							.error(function(err) {
+								console.log(err);
+								scope.prevDef = true;
+								scope.popErr = err.errors[0];
+								scope.showAlert();
+							})
+							.success(function(response) {
+								console.log(response);
+								scope.checkConnection();
+							});
+					});
+				},
+				description: function(tId, description, scope) {
+					$alert.inputArea(scope, 'Edit Tournament Description:', 'Description/instructions to be displayed above the bracket. Accepts HTML.', description, function(newDesc) {
+						console.log(newDesc);
+						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
+								description: newDesc
+							})
+							.error(function(err) {
+								console.log(err);
+								scope.prevDef = true;
+								scope.popErr = err.errors[0];
+								scope.showAlert();
+							})
+							.success(function(response) {
+								console.log(response);
+								scope.tournament = response;
+								scope.checkConnection();
+							});
+					});
+				},
+			}
 		}
 	};
 });

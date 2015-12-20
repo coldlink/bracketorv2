@@ -64,6 +64,9 @@
             >
             {{subdomain ? subdomain : '{Organization}'}}.challonge.com
           </code>
+          <div ng-if="error" ng-class="error.type ? error.type : 'assertive'" class="item item-text-wrap text-center">
+            {{error.message}}
+          </div>
         </div>
         <a class="item item-icon-left assertive" ng-click="click('subdomain', subdomain)">
           <i class="icon ion-log-in"></i>
@@ -100,6 +103,9 @@
             >
             {{incSubdomain ? (subdomain ? subdomain + '.' : '{Organization}.') : ''}}challonge.com/{{url ? url : '{URL}'}}
           </code>
+          <div ng-if="error" ng-class="error.type ? error.type : 'assertive'" class="item item-text-wrap text-center">
+            {{error.message}}
+          </div>
         </div>
         <a class="item item-icon-left assertive" ng-click="click('single', subdomain, url, incSubdomain)">
           <i class="icon ion-log-in"></i>
@@ -117,14 +123,6 @@
         <a class="item item-icon-left" ng-click="click('favTour')">
           <i class="icon ion-heart"></i>
           Bookmarked Tournaments
-        </a>
-        <a class="item item-icon-left" ng-click="click('single', subdomain, url, incSubdomain)">
-          <i class="icon ion-clock"></i>
-          Organizations History
-        </a>
-        <a class="item item-icon-left" ng-click="click('single', subdomain, url, incSubdomain)">
-          <i class="icon ion-heart"></i>
-          Bookmarked Organizations
         </a>
       </div>
     </div>
