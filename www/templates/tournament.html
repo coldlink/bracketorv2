@@ -84,8 +84,8 @@
               <div class="item item-text-wrap item-button-right">
                 <h2>{{tournament.tournament.signup_cap ? tournament.tournament.signup_cap : 'N/A'}}</h2>
                 <p>Sign Up Cap</p>
-                <button class="button button-clear" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
+                <button ng-if="editEnabled" class="button button-clear" ng-click="scrBtn.edit.signUpCap(tournament.tournament.id, {value: tournament.tournament.signup_cap, type: 'signup_cap', required: false})">
+                  <i class="icon ion-edit" ></i>
                 </button>
               </div>
             </div>
@@ -101,7 +101,7 @@
                 <p>Created At</p>
               </div>
             </div>
-            <div class="list card">
+            <div class="list card" ng-click="!editEnabled ? scrBtn.urlCopyOpen(tournament.tournament.full_challonge_url) : flase">
               <div class="item item-text-wrap item-button-right">
                 <h2>{{tournament.tournament.full_challonge_url}}</h2>
                 <p>Challonge URL</p>
@@ -110,10 +110,13 @@
                 </button>
               </div>
             </div>
-            <div class="list card">
-              <div class="item item-text-wrap">
+            <div class="list card" ng-click="(!editEnabled && tournament.tournament.sign_up_url) ? scrBtn.signUpUrlCopyOpen(tournament.tournament.sign_up_url) : flase">
+              <div class="item item-text-wrap item-button-right">
                 <h2>{{tournament.tournament.sign_up_url ? tournament.tournament.sign_up_url : 'N/A'}}</h2>
                 <p>Sign Up URL</p>
+                <button ng-if="editEnabled" class="button button-clear" ng-click="scrBtn.edit.openSignup(tournament.tournament.id, {value: tournament.tournament.open_signup, type: 'open_signup', required: false})">
+                  <i class="icon ion-edit" ></i>
+                </button>
               </div>
             </div>
             <div class="list card">

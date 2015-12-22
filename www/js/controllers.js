@@ -265,7 +265,7 @@ angular.module('challonger.controllers', [])
 	$scope.checkConnection();
 })
 
-.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $cordovaToast, $ionicPlatform, $tournament, $q) {
+.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $cordovaToast, $ionicPlatform, $tournament, $q, $alert) {
 	$scope.loading = true;
 	$scope.editEnabled = false;
 	var API_KEY = $localStorage.get('API_KEY');
@@ -439,7 +439,7 @@ angular.module('challonger.controllers', [])
 				$scope.matchScores[matchId].dirty = true;
 			}
 		},
-		winSelect: function (matchId, winnerId) {
+		winSelect: function(matchId, winnerId) {
 			$scope.matchScores[matchId].winner_id = winnerId;
 		},
 		addSet: function(matchId) {
@@ -453,7 +453,7 @@ angular.module('challonger.controllers', [])
 			$scope.matchScores[matchId].pop();
 			$scope.matchScores[matchId].dirty = true;
 		},
-		saveMatch: function (matchId) {
+		saveMatch: function(matchId) {
 			var tmpScr = '';
 			var sameScrFlag = false;
 			for (var i = 0; i < $scope.matchScores[matchId].length; i++) {
@@ -470,18 +470,30 @@ angular.module('challonger.controllers', [])
 				//alert for same score stuff
 			}
 		},
+		urlCopyOpen: function(url) {
+			$alert.urlCopyOpen($scope, 'Challonge URL', 'Copy the Challonge URL to the clipboard, or open in a browser.', url);
+		},
+		signUpUrlCopyOpen: function(url) {
+			$alert.urlCopyOpen($scope, 'Sign Up URL', 'Copy the Sign Up URL to the clipboard, or open in a browser.', url);
+		},
 		edit: {
-			value: function (tid, value) {
+			value: function(tid, value) {
 				$tournament.tournament.update.value(tid, value, $scope);
 			},
-			description: function (tid, description) {
+			description: function(tid, description) {
 				$tournament.tournament.update.description(tid, description, $scope);
 			},
-			state: function (tid, state) {
+			state: function(tid, state) {
 				$tournament.tournament.update.state(tid, state, $scope);
 			},
-			type: function (tid, type) {
+			type: function(tid, type) {
 				$tournament.tournament.update.type(tid, type, $scope);
+			},
+			signUpCap: function(tid, cap) {
+				$tournament.tournament.update.signUpCap(tid, cap, $scope);
+			},
+			openSignup: function(tid, bool) {
+				$tournament.tournament.update.openSignup(tid, bool, $scope);
 			}
 		}
 	};

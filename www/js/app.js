@@ -180,6 +180,38 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 			};
 			scope.showAlert();
 		},
+		urlCopyOpen: function(scope, title, subtitle, url) {
+			scope.showAlert = function() {
+				scope.current = url;
+				var alertPopup = $ionicPopup.alert({
+					title: title,
+					subTitle: subtitle,
+					template: '<input type="text" ng-disabled="true" ng-model="current">',
+					scope: scope,
+					buttons: [{
+						text: 'Close',
+						onTap: function (e) {
+							return false;
+						}
+					}, {
+						text: '<b>Copy</b>',
+						type: 'button-positive',
+						onTap: function (e) {
+							//implement copy
+							return false;
+						}
+					}, {
+						text: '<b>Open</b>',
+						type: 'button-positive',
+						onTap: function (e) {
+							//implement open
+							return false;
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		},
 		input: function(scope, title, subtitle, value, callback) {
 			scope.prevDef = false;
 			scope.popErr = null;
@@ -328,6 +360,71 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 						}
 					}, {
 						text: '<b>Save</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							callback(scope.current);
+							return false;
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		},
+		signUpCap: function(scope, title, subtitle, value, callback) {
+			scope.prevDef = false;
+			scope.poperr = null;
+			scope.showAlert = function() {
+				scope.current = value.value;
+				scope.changeCurrent = function(newCurrent) {
+					scope.current = newCurrent;
+				};
+				var alertPopup = $ionicPopup.alert({
+					template: '<input type="number" ng-model="current" ng-change="changeCurrent(current)"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					title: title,
+					subTitle: subtitle,
+					scope: scope,
+					buttons: [{
+						text: 'Cancel',
+						onTap: function(e) {
+							callback();
+							return false;
+						}
+					}, {
+						text: '<b>Save<b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							if (scope.current === 0) {
+								scope.current = null;
+							}
+							callback(scope.current);
+							return false;
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		},
+		openSignup: function(scope, title, subtitle, value, callback) {
+			scope.prevDef = false;
+			scope.poperr = null;
+			scope.showAlert = function() {
+				scope.current = value.value;
+				scope.changeCurrent = function(newCurrent) {
+					scope.current = newCurrent;
+				};
+				var alertPopup = $ionicPopup.alert({
+					template: '<ion-list><ion-radio ng-model="current" ng-change="changeCurrent(current)" ng-value="true">Yes</ion-radio><ion-radio ng-model="current" ng-change="changeCurrent(current)" ng-value="false">No</ion-radio></ion-list>',
+					title: title,
+					subTitle: subtitle,
+					scope: scope,
+					buttons: [{
+						text: 'Cancel',
+						onTap: function(e) {
+							callback();
+							return false;
+						}
+					}, {
+						text: '<b>Save<b>',
 						type: 'button-positive',
 						onTap: function(e) {
 							callback(scope.current);
@@ -495,6 +592,50 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 						}
 						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
 								tournament_type: newType
+							})
+							.error(function(err) {
+								console.log(err);
+								scope.prevDef = true;
+								scope.popErr = err.errors[0];
+								scope.showAlert();
+							})
+							.success(function(response) {
+								console.log(response);
+								scope.tournament = response;
+								scope.checkConnection();
+							});
+					});
+				},
+				signUpCap: function(tId, cap, scope) {
+					$alert.signUpCap(scope, 'Change Sign Up Cap', 'Maximum number of participants in the bracket. Set to 0 for no cap.', cap, function(newCap) {
+						console.log(newCap);
+						if (newCap === undefined) {
+							return false;
+						}
+						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
+								signup_cap: newCap
+							})
+							.error(function(err) {
+								console.log(err);
+								scope.prevDef = true;
+								scope.popErr = err.errors[0];
+								scope.showAlert();
+							})
+							.success(function(response) {
+								console.log(response);
+								scope.tournament = response;
+								scope.checkConnection();
+							});
+					});
+				},
+				openSignup: function(tId, bool, scope) {
+					$alert.openSignup(scope, 'Host Sign Up Page?', 'Have Challonge host a sign-up page? (Otherwise, you manually add all participants).', bool, function(newBool) {
+						console.log(newBool);
+						if (newBool === undefined) {
+							return false;
+						}
+						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
+								open_signup: newBool
 							})
 							.error(function(err) {
 								console.log(err);
