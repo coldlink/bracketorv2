@@ -476,6 +476,12 @@ angular.module('challonger.controllers', [])
 			},
 			description: function (tid, description) {
 				$tournament.tournament.update.description(tid, description, $scope);
+			},
+			state: function (tid, state) {
+				$tournament.tournament.update.state(tid, state, $scope);
+			},
+			type: function (tid, type) {
+				$tournament.tournament.update.type(tid, type, $scope);
 			}
 		}
 	};

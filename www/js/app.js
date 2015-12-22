@@ -168,6 +168,18 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 			};
 			scope.showAlert();
 		},
+		deleted: function(scope) {
+			scope.showAlert = function() {
+				var alertPopup = $ionicPopup.alert({
+					title: 'Tournament Deleted',
+					template: 'Tournament successfully deleted.'
+				});
+				alertPopup.then(function() {
+					$ionicHistory.goBack();
+				});
+			};
+			scope.showAlert();
+		},
 		input: function(scope, title, subtitle, value, callback) {
 			scope.prevDef = false;
 			scope.popErr = null;
@@ -179,6 +191,91 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 				};
 				var alertPopup = $ionicPopup.alert({
 					template: '<input type="text" ng-model="current" ng-change="changeCurrent(current)"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					title: title,
+					subTitle: subtitle,
+					scope: scope,
+					buttons: [{
+						text: 'Cancel',
+						onTap: function(e) {
+							callback();
+							return false;
+						}
+					}, {
+						text: '<b>Save</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							if (!scope.current) {
+								if (value.required) {
+									scope.prevDef = true;
+									e.preventDefault();
+								} else {
+									callback(scope.current);
+									return false;
+								}
+							} else {
+								callback(scope.current);
+								return false;
+							}
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		},
+		selectState: function(scope, title, subtitle, value, callback) {
+			scope.prevDef = false;
+			scope.popErr = null;
+			scope.showAlert = function() {
+				console.log(value);
+				scope.initVal = value.value;
+				scope.current = value.value;
+				scope.changeCurrent = function(newCurrent) {
+					scope.current = newCurrent;
+				};
+				var alertPopup = $ionicPopup.alert({
+					template: '<ion-list><ion-radio ng-model="current" ng-value="\'start\'" ng-change="changeCurrent(current)" ng-disabled="initVal !== \'pending\'">Start Tournament</ion-radio><ion-radio ng-model="current" ng-value="\'finalize\'" ng-change="changeCurrent(current)" ng-disabled="initVal !== \'awaiting_review\'">Finalize Tournament</ion-radio><ion-radio ng-model="current" ng-value="\'reset\'" ng-change="changeCurrent(current)" ng-disabled="initVal === \'pending\'">Reset Tournament</ion-radio><ion-radio ng-model="current" ng-value="\'destroy\'" ng-change="changeCurrent(current)">Delete Tournament</ion-radio></ion-list><br><p ng-if="current === \'start\'">Start the tournament, opening the first round of matches for score reporting. The tournament must have at least 2 participants.</p><p ng-if="current === \'finalize\'">Finalize this tournament which has had all match scores submitted, rendering its results permanant.</p><p ng-if="current === \'reset\'">Reset a tournament, clearing all of its scores and attachments. You can then add/remove/edit participants before starting the tournament again.</p><p ng-if="current === \'destroy\'">Deletes a tournament along with all its records. The is no undo, so please use with care.</p><br ng-if="popErr"><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					title: title,
+					subTitle: subtitle,
+					scope: scope,
+					buttons: [{
+						text: 'Cancel',
+						onTap: function(e) {
+							callback();
+							return false;
+						}
+					}, {
+						text: '<b>Save</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							if (!scope.current) {
+								if (value.required) {
+									scope.prevDef = true;
+									e.preventDefault();
+								} else {
+									callback(scope.current);
+									return false;
+								}
+							} else {
+								callback(scope.current);
+								return false;
+							}
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		},
+		selectType: function(scope, title, subtitle, value, callback) {
+			scope.prevDef = false;
+			scope.popErr = null;
+			scope.showAlert = function() {
+				console.log(value);
+				scope.current = value.value;
+				scope.changeCurrent = function(newCurrent) {
+					scope.current = newCurrent;
+				};
+				var alertPopup = $ionicPopup.alert({
+					template: '<ion-list><ion-radio ng-model="current" ng-value="\'single elimination\'" ng-change="changeCurrent(current)">Single Elimination</ion-radio><ion-radio ng-model="current" ng-value="\'double elimination\'" ng-change="changeCurrent(current)">Double Elimination</ion-radio><ion-radio ng-model="current" ng-value="\'round robin\'" ng-change="changeCurrent(current)">Round Robin</ion-radio><ion-radio ng-model="current" ng-value="\'swiss\'" ng-change="changeCurrent(current)">Swiss Style</ion-radio></ion-list><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
 					title: title,
 					subTitle: subtitle,
 					scope: scope,
@@ -244,7 +341,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 	};
 })
 
-.factory('$tournament', function($http, $alert, $API, $localStorage) {
+.factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory) {
 	return {
 		tournament: {
 			update: {
@@ -261,7 +358,11 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 							break;
 						case 'subdomain':
 							title = 'Edit Tournament Organization:';
-							subtitle = '(Requires write access to the specified subdomain)';
+							subtitle = '(Requires write access to the specified organisation). Cannot remove organisation once it has been set.';
+							break;
+						case 'game_name':
+							title = 'Edit Game Name:';
+							subtitle = 'The input is the name of the game.';
 							break;
 					}
 					$alert.input(scope, title, subtitle, current, function(newValue) {
@@ -284,7 +385,16 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 								break;
 							case 'subdomain':
 								data = {
-									subdomain: newValue
+									tournament: {
+										subdomain: newValue
+									}
+								};
+								break;
+							case 'game_name':
+								data = {
+									tournament: {
+										game_name: newValue
+									}
 								};
 								break;
 						}
@@ -304,6 +414,9 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 				description: function(tId, description, scope) {
 					$alert.inputArea(scope, 'Edit Tournament Description:', 'Description/instructions to be displayed above the bracket. Accepts HTML.', description, function(newDesc) {
 						console.log(newDesc);
+						if (newDesc) {
+							return false;
+						}
 						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
 								description: newDesc
 							})
@@ -320,6 +433,82 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 							});
 					});
 				},
+				state: function(tId, state, scope) {
+					$alert.selectState(scope, 'Select Tournament State:', null, state, function(newState) {
+						console.log(newState);
+						var eurl;
+						switch (newState) {
+							case 'start':
+								eurl = $API.url() + 'tournaments/' + tId + '/start.json?api_key=' + $localStorage.get('API_KEY');
+								break;
+							case 'reset':
+								eurl = $API.url() + 'tournaments/' + tId + '/reset.json?api_key=' + $localStorage.get('API_KEY');
+								break;
+							case 'finalize':
+								eurl = $API.url() + 'tournaments/' + tId + '/finalize.json?api_key=' + $localStorage.get('API_KEY');
+								break;
+							case 'destroy':
+								eurl = $API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY');
+								break;
+						}
+						if (eurl !== undefined) {
+							if (newState === 'destroy') {
+								$http.delete(eurl)
+									.success(function(response) {
+										console.log(response);
+										$ionicHistory.nextViewOptions({
+											disableBack: true
+										});
+										$state.go('app.home');
+										$alert.deleted(scope);
+									})
+									.error(function(err) {
+										console.log(err);
+										scope.prevDef = true;
+										scope.popErr = err.errors[0];
+										scope.showAlert();
+									});
+							} else {
+								$http.post(eurl)
+									.success(function(response) {
+										console.log(response);
+										scope.tournament = response;
+										scope.checkConnection();
+									})
+									.error(function(err) {
+										if (err) {
+											console.log(err);
+											scope.prevDef = true;
+											scope.popErr = err.errors[0];
+											scope.showAlert();
+										}
+									});
+							}
+						}
+					});
+				},
+				type: function(tId, type, scope) {
+					$alert.selectType(scope, 'Edit Tournament Type:', null, type, function(newType) {
+						console.log(newType);
+						if (!newType) {
+							return false;
+						}
+						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
+								tournament_type: newType
+							})
+							.error(function(err) {
+								console.log(err);
+								scope.prevDef = true;
+								scope.popErr = err.errors[0];
+								scope.showAlert();
+							})
+							.success(function(response) {
+								console.log(response);
+								scope.tournament = response;
+								scope.checkConnection();
+							});
+					});
+				}
 			}
 		}
 	};

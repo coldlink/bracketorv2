@@ -32,8 +32,8 @@
               <div class="item item-text-wrap item-button-right">
                 <h2>{{state(tournament.tournament.state)}}</h2>
                 <p>Tournament State</p>
-                <button class="button button-clear" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
+                <button ng-if="editEnabled" class="button button-clear" ng-click="scrBtn.edit.state(tournament.tournament.id, {value: tournament.tournament.state, type: 'state', required: true})">
+                  <i class="icon ion-edit" ></i>
                 </button>
               </div>
             </div>
@@ -41,8 +41,8 @@
               <div class="item item-text-wrap item-button-right">
                 <h2>{{tournamentType(tournament.tournament.tournament_type)}}</h2>
                 <p>Tournament Type</p>
-                <button class="button button-clear" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
+                <button ng-if="editEnabled" class="button button-clear" ng-click="scrBtn.edit.type(tournament.tournament.id, {value: tournament.tournament.tournament_type, type: 'type', required: true})">
+                  <i class="icon ion-edit" ></i>
                 </button>
               </div>
             </div>
@@ -50,6 +50,9 @@
               <div class="item item-text-wrap item-button-right">
                 <h2>{{tournament.tournament.game_name ? tournament.tournament.game_name : 'N/A'}}</h2>
                 <p>Game Name</p>
+                <button ng-if="editEnabled" class="button button-clear" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.game_name, type: 'game_name', required: false})">
+                  <i class="icon ion-edit" ></i>
+                </button>
               </div>
             </div>
             <div class="list card">
@@ -66,7 +69,7 @@
               <div class="item item-text-wrap item-button-right">
                 <h2>{{tournament.tournament.subdomain ? tournament.tournament.subdomain : 'N/A'}}</h2>
                 <p>Organization</p>
-                <button ng-if="editEnabled" class="button button-clear" ng-click="scrBtn.edit.value(tournament.tournament.subdomain, {value: tournament.tournament.subdomain, type: 'subdomain', required: false})">
+                <button ng-if="editEnabled" class="button button-clear" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.subdomain, type: 'subdomain', required: false})">
                   <i class="icon ion-edit" ></i>
                 </button>
               </div>
