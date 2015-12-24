@@ -154,7 +154,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 	};
 })
 
-.factory('$alert', function($ionicPopup, $ionicHistory) {
+.factory('$alert', function($ionicPopup, $ionicHistory, $cordovaClipboard) {
 	return {
 		generic: function(scope, title, msg) {
 			scope.showAlert = function() {
@@ -164,6 +164,18 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 				});
 				alertPopup.then(function() {
 					$ionicHistory.goBack();
+				});
+			};
+			scope.showAlert();
+		},
+		genericNoBack: function(scope, title, msg) {
+			scope.showAlert = function() {
+				var alertPopup = $ionicPopup.alert({
+					title: title,
+					template: msg
+				});
+				alertPopup.then(function() {
+					return false;
 				});
 			};
 			scope.showAlert();
@@ -181,30 +193,34 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 			scope.showAlert();
 		},
 		urlCopyOpen: function(scope, title, subtitle, url) {
+			scope.prevDef = false;
+			scope.popErr = null;
 			scope.showAlert = function() {
 				scope.current = url;
 				var alertPopup = $ionicPopup.alert({
 					title: title,
 					subTitle: subtitle,
-					template: '<input type="text" ng-disabled="true" ng-model="current">',
+					template: '<input type="text" ng-disabled="true" ng-model="current"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
 					scope: scope,
 					buttons: [{
 						text: 'Close',
-						onTap: function (e) {
+						onTap: function(e) {
 							return false;
 						}
 					}, {
 						text: '<b>Copy</b>',
 						type: 'button-positive',
-						onTap: function (e) {
-							//implement copy
-							return false;
+						onTap: function(e) {
+							$cordovaClipboard.copy(url);
+							scope.prevDef = true;
+							scope.popErr = 'Copied to clipboard.';
+							e.preventDefault();
 						}
 					}, {
 						text: '<b>Open</b>',
 						type: 'button-positive',
-						onTap: function (e) {
-							//implement open
+						onTap: function(e) {
+							window.open(url, '_system', 'location=yes');
 							return false;
 						}
 					}]
@@ -511,7 +527,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 				description: function(tId, description, scope) {
 					$alert.inputArea(scope, 'Edit Tournament Description:', 'Description/instructions to be displayed above the bracket. Accepts HTML.', description, function(newDesc) {
 						console.log(newDesc);
-						if (newDesc) {
+						if (!newDesc) {
 							return false;
 						}
 						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {

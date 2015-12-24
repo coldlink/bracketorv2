@@ -305,6 +305,7 @@ angular.module('challonger.controllers', [])
 						};
 						$scope.matchScores[match.match.id].push(tempSetObj);
 						$scope.matchScores[match.match.id].dirty = false;
+						$scope.matchScores[match.match.id].state = match.match.state;
 						$scope.matchScores[match.match.id].ident = match.match.identifier;
 						$scope.matchScores[match.match.id].winner_id = match.match.winner_id;
 					}
@@ -429,6 +430,10 @@ angular.module('challonger.controllers', [])
 	$scope.scrBtn = {
 		click: function(matchId, player, index) {
 			if ($scope.editEnabled) {
+				if ($scope.tournament.tournament.state === 'complete') {
+					$alert.genericNoBack($scope, 'Error: Tournament Complete', 'Cannot change score of a completed tournament.');
+					return false;
+				}
 				$scope.matchScores[matchId][index][player]++;
 				$scope.matchScores[matchId].dirty = true;
 			}
@@ -440,7 +445,14 @@ angular.module('challonger.controllers', [])
 			}
 		},
 		winSelect: function(matchId, winnerId) {
-			$scope.matchScores[matchId].winner_id = winnerId;
+			if ($scope.editEnabled) {
+				if ($scope.tournament.tournament.state === 'complete') {
+					$alert.genericNoBack($scope, 'Error: Tournament Complete', 'Cannot change winner of a completed tournament.');
+					return false;
+				}
+				$scope.matchScores[matchId].winner_id = winnerId;
+				$scope.matchScores[matchId].dirty = true;
+			}
 		},
 		addSet: function(matchId) {
 			$scope.matchScores[matchId].push({
@@ -456,11 +468,17 @@ angular.module('challonger.controllers', [])
 		saveMatch: function(matchId) {
 			var tmpScr = '';
 			var sameScrFlag = false;
+			console.log($scope.matchScores[matchId]);
+
+			if (!$scope.matchScores[matchId].winner_id) {
+				//alert no winner selected
+			}
+
 			for (var i = 0; i < $scope.matchScores[matchId].length; i++) {
 				tmpScr += $scope.matchScores[matchId][i].p1 + '-' + $scope.matchScores[matchId][i].p2 + ',';
 
 				if ($scope.matchScores[matchId][i].p1 === $scope.matchScores[matchId][i].p2) {
-					sameScrFlag = true;
+					//alert for same score stuff
 				}
 			}
 			tmpScr = tmpScr.slice(0, -1);
@@ -474,7 +492,10 @@ angular.module('challonger.controllers', [])
 			$alert.urlCopyOpen($scope, 'Challonge URL', 'Copy the Challonge URL to the clipboard, or open in a browser.', url);
 		},
 		signUpUrlCopyOpen: function(url) {
-			$alert.urlCopyOpen($scope, 'Sign Up URL', 'Copy the Sign Up URL to the clipboard, or open in a browser.', url);
+			$alert.urlCopyOpen($scope, 'Sign Up URL', 'Copy the sign up URL to the clipboard, or open in a browser.', url);
+		},
+		imgCopyOpen: function(url) {
+			$alert.urlCopyOpen($scope, 'Live Image URL', 'Copy the live image URL to the clipboard, or open in a browser.', url);
 		},
 		edit: {
 			value: function(tid, value) {
@@ -496,6 +517,16 @@ angular.module('challonger.controllers', [])
 				$tournament.tournament.update.openSignup(tid, bool, $scope);
 			}
 		}
+	};
+
+	$scope.getImage = function(url) {
+		if (!url) {
+			return 'https://i2.wp.com/challonge.com/assets/gravatar.png';
+		}
+		if (url.substring(0, 2) === '//') {
+			return 'https:' + url;
+		}
+		return url;
 	};
 
 	$scope.checkConnection();
