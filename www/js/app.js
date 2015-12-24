@@ -192,6 +192,29 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 			};
 			scope.showAlert();
 		},
+		matchSameScr: function(scope, title, subtitle, callback) {
+			scope.showAlert = function () {
+				var alertPopup = $ionicPopup.alert({
+					title: title,
+					subTitle: subtitle,
+					buttons: [{
+						text: 'Cancel',
+						onTap: function (e) {
+							callback(false);
+							return false;
+						}
+					}, {
+						text: 'Continue',
+						type: 'button-positive',
+						onTap: function (e) {
+							callback(true);
+							return false;
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		},
 		urlCopyOpen: function(scope, title, subtitle, url) {
 			scope.prevDef = false;
 			scope.popErr = null;
@@ -527,7 +550,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 				description: function(tId, description, scope) {
 					$alert.inputArea(scope, 'Edit Tournament Description:', 'Description/instructions to be displayed above the bracket. Accepts HTML.', description, function(newDesc) {
 						console.log(newDesc);
-						if (!newDesc) {
+						if (newDesc === undefined) {
 							return false;
 						}
 						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {

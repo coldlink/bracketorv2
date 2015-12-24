@@ -196,7 +196,7 @@
                   <div class="col text-center">
                     <button class="button button-clear button-dark icon ion-plus-circled" ng-click="scrBtn.addSet(match.match.id)"></button>
                     <button class="button button-clear button-dark icon ion-minus-circled" ng-click="scrBtn.rmSet(match.match.id)" ng-if="matchScores[match.match.id].length > 1"></button>
-                    <button class="button button-clear button-dark icon ion-checkmark-circled" ng-click="scrBtn.saveMatch(match.match.id)" ng-if="matchScores[match.match.id].dirty"></button>
+                    <button class="button button-clear button-dark icon ion-checkmark-circled" ng-click="scrBtn.saveMatch(match.match.id, false, false, false)" ng-if="matchScores[match.match.id].dirty"></button>
                   </div>
                 </div>
               </div>
@@ -218,14 +218,14 @@
           <div ng-if="!loading">
             <div class="bar bar-header bar-light">
               <h1 class="title">Participants</h1>
-              <button class="button button-clear icon ion-plus-circled" ng-if="editEnabled"></button>
+              <button class="button button-clear icon ion-plus-circled" ng-if="editEnabled && tournament.tournament.state === 'pending'"></button>
             </div>
             <div class="row">
               <div class="col">
                 <div class="spacer" style="height: 40px;"></div>
               </div>
             </div>
-            <ion-list show-reorder="editEnabled">
+            <ion-list show-reorder="editEnabled && tourament.tournament.state === 'pending'">
               <ion-item class="item item-avatar-left item-icon-right" ng-repeat="participant in tournament.tournament.participants">
                 <img ng-src="{{getImage(participant.participant.attached_participatable_portrait_url)}}">
                 <h2>{{participant.participant.display_name}}</h2>

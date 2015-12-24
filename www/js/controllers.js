@@ -308,6 +308,8 @@ angular.module('challonger.controllers', [])
 						$scope.matchScores[match.match.id].state = match.match.state;
 						$scope.matchScores[match.match.id].ident = match.match.identifier;
 						$scope.matchScores[match.match.id].winner_id = match.match.winner_id;
+						$scope.matchScores[match.match.id].p1id = match.match.player1_id;
+						$scope.matchScores[match.match.id].p2id = match.match.player2_id;
 					}
 				});
 				console.log($scope.listParticipants);
@@ -465,27 +467,86 @@ angular.module('challonger.controllers', [])
 			$scope.matchScores[matchId].pop();
 			$scope.matchScores[matchId].dirty = true;
 		},
-		saveMatch: function(matchId) {
+		saveMatch: function(matchId, completeFlag, sameScoreFlag, playerFlag) {
 			var tmpScr = '';
-			var sameScrFlag = false;
 			console.log($scope.matchScores[matchId]);
 
-			if (!$scope.matchScores[matchId].winner_id) {
-				//alert no winner selected
-			}
-
-			for (var i = 0; i < $scope.matchScores[matchId].length; i++) {
-				tmpScr += $scope.matchScores[matchId][i].p1 + '-' + $scope.matchScores[matchId][i].p2 + ',';
-
-				if ($scope.matchScores[matchId][i].p1 === $scope.matchScores[matchId][i].p2) {
-					//alert for same score stuff
+			if ($scope.matchScores[matchId].state === 'complete' && !completeFlag) {
+				$alert.matchSameScr($scope, 'Warning: Match Complete', 'Changing the result of this match may cause other matches to be reset, possibly losing progress in the tournament. Are you sure you want to continue?', function(arg) {
+					if (!arg) {
+						return false;
+					} else {
+						completeFlag = true;
+						return $scope.scrBtn.saveMatch(matchId, completeFlag, sameScoreFlag, playerFlag);
+					}
+				});
+			} else {
+				if (!$scope.matchScores[matchId].winner_id) {
+					$alert.genericNoBack($scope, 'Error: No Winner Selected', 'A winner must be selected before a match can be saved. Select a winner by tapping on the winners name.');
+					return false;
 				}
-			}
-			tmpScr = tmpScr.slice(0, -1);
-			console.log(tmpScr);
 
-			if (sameScrFlag) {
-				//alert for same score stuff
+				var p1scr = 0;
+				var p2scr = 0;
+				for (var i = 0; i < $scope.matchScores[matchId].length; i++) {
+					tmpScr += $scope.matchScores[matchId][i].p1 + '-' + $scope.matchScores[matchId][i].p2 + ',';
+
+					if ($scope.matchScores[matchId][i].p1 > $scope.matchScores[matchId][i].p2) {
+						p1scr++;
+					}
+
+					if ($scope.matchScores[matchId][i].p2 > $scope.matchScores[matchId][i].p1) {
+						p2scr++;
+					}
+				}
+
+				if (p1scr === p2scr && !sameScoreFlag) {
+					$alert.matchSameScr($scope, 'Warning: Same Score', 'Both players have the same overall score. If this is correct then click \'Continue\' to proceed, else click \'Cancel\' to cancel saving and check.', function(arg) {
+						if (!arg) {
+							return false;
+						} else {
+							sameScoreFlag = true;
+							return $scope.scrBtn.saveMatch(matchId, completeFlag, sameScoreFlag, playerFlag);
+						}
+					});
+				} else {
+					if (p1scr > p2scr && $scope.matchScores[matchId].winner_id === $scope.matchScores[matchId].p2id && !playerFlag) {
+						$alert.matchSameScr($scope, 'Warning: Possible Mismatched Winner', 'The winner you selected does not match the result of the scores you entered (assuming high score wins). Click \'Cancel\' to make changes or \'Continue\' to submit as-is.', function(arg) {
+							if (!arg) {
+								return false;
+							} else {
+								playerFlag = true;
+								return $scope.scrBtn.saveMatch(matchId, completeFlag, sameScoreFlag, playerFlag);
+							}
+						});
+					} else {
+						if (p2scr > p1scr && $scope.matchScores[matchId].winner_id === $scope.matchScores[matchId].p1id && !playerFlag) {
+							$alert.matchSameScr($scope, 'Warning: Possible Mismatched Winner', 'The winner you selected does not match the result of the scores you entered (assuming high score wins). Click \'Cancel\' to make changes or \'Continue\' to submit as-is.', function(arg) {
+								if (!arg) {
+									return false;
+								} else {
+									playerFlag = true;
+									return $scope.scrBtn.saveMatch(matchId, completeFlag, sameScoreFlag, playerFlag);
+								}
+							});
+						} else {
+							tmpScr = tmpScr.slice(0, -1);
+							console.log(tmpScr);
+							$http.put($API.url() + 'tournaments/' + $scope.tournament.tournament.id + '/matches/' + matchId + '.json?api_key=' + $localStorage.get('API_KEY'), {
+									match: {
+										scores_csv: tmpScr,
+										winner_id: $scope.matchScores[matchId].winner_id
+									}
+								})
+								.success(function() {
+									$scope.checkConnection();
+								})
+								.error(function(err) {
+									$alert.genericNoBack($scope, 'Error', err.errors[0]);
+								});
+						}
+					}
+				}
 			}
 		},
 		urlCopyOpen: function(url) {
