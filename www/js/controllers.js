@@ -585,17 +585,22 @@ angular.module('challonger.controllers', [])
 				$scope.tournament.tournament.participants.splice(toIndex, 0, participant);
 
 				$http.put($API.url() + 'tournaments/' + tid + '/participants/' + pid + '.json?api_key=' + $localStorage.get('API_KEY'), {
-					participant: {
-						seed: toIndex + 1
-					}
-				})
-				.success(function (response) {
-					console.log(response);
-					$scope.checkConnection();
-				})
-				.error(function (err) {
-					console.log(err);
-				});
+						participant: {
+							seed: toIndex + 1
+						}
+					})
+					.success(function(response) {
+						console.log(response);
+						$scope.checkConnection();
+					})
+					.error(function(err) {
+						console.log(err);
+					});
+			}
+		},
+		create: {
+			participant: function(tid) {
+				$tournament.tournament.create.participant(tid, $scope);
 			}
 		}
 	};

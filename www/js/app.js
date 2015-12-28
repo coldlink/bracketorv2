@@ -193,20 +193,20 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 			scope.showAlert();
 		},
 		matchSameScr: function(scope, title, subtitle, callback) {
-			scope.showAlert = function () {
+			scope.showAlert = function() {
 				var alertPopup = $ionicPopup.alert({
 					title: title,
 					subTitle: subtitle,
 					buttons: [{
 						text: 'Cancel',
-						onTap: function (e) {
+						onTap: function(e) {
 							callback(false);
 							return false;
 						}
 					}, {
 						text: 'Continue',
 						type: 'button-positive',
-						onTap: function (e) {
+						onTap: function(e) {
 							callback(true);
 							return false;
 						}
@@ -473,6 +473,36 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 				});
 			};
 			scope.showAlert();
+		},
+		newParticipant: function (scope, callback) {
+			scope.prevDef = false;
+			scope.popErr = null;
+			scope.showAlert = function () {
+				scope.current = {};
+				scope.changeCurrent = function (newCurrent) {
+					scope.current = newCurrent;
+				};
+				var alertPopup = $ionicPopup.alert({
+					template: '<p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p><input type="text" placeholder="Display Name" ng-model="current.participant.name" ng-change="changeCurrent(current)"><small>The name displayed in the bracket - not required if Email or Challonge Username is provided. Must be unique per tournament.</small><br><input type="text" placeholder="Challonge Username" ng-model="current.participant.challonge_username" ng-change="changeCurrent(current)"><small>Provide this if the participant has a Challonge account. They will be invited to the tournament.</small><br><input type="email" placeholder="Email" ng-model="current.participant.email" ng-change="changeCurrent(current)"><small>Providing this will first search for a matching Challonge account. If a Challonge user with that email is found, they will be invited to the tournament. Otherwise they will be invited by email to create a Challonge account.</small><br><input type="number" placeholder="Seed" ng-model="current.participant.seed" ng-change="changeCurrent(current)"><small>The participants new seed. Must be between 1 and the total number of participants. Overwriting an existing seed will automatically bump other participants as you would expect. Leave blank to add participant as last seed.</small>',
+					title: 'Add Participant',
+					scope: scope,
+					buttons: [{
+						text: 'Cancel',
+						onTap: function (e) {
+							callback();
+							return false;
+						}
+					}, {
+						text: '<b>Add</b>',
+						type: 'button-positive',
+						onTap: function (e) {
+							callback(scope.current);
+							return false;
+						}
+					}]
+				});
+			};
+			scope.showAlert();
 		}
 	};
 })
@@ -480,6 +510,26 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 .factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory) {
 	return {
 		tournament: {
+			create: {
+				participant: function(tId, scope) {
+					$alert.newParticipant(scope, function(newPart) {
+						console.log(newPart);
+						if (!newPart) {
+							return false;
+						}
+						return $http.post($API.url() + 'tournaments/' + tId + '/participants.json?api_key=' + $localStorage.get('API_KEY'), newPart)
+							.success(function(response) {
+								console.log(response);
+								scope.checkConnection();
+							})
+							.error(function(err) {
+								scope.prevDef = true;
+								scope.popErr = err.errors[0];
+								scope.showAlert();
+							});
+					});
+				}
+			},
 			update: {
 				value: function(tId, current, scope) {
 					var title, subtitle;
