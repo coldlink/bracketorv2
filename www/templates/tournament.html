@@ -225,13 +225,13 @@
                 <div class="spacer" style="height: 40px;"></div>
               </div>
             </div>
-            <ion-list show-reorder="editEnabled && tourament.tournament.state === 'pending'">
+            <ion-list show-reorder="editEnabled && tournament.tournament.state === 'pending'">
               <ion-item class="item item-avatar-left item-icon-right" ng-repeat="participant in tournament.tournament.participants">
                 <img ng-src="{{getImage(participant.participant.attached_participatable_portrait_url)}}">
                 <h2>{{participant.participant.display_name}}</h2>
                 <p>{{participant.participant.challonge_username}}</p>
                 <i class="icon">{{participant.participant.seed}}</i>
-                <ion-reorder-button on-reorder="">{{participant.participant.seed}}&emsp;
+                <ion-reorder-button on-reorder="scrBtn.edit.reorder(tournament.tournament.id, participant, participant.participant.id, $fromIndex, $toIndex)">{{participant.participant.seed}}&emsp;
                   <i class="ion-navicon"></i>
                 </ion-reorder-button>
               </ion-item>

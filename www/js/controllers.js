@@ -576,6 +576,26 @@ angular.module('challonger.controllers', [])
 			},
 			openSignup: function(tid, bool) {
 				$tournament.tournament.update.openSignup(tid, bool, $scope);
+			},
+			reorder: function(tid, participant, pid, fromIndex, toIndex) {
+				console.log(pid);
+				console.log(tid);
+
+				$scope.tournament.tournament.participants.splice(fromIndex, 1);
+				$scope.tournament.tournament.participants.splice(toIndex, 0, participant);
+
+				$http.put($API.url() + 'tournaments/' + tid + '/participants/' + pid + '.json?api_key=' + $localStorage.get('API_KEY'), {
+					participant: {
+						seed: toIndex + 1
+					}
+				})
+				.success(function (response) {
+					console.log(response);
+					$scope.checkConnection();
+				})
+				.error(function (err) {
+					console.log(err);
+				});
 			}
 		}
 	};
