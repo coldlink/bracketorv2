@@ -231,7 +231,7 @@
                 <h2>{{participant.participant.display_name}}</h2>
                 <p>{{participant.participant.challonge_username}}</p>
                 <i class="icon">{{participant.participant.seed}}</i>
-                <ion-reorder-button on-reorder="scrBtn.edit.reorder(tournament.tournament.id, participant, participant.participant.id, $fromIndex, $toIndex)">{{participant.participant.seed}}&emsp;
+                <ion-reorder-button ng-click="scrBtn.edit.participant(tournament.tournament.id, participant.participant.id)" on-reorder="scrBtn.edit.reorder(tournament.tournament.id, participant, participant.participant.id, $fromIndex, $toIndex)">{{participant.participant.seed}}&emsp;
                   <i class="ion-navicon"></i>
                 </ion-reorder-button>
               </ion-item>

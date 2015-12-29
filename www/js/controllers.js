@@ -578,6 +578,9 @@ angular.module('challonger.controllers', [])
 				$tournament.tournament.update.openSignup(tid, bool, $scope);
 			},
 			reorder: function(tid, participant, pid, fromIndex, toIndex) {
+				if (!$scope.editEnabled) {
+					return false;
+				}
 				console.log(pid);
 				console.log(tid);
 
@@ -596,11 +599,17 @@ angular.module('challonger.controllers', [])
 					.error(function(err) {
 						console.log(err);
 					});
+			},
+			participant: function(tid, pid) {
+				if (!$scope.editEnabled) {
+					return false;
+				}
+				$tournament.participant.update(tid, pid, $scope);
 			}
 		},
 		create: {
 			participant: function(tid) {
-				$tournament.tournament.create.participant(tid, $scope);
+				$tournament.participant.create(tid, $scope);
 			}
 		}
 	};

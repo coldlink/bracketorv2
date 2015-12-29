@@ -474,7 +474,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 			};
 			scope.showAlert();
 		},
-		newParticipant: function (scope, callback) {
+		newParticipant: function (scope, title, callback) {
 			scope.prevDef = false;
 			scope.popErr = null;
 			scope.showAlert = function () {
@@ -484,7 +484,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 				};
 				var alertPopup = $ionicPopup.alert({
 					template: '<p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p><input type="text" placeholder="Display Name" ng-model="current.participant.name" ng-change="changeCurrent(current)"><small>The name displayed in the bracket - not required if Email or Challonge Username is provided. Must be unique per tournament.</small><br><input type="text" placeholder="Challonge Username" ng-model="current.participant.challonge_username" ng-change="changeCurrent(current)"><small>Provide this if the participant has a Challonge account. They will be invited to the tournament.</small><br><input type="email" placeholder="Email" ng-model="current.participant.email" ng-change="changeCurrent(current)"><small>Providing this will first search for a matching Challonge account. If a Challonge user with that email is found, they will be invited to the tournament. Otherwise they will be invited by email to create a Challonge account.</small><br><input type="number" placeholder="Seed" ng-model="current.participant.seed" ng-change="changeCurrent(current)"><small>The participants new seed. Must be between 1 and the total number of participants. Overwriting an existing seed will automatically bump other participants as you would expect. Leave blank to add participant as last seed.</small>',
-					title: 'Add Participant',
+					title: title,
 					scope: scope,
 					buttons: [{
 						text: 'Cancel',
@@ -496,7 +496,49 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 						text: '<b>Add</b>',
 						type: 'button-positive',
 						onTap: function (e) {
+							if (!scope.current.participant.name) {
+								scope.prevDef = true;
+								scope.popErr = "A display name is required."
+								e.preventDefault();
+							}
 							callback(scope.current);
+							return false;
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		},
+		editParticipant: function (scope, value, callback) {
+			scope.prevDef = false;
+			scope.popErr = null;
+			scope.showAlert = function () {
+				scope.current = value;
+				scope.changeCurrent = function (newCurrent) {
+					scope.current = newCurrent;
+				};
+				var alertPopup = $ionicPopup.alert({
+					template: '<p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p><input type="text" placeholder="Display Name" ng-model="current.participant.name" ng-change="changeCurrent(current)"><small>The name displayed in the bracket - not required if Email or Challonge Username is provided. Must be unique per tournament.</small><br><input type="text" placeholder="Challonge Username" ng-model="current.participant.challonge_username" ng-change="changeCurrent(current)"><small>Provide this if the participant has a Challonge account. They will be invited to the tournament.</small><br><input type="number" placeholder="Seed" ng-model="current.participant.seed" ng-change="changeCurrent(current)"><small>The participants new seed. Must be between 1 and the total number of participants. Overwriting an existing seed will automatically bump other participants as you would expect. Leave blank to add participant as last seed.</small>',
+					title: 'Edit Participant',
+					scope: scope,
+					buttons: [{
+						text: 'Close',
+						onTap: function (e) {
+							callback();
+							return false;
+						}
+					}, {
+						text: 'Delete',
+						type: 'button-assertive',
+						onTap: function (e) {
+							callback(null, true);
+							return false;
+						}
+					}, {
+						text: 'Edit',
+						type: 'button-positive',
+						onTap: function (e) {
+							callback(scope.current, false);
 							return false;
 						}
 					}]
@@ -509,10 +551,9 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 
 .factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory) {
 	return {
-		tournament: {
-			create: {
-				participant: function(tId, scope) {
-					$alert.newParticipant(scope, function(newPart) {
+		participant: {
+			create: function(tId, scope) {
+					$alert.newParticipant(scope, 'Add Participant', function(newPart) {
 						console.log(newPart);
 						if (!newPart) {
 							return false;
@@ -528,8 +569,48 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 								scope.showAlert();
 							});
 					});
-				}
 			},
+			update: function (tId, pId, scope) {
+				var part = {
+					participant: {
+							name: scope.listParticipants[pId].display_name,
+							seed: scope.listParticipants[pId].seed
+					}
+				};
+				if (scope.listParticipants[pId].challonge_username) {
+					part.participant.challonge_username = scope.listParticipants[pId].challonge_username;
+				}
+				$alert.editParticipant(scope, part, function (newPart, delFlag) {
+					console.log(newPart);
+					if (delFlag) {
+						return $http.delete($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'))
+						.success(function (response) {
+							console.log(response);
+							scope.checkConnection();
+						})
+						.error(function (err) {
+							scope.prevDef = true;
+							scope.popErr = err.errors[0];
+							scope.showAlert();
+						});
+					}
+					if (!newPart) {
+						return false;
+					}
+					return $http.put($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'), newPart)
+					.success(function (response) {
+						console.log(response);
+						scope.checkConnection();
+					})
+					.error(function (err) {
+						scope.prevDef = true;
+						scope.popErr = err.errors[0];
+						scope.showAlert();
+					});
+				});
+			}
+		},
+		tournament: {
 			update: {
 				value: function(tId, current, scope) {
 					var title, subtitle;
