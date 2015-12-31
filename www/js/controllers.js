@@ -627,6 +627,26 @@ angular.module('challonger.controllers', [])
 	$scope.checkConnection();
 })
 
+.controller('CreateCtrl', function($scope, $localStorage, $API, $connection, $alert, $http) {
+	$scope.save = function(tournament) {
+		console.log(tournament);
+		if (!$connection.isConnected()) {
+			return $alert.genericNoBack($scope, 'No internet connention detected.', 'No internet connection was detected, please check your internet connection and try again.');
+		} else {
+			console.log($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'));
+			$http.post($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'), tournament)
+			.success(function (response) {
+				console.log(response);
+				return $alert.newUrlCopyOpen($scope, 'New Tournament', 'Tournament successfully created. Copy the url from the input below, or open the tournament by clicking \'Open\'.', response.tournament.full_challonge_url, response.tournament.id);
+			})
+			.error(function (err) {
+				console.log(err);
+				return $alert.genericNoBack($scope, 'Error', err.errors[0]);
+			});
+		}
+	};
+})
+
 .controller('SettingsCtrl', function($scope, $localStorage, $ionicModal) {
 	if ($localStorage.get('API_KEY')) {
 		$scope.API_KEY = $localStorage.get('API_KEY');

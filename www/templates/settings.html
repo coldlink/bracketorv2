@@ -1,22 +1,18 @@
 <ion-view view-title="Settings">
   <ion-content>
-    <div class="row">
-      <div class="col">
-        <div class="card">
-          <div class="item item-input-inset">
-            <button class="button button-icon icon ion-help-circled padding-right" ng-click="openModal();"></button>
-            <label class="item-input-wrapper">
-              <span class="input-label">API Key:</span>
-              <input ng-model="API_KEY" placeholder="API Key" type="password">
-            </label>
-            <button class="button button-clear button-small" ng-click="saveKey(API_KEY)">
-              Save
-            </button>
-          </div>
-          <div ng-if="apiError" ng-class="apiError.type ? apiError.type : 'assertive'" class="item item-text-wrap text-center">
-            {{apiError.message}}
-          </div>
-        </div>
+    <div class="list">
+      <div class="item item-input-inset">
+        <button class="button button-icon icon ion-help-circled padding-right" ng-click="openModal();"></button>
+        <label class="item-input-wrapper">
+          <span class="input-label">API Key:</span>
+          <input ng-model="API_KEY" placeholder="API Key" type="password">
+        </label>
+        <button class="button button-clear button-small" ng-click="saveKey(API_KEY)">
+          Save
+        </button>
+      </div>
+      <div class="item item-text-wrap text-center" ng-class="apiError.type ? apiError.type : 'assertive'" ng-if="apiError">
+        {{apiError.message}}
       </div>
     </div>
   </ion-content>

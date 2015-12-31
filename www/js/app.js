@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
+angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'angular-svg-round-progress'])
 
 .run(function($ionicPlatform) {
 	$ionicPlatform.ready(function() {
@@ -88,6 +88,16 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 				controller: 'TournamentCtrl'
 			}
 		}
+	})
+
+	.state('app.create', {
+		url: '/create',
+		views: {
+			'menuContent': {
+				templateUrl: 'templates/create.html',
+				controller: 'CreateCtrl'
+			}
+		}
 	});
 	// if none of the above states are matched, use this as the fallback
 	$urlRouterProvider.otherwise('/app/home');
@@ -154,7 +164,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 	};
 })
 
-.factory('$alert', function($ionicPopup, $ionicHistory, $cordovaClipboard) {
+.factory('$alert', function($ionicPopup, $ionicHistory, $cordovaClipboard, $state) {
 	return {
 		generic: function(scope, title, msg) {
 			scope.showAlert = function() {
@@ -216,8 +226,6 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 			scope.showAlert();
 		},
 		urlCopyOpen: function(scope, title, subtitle, url) {
-			scope.prevDef = false;
-			scope.popErr = null;
 			scope.showAlert = function() {
 				scope.current = url;
 				var alertPopup = $ionicPopup.alert({
@@ -244,6 +252,31 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova'])
 						type: 'button-positive',
 						onTap: function(e) {
 							window.open(url, '_system', 'location=yes');
+							return false;
+						}
+					}]
+				});
+			};
+			scope.showAlert();
+		},
+		newUrlCopyOpen: function (scope, title, subtitle, url, tid) {
+			scope.showAlert = function() {
+				scope.current = url;
+				var alertPopup = $ionicPopup.alert({
+					title: title,
+					subTitle: subtitle,
+					template: '<input type="text" ng-disabled="true" ng-model="current"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					scope: scope,
+					buttons: [{
+						text: 'Close',
+						onTap: function(e) {
+							return false;
+						}
+					}, {
+						text: '<b>Open</b>',
+						type: 'button-positive',
+						onTap: function(e) {
+							$state.go('app.tournament', {id: tid});
 							return false;
 						}
 					}]

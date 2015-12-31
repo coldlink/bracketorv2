@@ -1,0 +1,130 @@
+<ion-view view-title="Create Tournament">
+  <ion-content>
+    <div class="list">
+      <div class="item item-divider item-body">
+        <i class="icon ion-alert-circled"></i>
+        Tournament Name
+        <br>
+        <small>Max: 60 Characters</small>
+      </div>
+      <label class="item item-input">
+        <input ng-model="tournament.tournament.name" placeholder="Insert name here..." type="text">
+      </label>
+      <div class="item item-divider item-body">
+        <i class="icon ion-alert-circled"></i>
+        Tournament Type
+      </div>
+      <ion-list>
+        <ion-radio ng-model="tournament.tournament.tournament_type" ng-value="'single elimination'">Single Elimination</ion-radio>
+        <ion-radio ng-model="tournament.tournament.tournament_type" ng-value="'double elimination'">Double Elimination</ion-radio>
+        <ion-radio ng-model="tournament.tournament.tournament_type" ng-value="'round robin'">Round Robin</ion-radio>
+        <ion-radio ng-model="tournament.tournament.tournament_type" ng-value="'swiss'">Swiss Style</ion-radio>
+      </ion-list>
+      <div class="item item-divider item-body">
+        <i class="icon ion-alert-circled"></i>
+        URL: challonge.com/{{tournament.tournament.url ? tournament.tournament.url : '{url}'}}
+        <br>
+        <small>Letters, numbers, and underscores only.</small>
+      </div>
+      <label class="item item-input">
+        <input ng-model="tournament.tournament.url" placeholder="challonge.com/{url}" type="text">
+      </label>
+      <div class="item item-divider item-body">
+        Organization:
+        {{tournament.tournament.subdomain ? tournament.tournament.subdomain : '{organization}'}}.challonge.com
+        <br>
+        <small>Requires write access to the specified organization.</small>
+      </div>
+      <label class="item item-input">
+        <input ng-model="tournament.tournament.subdomain" placeholder="{organization}.challonge.com" type="text">
+      </label>
+      <div class="item item-divider item-body">
+        Description
+        <br>
+        <small>Description/instructions to be displayed with the bracket. Can contain HTML</small>
+      </div>
+      <label class="item item-input">
+        <textarea ng-model="tournament.tournament.description" placeholder="Insert description here..."></textarea>
+      </label>
+      <div class="item item-divider item-body">
+        Host Sign Up
+        <br>
+        <small>Have Challonge host a sign up page? Otherwise you manually add all participants</small>
+      </div>
+      <ion-list>
+        <ion-checkbox ng-model="tournament.tournament.open_signup">Host Sign Up?</ion-checkbox>
+      </ion-list>
+      <div class="item item-divider item-body">
+        Make Private
+        <br>
+        <small>Hide this tournament from the public browsable index and your profile.</small>
+      </div>
+      <ion-list>
+        <ion-checkbox ng-model="tournament.tournament.private">Make Private?</ion-checkbox>
+      </ion-list>
+      <div class="item item-divider item-body">
+        Sign Up Cap
+        <br>
+        <small>Maximum number of participants in the bracket. 0 or blank is no cap.</small>
+      </div>
+      <label class="item item-input">
+        <input ng-model="tournament.tournament.signup_cap" placeholder="Cap" type="number">
+      </label>
+
+      <!-- SE SPECIFIC STUFF -->
+      <div class="item item-divider item-body" ng-show="tournament.tournament.tournament_type === 'single elimination'">
+        Hold 3rd Place Match?
+        <br>
+        <small>Single Elimination only. Include a match between semifinal losers?</small>
+      </div>
+      <ion-list ng-show="tournament.tournament.tournament_type === 'single elimination'">
+        <ion-checkbox ng-model="tournament.tournament.hold_third_place_match">Hold 3rd Place Match?</ion-checkbox>
+      </ion-list>
+
+      <!-- SW SPECIFIC STUFF -->
+      <div class="item item-divider item-body" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        Swiss - Points for Match Win
+      </div>
+      <label class="item item-input" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        <input ng-model="tournament.tournament.pts_for_match_win" placeholder="default: 1.0" type="number">
+      </label>
+      <div class="item item-divider item-body" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        Swiss - Points for Match Tie
+      </div>
+      <label class="item item-input" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        <input ng-model="tournament.tournament.tie" placeholder="default: 0.5" type="number">
+      </label>
+      <div class="item item-divider item-body" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        Swiss - Points for Game Win
+      </div>
+      <label class="item item-input" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        <input ng-model="tournament.tournament.pts_for_game_win" placeholder="default: 0.0" type="number">
+      </label>
+      <div class="item item-divider item-body" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        Swiss - Points for Game Tie
+      </div>
+      <label class="item item-input" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        <input ng-model="tournament.tournament.pts_for_game_tie" placeholder="default: 0.0" type="number">
+      </label>
+      <div class="item item-divider item-body" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        Swiss - Points for Bye
+      </div>
+      <label class="item item-input" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        <input ng-model="tournament.tournament.pts_for_bye" placeholder="default: 1.0" type="number">
+      </label>
+      <div class="item item-divider item-body" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        Swiss Rounds
+        <br>
+        <small>
+          We recommend limiting the number of rounds to less than two-thirds the number of players. Otherwise, an impossible pairing situation can be reached and your tournament may end before the desired number of rounds are played.
+        </small>
+      </div>
+      <label class="item item-input" ng-show="tournament.tournament.tournament_type === 'swiss'">
+        <input ng-model="tournament.tournament.swiss_rounds" placeholder="Set to < 2/3 of total players." type="number">
+      </label>
+      <button ng-click="save(tournament)" class="button button-block button-positive" ng-disabled="!(tournament.tournament.name && tournament.tournament.tournament_type && tournament.tournament.url)">
+        Create
+      </button>
+    </div>
+  </ion-content>
+</ion-view>
