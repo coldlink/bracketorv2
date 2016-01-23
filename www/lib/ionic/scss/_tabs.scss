@@ -94,7 +94,7 @@
       background-color: $background;
     }
     .tab-item {
-      color: rgba($color, $tabs-striped-off-opacity);
+      color: rgba(#fff, $tabs-striped-off-opacity);
       opacity: 1;
       .badge{
         opacity:$tabs-striped-off-opacity;
@@ -103,7 +103,7 @@
       &.active,
       &.activated {
         margin-top: -$tabs-striped-border-width;
-        color: $color;
+        color: #fff;
         border-style: solid;
         border-width: $tabs-striped-border-width 0 0 0;
         border-color: $color;
@@ -525,4 +525,3 @@ ion-tabs {
 .pane[hide-nav-bar="true"] .has-tabs-top{
   top:49px
 }
-

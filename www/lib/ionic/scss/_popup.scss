@@ -44,7 +44,7 @@
     max-height: 90%;
 
     border-radius: $popup-border-radius;
-    background-color: $popup-background-color;
+    background-color: rgb(68, 68, 68);
 
     @include display-flex();
     @include flex-direction(column);

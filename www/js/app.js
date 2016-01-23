@@ -215,7 +215,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: 'Continue',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function(e) {
 							callback(true);
 							return false;
@@ -231,7 +231,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 				var alertPopup = $ionicPopup.alert({
 					title: title,
 					subTitle: subtitle,
-					template: '<input type="text" ng-disabled="true" ng-model="current"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					template: '<input class="dark" type="text" ng-disabled="true" ng-model="current"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
 					scope: scope,
 					buttons: [{
 						text: 'Close',
@@ -240,7 +240,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					} , {
 						text: '<b>Open</b>',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function(e) {
 							window.open(url, '_system', 'location=yes');
 							return false;
@@ -256,7 +256,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 				var alertPopup = $ionicPopup.alert({
 					title: title,
 					subTitle: subtitle,
-					template: '<input type="text" ng-disabled="true" ng-model="current"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					template: '<input class="dark" type="text" ng-disabled="true" ng-model="current"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
 					scope: scope,
 					buttons: [{
 						text: 'Close',
@@ -265,7 +265,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: '<b>Open</b>',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function(e) {
 							$state.go('app.tournament', {id: tid});
 							return false;
@@ -285,7 +285,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					scope.current = newCurrent;
 				};
 				var alertPopup = $ionicPopup.alert({
-					template: '<input type="text" ng-model="current" ng-change="changeCurrent(current)"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					template: '<input class="dark" type="text" ng-model="current" ng-change="changeCurrent(current)"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
 					title: title,
 					subTitle: subtitle,
 					scope: scope,
@@ -297,7 +297,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: '<b>Save</b>',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function(e) {
 							if (!scope.current) {
 								if (value.required) {
@@ -340,7 +340,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: '<b>Save</b>',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function(e) {
 							if (!scope.current) {
 								if (value.required) {
@@ -382,7 +382,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: '<b>Save</b>',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function(e) {
 							if (!scope.current) {
 								if (value.required) {
@@ -411,7 +411,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					scope.current = newCurrent;
 				};
 				var alertPopup = $ionicPopup.alert({
-					template: '<textarea ng-model="current" ng-change="changeCurrent(current)"></textarea><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					template: '<textarea class="dark" ng-model="current" ng-change="changeCurrent(current)"></textarea><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
 					title: title,
 					subTitle: subtitle,
 					scope: scope,
@@ -423,7 +423,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: '<b>Save</b>',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function(e) {
 							callback(scope.current);
 							return false;
@@ -442,7 +442,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					scope.current = newCurrent;
 				};
 				var alertPopup = $ionicPopup.alert({
-					template: '<input type="number" ng-model="current" ng-change="changeCurrent(current)"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
+					template: '<input class="dark" type="number" ng-model="current" ng-change="changeCurrent(current)"><br><p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p>',
 					title: title,
 					subTitle: subtitle,
 					scope: scope,
@@ -454,7 +454,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: '<b>Save<b>',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function(e) {
 							if (scope.current === 0) {
 								scope.current = null;
@@ -488,7 +488,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: '<b>Save<b>',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function(e) {
 							callback(scope.current);
 							return false;
@@ -507,7 +507,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					scope.current = newCurrent;
 				};
 				var alertPopup = $ionicPopup.alert({
-					template: '<p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p><input type="text" placeholder="Display Name" ng-model="current.participant.name" ng-change="changeCurrent(current)"><small>The name displayed in the bracket - not required if Email or Challonge Username is provided. Must be unique per tournament.</small><br><input type="text" placeholder="Challonge Username" ng-model="current.participant.challonge_username" ng-change="changeCurrent(current)"><small>Provide this if the participant has a Challonge account. They will be invited to the tournament.</small><br><input type="email" placeholder="Email" ng-model="current.participant.email" ng-change="changeCurrent(current)"><small>Providing this will first search for a matching Challonge account. If a Challonge user with that email is found, they will be invited to the tournament. Otherwise they will be invited by email to create a Challonge account.</small><br><input type="number" placeholder="Seed" ng-model="current.participant.seed" ng-change="changeCurrent(current)"><small>The participants new seed. Must be between 1 and the total number of participants. Overwriting an existing seed will automatically bump other participants as you would expect. Leave blank to add participant as last seed.</small>',
+					template: '<p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p><input class="dark" type="text" placeholder="Display Name" ng-model="current.participant.name" ng-change="changeCurrent(current)"><small>The name displayed in the bracket - not required if Email or Challonge Username is provided. Must be unique per tournament.</small><br><input class="dark" type="text" placeholder="Challonge Username" ng-model="current.participant.challonge_username" ng-change="changeCurrent(current)"><small>Provide this if the participant has a Challonge account. They will be invited to the tournament.</small><br><input class="dark" type="email" placeholder="Email" ng-model="current.participant.email" ng-change="changeCurrent(current)"><small>Providing this will first search for a matching Challonge account. If a Challonge user with that email is found, they will be invited to the tournament. Otherwise they will be invited by email to create a Challonge account.</small><br><input class="dark" type="number" placeholder="Seed" ng-model="current.participant.seed" ng-change="changeCurrent(current)"><small>The participants new seed. Must be between 1 and the total number of participants. Overwriting an existing seed will automatically bump other participants as you would expect. Leave blank to add participant as last seed.</small>',
 					title: title,
 					scope: scope,
 					buttons: [{
@@ -518,7 +518,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: '<b>Add</b>',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function (e) {
 							if (!scope.current.participant.name) {
 								scope.prevDef = true;
@@ -542,7 +542,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					scope.current = newCurrent;
 				};
 				var alertPopup = $ionicPopup.alert({
-					template: '<p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p><input type="text" placeholder="Display Name" ng-model="current.participant.name" ng-change="changeCurrent(current)"><small>The name displayed in the bracket - not required if Email or Challonge Username is provided. Must be unique per tournament.</small><br><input type="text" placeholder="Challonge Username" ng-model="current.participant.challonge_username" ng-change="changeCurrent(current)"><small>Provide this if the participant has a Challonge account. They will be invited to the tournament.</small><br><input type="number" placeholder="Seed" ng-model="current.participant.seed" ng-change="changeCurrent(current)"><small>The participants new seed. Must be between 1 and the total number of participants. Overwriting an existing seed will automatically bump other participants as you would expect. Leave blank to add participant as last seed.</small>',
+					template: '<p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p><input class="dark" type="text" placeholder="Display Name" ng-model="current.participant.name" ng-change="changeCurrent(current)"><small>The name displayed in the bracket - not required if Email or Challonge Username is provided. Must be unique per tournament.</small><br><input class="dark" type="text" placeholder="Challonge Username" ng-model="current.participant.challonge_username" ng-change="changeCurrent(current)"><small>Provide this if the participant has a Challonge account. They will be invited to the tournament.</small><br><input class="dark" type="number" placeholder="Seed" ng-model="current.participant.seed" ng-change="changeCurrent(current)"><small>The participants new seed. Must be between 1 and the total number of participants. Overwriting an existing seed will automatically bump other participants as you would expect. Leave blank to add participant as last seed.</small>',
 					title: 'Edit Participant',
 					scope: scope,
 					buttons: [{
@@ -553,14 +553,14 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 					}, {
 						text: 'Delete',
-						type: 'button-assertive',
+						type: 'button-energized',
 						onTap: function (e) {
 							callback(null, true);
 							return false;
 						}
 					}, {
 						text: 'Edit',
-						type: 'button-positive',
+						type: 'button-assertive',
 						onTap: function (e) {
 							callback(scope.current, false);
 							return false;

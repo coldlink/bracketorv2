@@ -5,7 +5,7 @@
   <ion-nav-buttons side="right">
     <button class="button button-icon icon ion-android-more-vertical" menu-toggle="right" ng-click="menu()"></button>
   </ion-nav-buttons>
-  <ion-tabs class="tabs-positive tabs-icon-only">
+  <ion-tabs class="tabs-assertive tabs-icon-only">
     <ion-tab icon="ion-ios-information" title="Information">
       <ion-view title="Information">
         <ion-content>
@@ -153,6 +153,13 @@
                 <div class="spacer" style="height: 40px;"></div>
               </div>
             </div>
+            <div class="list card" ng-if="tournament.tournament.state === 'pending'">
+              <div class="item row row-center">
+                <div class="col text-center item-text-wrap">
+                  Matches will become visible once the tournament has been started.
+                </div>
+              </div>
+            </div>
             <div class="list card" ng-repeat="match in tournament.tournament.matches | orderBy:sortMatches">
               <div class="item row row-center">
                 <div class="col col-33 text-left">
@@ -167,18 +174,18 @@
               </div>
               <div class="item row row-center">
                 <div class="col text-center item-text-wrap">
-                  <button class="button button-clear" ng-class="match.match.player1_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-dark'" ng-click="scrBtn.winSelect(match.match.id, match.match.player1_id)">{{match.match.player1_id ? listParticipants[match.match.player1_id].display_name :  (match.match.player1_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player1_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player1_prereq_match_id].ident))}}</button>
+                  <button class="button button-clear" ng-class="match.match.player1_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-light'" ng-click="scrBtn.winSelect(match.match.id, match.match.player1_id)">{{match.match.player1_id ? listParticipants[match.match.player1_id].display_name :  (match.match.player1_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player1_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player1_prereq_match_id].ident))}}</button>
                 </div>
                 <div class="col col-10 text-center">
                   -
                 </div>
                 <div class="col text-center item-text-wrap">
-                  <button class="button button-clear" ng-class="match.match.player2_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-dark'" ng-click="scrBtn.winSelect(match.match.id, match.match.player2_id)">{{match.match.player2_id ? listParticipants[match.match.player2_id].display_name : (match.match.player2_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player2_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player2_prereq_match_id].ident))}}</button>
+                  <button class="button button-clear" ng-class="match.match.player2_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-light'" ng-click="scrBtn.winSelect(match.match.id, match.match.player2_id)">{{match.match.player2_id ? listParticipants[match.match.player2_id].display_name : (match.match.player2_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player2_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player2_prereq_match_id].ident))}}</button>
                 </div>
               </div>
               <div class="item row row-center" ng-if="match.match.state !== 'pending'" ng-repeat="score in matchScores[match.match.id] track by $index">
                 <div class="col text-center item-text-wrap">
-                  <button class="button button-clear" ng-class="score.p1 > score.p2 ? 'button-assertive' : 'button-dark'" ng-click="scrBtn.click(match.match.id, 'p1', $index)" on-hold="scrBtn.longClick(match.match.id, 'p1', $index)">
+                  <button class="button button-clear" ng-class="score.p1 > score.p2 ? 'button-assertive' : 'button-light'" ng-click="scrBtn.click(match.match.id, 'p1', $index)" on-hold="scrBtn.longClick(match.match.id, 'p1', $index)">
                     {{score.p1}}
                   </button>
                 </div>
@@ -186,7 +193,7 @@
                   -
                 </div>
                 <div class="col text-center item-text-wrap">
-                  <button class="button button-clear" ng-class="score.p2 > score.p1 ? 'button-assertive' : 'button-dark'" ng-click="scrBtn.click(match.match.id, 'p2', $index)" on-hold="scrBtn.longClick(match.match.id, 'p2', $index)">
+                  <button class="button button-clear" ng-class="score.p2 > score.p1 ? 'button-assertive' : 'button-light'" ng-click="scrBtn.click(match.match.id, 'p2', $index)" on-hold="scrBtn.longClick(match.match.id, 'p2', $index)">
                     {{score.p2}}
                   </button>
                 </div>
@@ -194,9 +201,9 @@
               <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'">
                 <div class="item row row-center">
                   <div class="col text-center">
-                    <button class="button button-clear button-dark icon ion-plus-circled" ng-click="scrBtn.addSet(match.match.id)"></button>
-                    <button class="button button-clear button-dark icon ion-minus-circled" ng-click="scrBtn.rmSet(match.match.id)" ng-if="matchScores[match.match.id].length > 1"></button>
-                    <button class="button button-clear button-dark icon ion-checkmark-circled" ng-click="scrBtn.saveMatch(match.match.id, false, false, false)" ng-if="matchScores[match.match.id].dirty"></button>
+                    <button class="button button-clear button-light icon ion-plus-circled" ng-click="scrBtn.addSet(match.match.id)"></button>
+                    <button class="button button-clear button-light icon ion-minus-circled" ng-click="scrBtn.rmSet(match.match.id)" ng-if="matchScores[match.match.id].length > 1"></button>
+                    <button class="button button-clear button-light icon ion-checkmark-circled" ng-click="scrBtn.saveMatch(match.match.id, false, false, false)" ng-if="matchScores[match.match.id].dirty"></button>
                   </div>
                 </div>
               </div>
@@ -231,7 +238,7 @@
                 <h2>{{participant.participant.display_name}}</h2>
                 <p>{{participant.participant.challonge_username}}</p>
                 <i class="icon">{{participant.participant.seed}}</i>
-                <ion-reorder-button ng-click="scrBtn.edit.participant(tournament.tournament.id, participant.participant.id)" on-reorder="scrBtn.edit.reorder(tournament.tournament.id, participant, participant.participant.id, $fromIndex, $toIndex)">{{participant.participant.seed}}&emsp;
+                <ion-reorder-button class="button-light" ng-click="scrBtn.edit.participant(tournament.tournament.id, participant.participant.id)" on-reorder="scrBtn.edit.reorder(tournament.tournament.id, participant, participant.participant.id, $fromIndex, $toIndex)">{{participant.participant.seed}}&emsp;
                   <i class="ion-navicon"></i>
                 </ion-reorder-button>
               </ion-item>
