@@ -253,6 +253,10 @@ angular.module('challonger.controllers', [])
 		});
 	};
 
+	$scope.createdAtOrder = function (tournament) {
+		return new Date(tournament.tournament.created_at);
+	};
+
 	$scope.$on('$ionicView.enter', function() {
 		$scope.loading = true;
 		$scope.active = null;

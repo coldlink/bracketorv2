@@ -2,13 +2,13 @@
 // Colors
 // -------------------------------
 
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
+$light:                           rgb(85,85,85) !default;
+$stable:                          rgb(100,100,100) !default;
 $positive:                        #387ef5 !default;
 $calm:                            #11c1f3 !default;
 $balanced:                        #33cd5f !default;
 $energized:                       #ffc900 !default;
-$assertive:                       #ef473a !default;
+$assertive:                       rgb(255, 119, 34) !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 
@@ -35,11 +35,11 @@ $headings-font-family:            $font-family-base !default;
 $headings-font-weight:            500 !default;
 $headings-line-height:            1.2 !default;
 
-$base-background-color:           #fff !default;
-$base-color:                      #000 !default;
+$base-background-color:           rgb(68, 68, 68) !default;
+$base-color:                      #fff !default;
 
 $link-color:                      $positive !default;
-$link-hover-color:                darken($link-color, 15%) !default;
+$link-hover-color:                lighten($link-color, 15%) !default;
 
 $content-padding:                 10px !default;
 
@@ -93,13 +93,13 @@ $button-bar-button-padding:       8px !default;
 $button-bar-button-icon-size:     20px !default;
 
 $button-light-bg:                 $light !default;
-$button-light-text:               #444 !default;
+$button-light-text:               #fff !default;
 $button-light-border:             #ddd !default;
 $button-light-active-bg:          #fafafa !default;
 $button-light-active-border:      #ccc !default;
 
 $button-stable-bg:                $stable !default;
-$button-stable-text:              #444 !default;
+$button-stable-text:              #fff !default;
 $button-stable-border:            #b2b2b2 !default;
 $button-stable-active-bg:         #e5e5e5 !default;
 $button-stable-active-border:     #a2a2a2 !default;
@@ -308,8 +308,8 @@ $item-thumbnail-width:            80px !default;
 $item-thumbnail-height:           80px !default;
 $item-thumbnail-margin:           10px !default;
 
-$item-divider-bg:                 #f5f5f5 !default;
-$item-divider-color:              #222 !default;
+$item-divider-bg:                 rgba(100,100,100,1) !default;
+$item-divider-color:              #ddd !default;
 $item-divider-padding:            5px 15px !default;
 
 $item-light-bg:                   $button-light-bg !default;
@@ -548,7 +548,7 @@ $range-default-track-bg:          #ccc !default;
 // Menus
 // -------------------------------
 
-$menu-bg:                         #fff !default;
+$menu-bg:                         rgb(68, 68, 68) !default;
 $menu-width:                      275px !default;
 $menu-animation-speed:            200ms !default;
 
@@ -558,7 +558,7 @@ $menu-side-shadow:                -1px 0px 2px rgba(0, 0, 0, 0.2), 1px 0px 2px r
 // Modals
 // -------------------------------
 
-$modal-bg-color:                  #fff !default;
+$modal-bg-color:                  #444 !default;
 $modal-backdrop-bg-active:        #000 !default;
 $modal-backdrop-bg-inactive:      rgba(0,0,0,0) !default;
 

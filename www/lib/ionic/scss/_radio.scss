@@ -36,7 +36,7 @@
 
   &:checked + .radio-content .item-content {
     /* style the item content when its checked */
-    background: #f7f7f7;
+    background: darken(rgb(255, 119, 34), 20%);
   }
 
   &:checked + .radio-content .radio-icon {
@@ -44,4 +44,3 @@
     visibility: visible;
   }
 }
-
