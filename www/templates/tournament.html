@@ -153,7 +153,7 @@
                 <div class="spacer" style="height: 40px;"></div>
               </div>
             </div>
-            <div class="list card" ng-repeat="match in tournament.tournament.matches">
+            <div class="list card" ng-repeat="match in tournament.tournament.matches | orderBy:sortMatches">
               <div class="item row row-center">
                 <div class="col col-33 text-left">
                   {{match.match.identifier}}
@@ -167,13 +167,13 @@
               </div>
               <div class="item row row-center">
                 <div class="col text-center item-text-wrap">
-                  <h2 ng-class="match.match.player1_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'assertive' : ''" ng-click="scrBtn.winSelect(match.match.id, match.match.player1_id)">{{match.match.player1_id ? listParticipants[match.match.player1_id].display_name :  (match.match.player1_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player1_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player1_prereq_match_id].ident))}}</h2>
+                  <button class="button button-clear" ng-class="match.match.player1_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-dark'" ng-click="scrBtn.winSelect(match.match.id, match.match.player1_id)">{{match.match.player1_id ? listParticipants[match.match.player1_id].display_name :  (match.match.player1_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player1_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player1_prereq_match_id].ident))}}</button>
                 </div>
                 <div class="col col-10 text-center">
                   -
                 </div>
                 <div class="col text-center item-text-wrap">
-                  <h2 ng-class="match.match.player2_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'assertive' : ''" ng-click="scrBtn.winSelect(match.match.id, match.match.player2_id)">{{match.match.player2_id ? listParticipants[match.match.player2_id].display_name : (match.match.player2_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player2_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player2_prereq_match_id].ident))}}</h2>
+                  <button class="button button-clear" ng-class="match.match.player2_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-dark'" ng-click="scrBtn.winSelect(match.match.id, match.match.player2_id)">{{match.match.player2_id ? listParticipants[match.match.player2_id].display_name : (match.match.player2_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player2_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player2_prereq_match_id].ident))}}</button>
                 </div>
               </div>
               <div class="item row row-center" ng-if="match.match.state !== 'pending'" ng-repeat="score in matchScores[match.match.id] track by $index">
@@ -260,7 +260,7 @@
               </div>
             </div>
             <ion-list>
-              <ion-item class="item item-avatar-left item-icon-right" ng-repeat="participant in tournament.tournament.participants | orderBy:'participant.final_rank'">
+              <ion-item class="item item-avatar-left item-icon-right" collection-repeat="participant in tournament.tournament.participants | orderBy:'participant.final_rank'">
                 <img ng-src="{{getImage(participant.participant.attached_participatable_portrait_url)}}">
                 <h2>{{participant.participant.display_name}}</h2>
                 <p>{{participant.participant.challonge_username}}</p>

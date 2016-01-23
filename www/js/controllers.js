@@ -1,16 +1,10 @@
 angular.module('challonger.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function() {
 
-	// With the new view caching in Ionic, Controllers are only called
-	// when they are recreated or on app start, instead of every page change.
-	// To listen for when this page is active (for example, to refresh data),
-	// listen for the $ionicView.enter event:
-	//$scope.$on('$ionicView.enter', function(e) {
-	//});
 })
 
-.controller('HomeCtrl', function($scope, $ionicPlatform) {
+.controller('HomeCtrl', function() {
 	//Nothing here!
 })
 
@@ -131,9 +125,6 @@ angular.module('challonger.controllers', [])
 })
 
 .controller('ResultsCtrl', function($scope, $stateParams, $http, $connection, $state, $API, $localStorage, $alert) {
-	$scope.loading = true;
-	$scope.active = null;
-
 	var alerts = {
 		noFavTour: {
 			title: 'No Bookmarks',
@@ -262,13 +253,31 @@ angular.module('challonger.controllers', [])
 		});
 	};
 
-	$scope.checkConnection();
+	$scope.$on('$ionicView.enter', function() {
+		$scope.loading = true;
+		$scope.active = null;
+		$scope.checkConnection();
+	});
+
+	$scope.$on('$ionicView.leave', function() {
+		$scope.tournaments = [];
+	});
 })
 
-.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $cordovaToast, $ionicPlatform, $tournament, $q, $alert) {
-	$scope.loading = true;
-	$scope.editEnabled = false;
-	var API_KEY = $localStorage.get('API_KEY');
+.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert) {
+	var API_KEY;
+	$scope.$on('$ionicView.enter', function() {
+		$scope.loading = true;
+		$scope.editEnabled = false;
+		API_KEY = $localStorage.get('API_KEY');
+		$scope.checkConnection();
+	});
+
+	$scope.$on('$ionicView.leave', function() {
+		$scope.tournament = null;
+		$scope.listParticipants = {};
+		$scope.matchScores = {};
+	});
 
 	$scope.checkConnection = function() {
 		if (!$connection.isConnected()) {
@@ -624,7 +633,16 @@ angular.module('challonger.controllers', [])
 		return url;
 	};
 
-	$scope.checkConnection();
+	$scope.sortMatches = function(match) {
+		switch (match.match.state) {
+			case 'open':
+				return 1;
+			case 'pending':
+				return 2;
+			case 'complete':
+				return 3;
+		}
+	};
 })
 
 .controller('CreateCtrl', function($scope, $localStorage, $API, $connection, $alert, $http) {
@@ -635,14 +653,14 @@ angular.module('challonger.controllers', [])
 		} else {
 			console.log($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'));
 			$http.post($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'), tournament)
-			.success(function (response) {
-				console.log(response);
-				return $alert.newUrlCopyOpen($scope, 'New Tournament', 'Tournament successfully created. Copy the url from the input below, or open the tournament by clicking \'Open\'.', response.tournament.full_challonge_url, response.tournament.id);
-			})
-			.error(function (err) {
-				console.log(err);
-				return $alert.genericNoBack($scope, 'Error', err.errors[0]);
-			});
+				.success(function(response) {
+					console.log(response);
+					return $alert.newUrlCopyOpen($scope, 'New Tournament', 'Tournament successfully created. Copy the url from the input below, or open the tournament by clicking \'Open\'.', response.tournament.full_challonge_url, response.tournament.id);
+				})
+				.error(function(err) {
+					console.log(err);
+					return $alert.genericNoBack($scope, 'Error', err.errors[0]);
+				});
 		}
 	};
 })

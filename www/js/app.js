@@ -164,7 +164,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 	};
 })
 
-.factory('$alert', function($ionicPopup, $ionicHistory, $cordovaClipboard, $state) {
+.factory('$alert', function($ionicPopup, $ionicHistory, $state) {
 	return {
 		generic: function(scope, title, msg) {
 			scope.showAlert = function() {
@@ -238,16 +238,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						onTap: function(e) {
 							return false;
 						}
-					}, {
-						text: '<b>Copy</b>',
-						type: 'button-positive',
-						onTap: function(e) {
-							$cordovaClipboard.copy(url);
-							scope.prevDef = true;
-							scope.popErr = 'Copied to clipboard.';
-							e.preventDefault();
-						}
-					}, {
+					} , {
 						text: '<b>Open</b>',
 						type: 'button-positive',
 						onTap: function(e) {
@@ -531,7 +522,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						onTap: function (e) {
 							if (!scope.current.participant.name) {
 								scope.prevDef = true;
-								scope.popErr = "A display name is required."
+								scope.popErr = "A display name is required.";
 								e.preventDefault();
 							}
 							callback(scope.current);
