@@ -1,21 +1,12 @@
-// Ionic Starter App
-
-// angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
-// the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
 angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'angular-svg-round-progress'])
 
 .run(function($ionicPlatform) {
 	$ionicPlatform.ready(function() {
-		// Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-		// for form inputs)
 		if (window.cordova && window.cordova.plugins.Keyboard) {
 			cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
 			cordova.plugins.Keyboard.disableScroll(true);
 		}
 		if (window.StatusBar) {
-			// org.apache.cordova.statusbar required
 			StatusBar.styleDefault();
 		}
 	});
@@ -35,7 +26,8 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 		url: '/about',
 		views: {
 			'menuContent': {
-				templateUrl: 'templates/about.html'
+				templateUrl: 'templates/about.html',
+				controller: 'AboutCtrl'
 			}
 		}
 	})
@@ -279,7 +271,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 			scope.prevDef = false;
 			scope.popErr = null;
 			scope.showAlert = function() {
-				console.log(value);
+				// console.log(value);
 				scope.current = value.value;
 				scope.changeCurrent = function(newCurrent) {
 					scope.current = newCurrent;
@@ -321,7 +313,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 			scope.prevDef = false;
 			scope.popErr = null;
 			scope.showAlert = function() {
-				console.log(value);
+				// console.log(value);
 				scope.initVal = value.value;
 				scope.current = value.value;
 				scope.changeCurrent = function(newCurrent) {
@@ -364,7 +356,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 			scope.prevDef = false;
 			scope.popErr = null;
 			scope.showAlert = function() {
-				console.log(value);
+				// console.log(value);
 				scope.current = value.value;
 				scope.changeCurrent = function(newCurrent) {
 					scope.current = newCurrent;
@@ -578,13 +570,13 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 		participant: {
 			create: function(tId, scope) {
 					$alert.newParticipant(scope, 'Add Participant', function(newPart) {
-						console.log(newPart);
+						// console.log(newPart);
 						if (!newPart) {
 							return false;
 						}
 						return $http.post($API.url() + 'tournaments/' + tId + '/participants.json?api_key=' + $localStorage.get('API_KEY'), newPart)
 							.success(function(response) {
-								console.log(response);
+								// console.log(response);
 								scope.checkConnection();
 							})
 							.error(function(err) {
@@ -605,11 +597,11 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					part.participant.challonge_username = scope.listParticipants[pId].challonge_username;
 				}
 				$alert.editParticipant(scope, part, function (newPart, delFlag) {
-					console.log(newPart);
+					// console.log(newPart);
 					if (delFlag) {
 						return $http.delete($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'))
 						.success(function (response) {
-							console.log(response);
+							// console.log(response);
 							scope.checkConnection();
 						})
 						.error(function (err) {
@@ -623,7 +615,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					}
 					return $http.put($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'), newPart)
 					.success(function (response) {
-						console.log(response);
+						// console.log(response);
 						scope.checkConnection();
 					})
 					.error(function (err) {
@@ -658,10 +650,10 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					}
 					$alert.input(scope, title, subtitle, current, function(newValue) {
 						if (newValue === undefined) {
-							console.log('no value');
+							// console.log('no value');
 							return false;
 						}
-						console.log(newValue);
+						// console.log(newValue);
 						var data;
 						switch (current.type) {
 							case 'name':
@@ -691,20 +683,20 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), data)
 							.error(function(err) {
-								console.log(err);
+								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
 								scope.showAlert();
 							})
 							.success(function(response) {
-								console.log(response);
+								// console.log(response);
 								scope.checkConnection();
 							});
 					});
 				},
 				description: function(tId, description, scope) {
 					$alert.inputArea(scope, 'Edit Tournament Description:', 'Description/instructions to be displayed above the bracket. Accepts HTML.', description, function(newDesc) {
-						console.log(newDesc);
+						// console.log(newDesc);
 						if (newDesc === undefined) {
 							return false;
 						}
@@ -712,13 +704,13 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 								description: newDesc
 							})
 							.error(function(err) {
-								console.log(err);
+								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
 								scope.showAlert();
 							})
 							.success(function(response) {
-								console.log(response);
+								// console.log(response);
 								scope.tournament = response;
 								scope.checkConnection();
 							});
@@ -726,7 +718,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 				},
 				state: function(tId, state, scope) {
 					$alert.selectState(scope, 'Select Tournament State:', null, state, function(newState) {
-						console.log(newState);
+						// console.log(newState);
 						var eurl;
 						switch (newState) {
 							case 'start':
@@ -746,7 +738,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 							if (newState === 'destroy') {
 								$http.delete(eurl)
 									.success(function(response) {
-										console.log(response);
+										// console.log(response);
 										$ionicHistory.nextViewOptions({
 											disableBack: true
 										});
@@ -754,7 +746,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 										$alert.deleted(scope);
 									})
 									.error(function(err) {
-										console.log(err);
+										// console.log(err);
 										scope.prevDef = true;
 										scope.popErr = err.errors[0];
 										scope.showAlert();
@@ -762,13 +754,13 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 							} else {
 								$http.post(eurl)
 									.success(function(response) {
-										console.log(response);
+										// console.log(response);
 										scope.tournament = response;
 										scope.checkConnection();
 									})
 									.error(function(err) {
 										if (err) {
-											console.log(err);
+											// console.log(err);
 											scope.prevDef = true;
 											scope.popErr = err.errors[0];
 											scope.showAlert();
@@ -780,7 +772,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 				},
 				type: function(tId, type, scope) {
 					$alert.selectType(scope, 'Edit Tournament Type:', null, type, function(newType) {
-						console.log(newType);
+						// console.log(newType);
 						if (!newType) {
 							return false;
 						}
@@ -788,13 +780,13 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 								tournament_type: newType
 							})
 							.error(function(err) {
-								console.log(err);
+								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
 								scope.showAlert();
 							})
 							.success(function(response) {
-								console.log(response);
+								// console.log(response);
 								scope.tournament = response;
 								scope.checkConnection();
 							});
@@ -802,7 +794,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 				},
 				signUpCap: function(tId, cap, scope) {
 					$alert.signUpCap(scope, 'Change Sign Up Cap', 'Maximum number of participants in the bracket. Set to 0 for no cap.', cap, function(newCap) {
-						console.log(newCap);
+						// console.log(newCap);
 						if (newCap === undefined) {
 							return false;
 						}
@@ -810,13 +802,13 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 								signup_cap: newCap
 							})
 							.error(function(err) {
-								console.log(err);
+								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
 								scope.showAlert();
 							})
 							.success(function(response) {
-								console.log(response);
+								// console.log(response);
 								scope.tournament = response;
 								scope.checkConnection();
 							});
@@ -824,7 +816,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 				},
 				openSignup: function(tId, bool, scope) {
 					$alert.openSignup(scope, 'Host Sign Up Page?', 'Have Challonge host a sign-up page? (Otherwise, you manually add all participants).', bool, function(newBool) {
-						console.log(newBool);
+						// console.log(newBool);
 						if (newBool === undefined) {
 							return false;
 						}
@@ -832,13 +824,13 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 								open_signup: newBool
 							})
 							.error(function(err) {
-								console.log(err);
+								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
 								scope.showAlert();
 							})
 							.success(function(response) {
-								console.log(response);
+								// console.log(response);
 								scope.tournament = response;
 								scope.checkConnection();
 							});

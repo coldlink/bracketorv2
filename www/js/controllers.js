@@ -1,11 +1,25 @@
 angular.module('challonger.controllers', [])
 
 .controller('AppCtrl', function() {
+	//nothing here :3
+})
 
+.controller('AboutCtrl', function ($scope) {
+	$scope.openTwitter = function () {
+		window.open('https://www.twitter.com/coldlink_', '_system', 'location=yes');
+	};
+
+	$scope.openWeb = function () {
+		window.open('https://www.mkn.sh', '_system', 'location=yes');
+	};
+
+	$scope.openGit = function () {
+		window.open('https://github.com/coldlink/challongerv2', '_system', 'location=yes');
+	};
 })
 
 .controller('HomeCtrl', function() {
-	//Nothing here!
+	//Nothing here :3
 })
 
 .controller('BrowseCtrl', function($scope, $API, $localStorage, $state) {
@@ -140,11 +154,11 @@ angular.module('challonger.controllers', [])
 		if (i < ids.length) {
 			$http.get($API.url() + 'tournaments/' + ids[i] + '.json?api_key=' + $localStorage.get('API_KEY'))
 				.success(function(response) {
-					console.log(response);
+					// console.log(response);
 					$scope.tournaments.push(response);
 				})
 				.error(function(err) {
-					console.log(err);
+					$alert.generic($scope, 'Error', err.errors[0]);
 				})
 				.finally(function() {
 					return getTbyId(i + 1, ids, cb);
@@ -192,7 +206,7 @@ angular.module('challonger.controllers', [])
 			default:
 				$http.get($stateParams.url)
 					.success(function(response) {
-						console.log(response);
+						// console.log(response);
 						$scope.tournaments = response;
 					})
 					.error(function(err) {
@@ -298,7 +312,7 @@ angular.module('challonger.controllers', [])
 				$scope.tournament = response;
 			})
 			.error(function(err) {
-				console.log(err);
+				$alert.generic($scope, 'Error', err.errors[0]);
 			})
 			.finally(function() {
 				$scope.listParticipants = {};
@@ -325,8 +339,8 @@ angular.module('challonger.controllers', [])
 						$scope.matchScores[match.match.id].p2id = match.match.player2_id;
 					}
 				});
-				console.log($scope.listParticipants);
-				console.log($scope.matchScores);
+				// console.log($scope.listParticipants);
+				// console.log($scope.matchScores);
 
 				var temp = [];
 				if ($localStorage.getObject('hisTour')) {
@@ -482,7 +496,7 @@ angular.module('challonger.controllers', [])
 		},
 		saveMatch: function(matchId, completeFlag, sameScoreFlag, playerFlag) {
 			var tmpScr = '';
-			console.log($scope.matchScores[matchId]);
+			// console.log($scope.matchScores[matchId]);
 
 			if ($scope.matchScores[matchId].state === 'complete' && !completeFlag) {
 				$alert.matchSameScr($scope, 'Warning: Match Complete', 'Changing the result of this match may cause other matches to be reset, possibly losing progress in the tournament. Are you sure you want to continue?', function(arg) {
@@ -544,7 +558,7 @@ angular.module('challonger.controllers', [])
 							});
 						} else {
 							tmpScr = tmpScr.slice(0, -1);
-							console.log(tmpScr);
+							// console.log(tmpScr);
 							$http.put($API.url() + 'tournaments/' + $scope.tournament.tournament.id + '/matches/' + matchId + '.json?api_key=' + $localStorage.get('API_KEY'), {
 									match: {
 										scores_csv: tmpScr,
@@ -594,8 +608,8 @@ angular.module('challonger.controllers', [])
 				if (!$scope.editEnabled) {
 					return false;
 				}
-				console.log(pid);
-				console.log(tid);
+				// console.log(pid);
+				// console.log(tid);
 
 				$scope.tournament.tournament.participants.splice(fromIndex, 1);
 				$scope.tournament.tournament.participants.splice(toIndex, 0, participant);
@@ -606,11 +620,11 @@ angular.module('challonger.controllers', [])
 						}
 					})
 					.success(function(response) {
-						console.log(response);
+						// console.log(response);
 						$scope.checkConnection();
 					})
 					.error(function(err) {
-						console.log(err);
+						$alert.generic($scope, 'Error', err.errors[0]);
 					});
 			},
 			participant: function(tid, pid) {
@@ -651,18 +665,18 @@ angular.module('challonger.controllers', [])
 
 .controller('CreateCtrl', function($scope, $localStorage, $API, $connection, $alert, $http) {
 	$scope.save = function(tournament) {
-		console.log(tournament);
+		// console.log(tournament);
 		if (!$connection.isConnected()) {
 			return $alert.genericNoBack($scope, 'No internet connention detected.', 'No internet connection was detected, please check your internet connection and try again.');
 		} else {
-			console.log($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'));
+			// console.log($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'));
 			$http.post($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'), tournament)
 				.success(function(response) {
-					console.log(response);
+					// console.log(response);
 					return $alert.newUrlCopyOpen($scope, 'New Tournament', 'Tournament successfully created. Copy the url from the input below, or open the tournament by clicking \'Open\'.', response.tournament.full_challonge_url, response.tournament.id);
 				})
 				.error(function(err) {
-					console.log(err);
+					// console.log(err);
 					return $alert.genericNoBack($scope, 'Error', err.errors[0]);
 				});
 		}
