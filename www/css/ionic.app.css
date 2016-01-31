@@ -3743,10 +3743,10 @@ a.subdued {
     border-radius: 0;
     border-color: #d1d3d6;
     background-color: transparent;
-    color: #007aff;
+    color: #ff7722;
     font-size: 21px; }
     .action-sheet .button:hover {
-      color: #007aff; }
+      color: #d55200; }
     .action-sheet .button.destructive {
       color: #ff3b30; }
       .action-sheet .button.destructive:hover {
@@ -3754,7 +3754,7 @@ a.subdued {
   .action-sheet .button.active, .action-sheet .button.activated {
     box-shadow: none;
     border-color: #d1d3d6;
-    color: #007aff;
+    color: #ff7722;
     background: #e4e5e7; }
 
 .action-sheet-has-icons .icon {
@@ -3800,7 +3800,7 @@ a.subdued {
     text-align: left;
     border-color: transparent;
     font-size: 16px;
-    color: inherit; }
+    color: #ff7722; }
   .platform-android .action-sheet .action-sheet-title {
     font-size: 14px;
     padding: 16px;

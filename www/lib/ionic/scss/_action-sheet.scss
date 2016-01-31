@@ -49,11 +49,11 @@
     border-color: $sheet-options-border-color;
     background-color: transparent;
 
-    color: $sheet-options-text-color;
+    color: rgb(255, 119, 34);
     font-size: 21px;
 
     &:hover {
-      color: $sheet-options-text-color;
+      color: darken(rgb(255, 119, 34), 15%);
     }
     &.destructive {
       color: #ff3b30;
@@ -66,7 +66,7 @@
   .button.active, .button.activated {
     box-shadow: none;
     border-color: $sheet-options-border-color;
-    color: $sheet-options-text-color;
+    color: rgb(255, 119, 34);
     background: $sheet-options-bg-active-color;
   }
 }
@@ -134,7 +134,7 @@
       text-align: left;
       border-color: transparent;
       font-size: 16px;
-      color: inherit;
+      color: rgb(255, 119, 34);
     }
 
     .action-sheet-title {
