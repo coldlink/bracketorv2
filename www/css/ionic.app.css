@@ -7055,6 +7055,7 @@ input[type="color"] {
   padding-left: 0;
   height: 34px;
   color: #fff;
+  background-color: #545454;
   vertical-align: middle;
   font-size: 14px;
   line-height: 16px; }

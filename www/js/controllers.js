@@ -172,6 +172,8 @@ angular.module('challonger.controllers', [])
 
 	$scope.doRefresh = function() {
 		$scope.tournaments = [];
+		console.log($stateParams);
+		console.log($stateParams.url);
 		switch ($stateParams.url) {
 			case 'favTour':
 				if ($localStorage.getObject('favTour')) {
