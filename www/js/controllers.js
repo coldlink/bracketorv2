@@ -672,6 +672,15 @@ angular.module('challonger.controllers', [])
 })
 
 .controller('CreateCtrl', function($scope, $localStorage, $API, $connection, $alert, $http) {
+	$scope.$on('$ionicView.enter', function(e) {
+		API_KEY = $localStorage.get('API_KEY');
+		if (!API_KEY) {
+			$scope.API_KEY = false;
+		} else {
+			$scope.API_KEY = true;
+		}
+	});
+
 	$scope.save = function(tournament) {
 		// console.log(tournament);
 		if (!$connection.isConnected()) {
@@ -695,6 +704,10 @@ angular.module('challonger.controllers', [])
 	if ($localStorage.get('API_KEY')) {
 		$scope.API_KEY = $localStorage.get('API_KEY');
 	}
+
+	$scope.openChallonge = function () {
+		window.open('https://challonge.com/settings/developer', '_system', 'location=yes');
+	};
 
 	$scope.saveKey = function(v) {
 		if (v.length === 0) {

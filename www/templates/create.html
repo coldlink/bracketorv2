@@ -1,6 +1,22 @@
 <ion-view view-title="Create Tournament">
   <ion-content>
-    <div class="list">
+    <div ng-if="!API_KEY">
+      <div class="list card">
+        <div class="item item-icon-left assertive">
+          <i class="icon ion-alert-circled"></i>
+          No API Key Found!
+        </div>
+        <div class="item item-body">
+          <p>API key is required to be set before tournaments can be viewed.</p>
+          <p>Set the API key in the settings menu.</p>
+        </div>
+        <a class="item item-icon-left assertive" href="#/app/settings">
+          <i class="icon ion-gear-b"></i>
+          Go to Settings
+        </a>
+      </div>
+    </div>
+    <div class="list" ng-if="API_KEY">
       <div class="item item-divider item-body">
         <i class="icon ion-alert-circled"></i>
         Tournament Name

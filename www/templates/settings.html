@@ -14,6 +14,9 @@
       <div class="item item-text-wrap text-center" ng-class="apiError.type ? apiError.type : 'assertive'" ng-if="apiError">
         {{apiError.message}}
       </div>
+      <div class="item item-text-wrap text-center">
+        Click the '?' icon to get help to find your API Key.
+      </div>
     </div>
   </ion-content>
 </ion-view>
@@ -27,7 +30,8 @@
       <div class="row responsive-sm">
         <div class="col">
           <p class="no-margin">
-            Get your API key by logging into Challonge and copying your API key from the Developer API Settings:
+            Get your API key by logging into Challonge and copying your API key from the Developer API Settings. Get your API Key from
+            <a style="color: #fff" ng-click="openChallonge()" href="#">Challonge</a> or using the page below:
           </p>
         </div>
       </div>
