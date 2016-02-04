@@ -17,11 +17,11 @@
   margin-right: 0 !important;
 }
 
-textarea.darki {
-  background-color: #555555;
+textarea .darki {
+  background-color: #333 !important;
   color: #fff;
 }
-input.darki {
-  background-color: #555555;
+input .darki {
+  background-color: #333 !important;
   color: #fff;
 }

@@ -44,6 +44,7 @@ angular.module('challonger.controllers', [])
 		}
 	};
 
+
 	$scope.$on('$ionicView.enter', function(e) {
 		API_KEY = $localStorage.get('API_KEY');
 		if (!API_KEY) {
@@ -158,7 +159,9 @@ angular.module('challonger.controllers', [])
 					$scope.tournaments.push(response);
 				})
 				.error(function(err) {
-					$alert.generic($scope, 'Error', err.errors[0]);
+					if ($stateParams.url !== 'favTour' && $stateParams.url !== 'hisTour') {
+						$alert.generic($scope, 'Error', err.errors[0]);
+					}
 				})
 				.finally(function() {
 					return getTbyId(i + 1, ids, cb);
@@ -208,8 +211,11 @@ angular.module('challonger.controllers', [])
 			default:
 				$http.get($stateParams.url)
 					.success(function(response) {
-						// console.log(response);
-						$scope.tournaments = response;
+						if (!Array.isArray(response)) {
+							$scope.tournaments = [response];
+						} else {
+							$scope.tournaments = response;
+						}
 					})
 					.error(function(err) {
 						$alert.generic($scope, 'Error', err.errors[0]);
@@ -310,7 +316,7 @@ angular.module('challonger.controllers', [])
 	$scope.doRefresh = function() {
 		$http.get($API.url() + 'tournaments/' + $stateParams.id + '.json?api_key=' + API_KEY + '&include_participants=1&include_matches=1')
 			.success(function(response) {
-				console.log(response);
+				// console.log(response);
 				$scope.tournament = response;
 			})
 			.error(function(err) {

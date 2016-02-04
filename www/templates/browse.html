@@ -56,8 +56,8 @@
             <p class="no-margin-top">Find tournaments created by any organization using a Challonge subdomain.</p>
           </div>
           <div class="list list-inset">
-            <label class="item item-input">
-              <input ng-model="subdomain" placeholder="Insert Organization Here" type="text">
+            <label style="background-color: #333" class="item item-input">
+              <input style="background-color: #333" ng-model="subdomain" placeholder="Insert Organization Here" type="text">
             </label>
           </div>
           <code>
@@ -82,20 +82,20 @@
             <p class="no-margin-top">Find a single tournament from a Challonge URL.</p>
           </div>
           <ul class="list">
-            <li class="item item-checkbox">
+            <li>
               <label class="checkbox">
                 <ion-checkbox ng-model="incSubdomain">Include Organization</ion-checkbox>
               </label>
-              Include Organization
             </li>
-            <li>
-              <label class="item item-input" ng-show="incSubdomain">
-                <input ng-model="subdomain" placeholder="Insert Organization Here" type="text">
+            <li ng-show="incSubdomain">
+              <label style="background-color: #333" class="item item-input">
+                <input style="background-color: #333" ng-model="subdomain" placeholder="Insert Organization Here" type="text">
               </label>
             </li>
+            <br ng-show="incSubdomain">
             <li>
-              <label class="item item-input">
-                <input ng-model="url" placeholder="Insert URL Here" type="text">
+              <label style="background-color: #333" class="item item-input">
+                <input style="background-color: #333" ng-model="url" placeholder="Insert URL Here" type="text">
               </label>
             </li>
           </ul>
