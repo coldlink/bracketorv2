@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.coldlink.challongerv2" version="2.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>ChallongerV2</name>
+<widget id="com.coldlink.challongerv2" version="2.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>BracketorV2</name>
   <description>
-        An unofficial Challonger application for mobile.
+        An unofficial Challonge application for mobile.
     </description>
   <author email="maheshmakani@gmail.com" href="https://mkn.sh/">
       Mahesh Makani

@@ -14,7 +14,7 @@ angular.module('challonger.controllers', [])
 	};
 
 	$scope.openGit = function () {
-		window.open('https://github.com/coldlink/challongerv2', '_system', 'location=yes');
+		window.open('https://github.com/coldlink/bracketorv2', '_system', 'location=yes');
 	};
 })
 
