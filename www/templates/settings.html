@@ -18,6 +18,9 @@
         Click the '?' icon to get help to find your API Key.
       </div>
     </div>
+    <div class="list">
+      <ion-checkbox ng-change="changeVibration(enableVibration)" ng-model="enableVibration">Enable Vibration? - {{enableVibration}}</ion-checkbox>
+    </div>
   </ion-content>
 </ion-view>
 <script id="setting-api-modal.html" type="text/ng-template">
@@ -31,7 +34,8 @@
         <div class="col">
           <p class="no-margin">
             Get your API key by logging into Challonge and copying your API key from the Developer API Settings. Get your API Key from
-            <a style="color: #fff" ng-click="openChallonge()" href="#">Challonge</a> or using the page below:
+            <a style="color: #fff" ng-click="openChallonge()" href="#">Challonge</a>
+            or using the page below:
           </p>
         </div>
       </div>

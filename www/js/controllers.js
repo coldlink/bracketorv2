@@ -1,31 +1,38 @@
 angular.module('challonger.controllers', [])
 
 .controller('AppCtrl', function() {
-	//nothing here :3
+	// $scope.vib = $vib;
 })
 
-.controller('AboutCtrl', function ($scope) {
+.controller('AboutCtrl', function ($scope, $vib) {
+	$vib.vshort();
+
 	$scope.openTwitter = function () {
+		$vib.vshort();
 		window.open('https://www.twitter.com/coldlink_', '_system', 'location=yes');
 	};
 
 	$scope.openWeb = function () {
+		$vib.vshort();
 		window.open('https://www.mkn.sh', '_system', 'location=yes');
 	};
 
 	$scope.openGit = function () {
+		$vib.vshort();
 		window.open('https://github.com/coldlink/bracketorv2', '_system', 'location=yes');
 	};
 })
 
 .controller('HomeCtrl', function() {
-	//Nothing here :3
+	// $vib.vshort();
 })
 
-.controller('BrowseCtrl', function($scope, $API, $localStorage, $state) {
+.controller('BrowseCtrl', function($scope, $API, $localStorage, $state, $vib) {
 	var API_KEY;
+	$vib.vshort();
 	$scope.API_KEY = true;
 	$scope.error = null;
+
 	var errors = {
 		noSub: {
 			message: 'No organization entered.'
@@ -44,7 +51,6 @@ angular.module('challonger.controllers', [])
 		}
 	};
 
-
 	$scope.$on('$ionicView.enter', function(e) {
 		API_KEY = $localStorage.get('API_KEY');
 		if (!API_KEY) {
@@ -55,6 +61,7 @@ angular.module('challonger.controllers', [])
 	});
 
 	$scope.open = function(type) {
+		$vib.vshort();
 		$scope.error = null;
 		if ($scope.expand === type) {
 			$scope.expand = false;
@@ -64,6 +71,7 @@ angular.module('challonger.controllers', [])
 	};
 
 	$scope.click = function(type, subdomain, eurl, isub) {
+		$vib.vshort();
 		var url = $API.url();
 		switch (type) {
 			case 'created':
@@ -139,7 +147,8 @@ angular.module('challonger.controllers', [])
 	};
 })
 
-.controller('ResultsCtrl', function($scope, $stateParams, $http, $connection, $state, $API, $localStorage, $alert) {
+.controller('ResultsCtrl', function($scope, $stateParams, $http, $connection, $state, $API, $localStorage, $alert, $vib) {
+	$vib.vshort();
 	var alerts = {
 		noFavTour: {
 			title: 'No Bookmarks',
@@ -159,6 +168,7 @@ angular.module('challonger.controllers', [])
 					$scope.tournaments.push(response);
 				})
 				.error(function(err) {
+					$vib.med();
 					if ($stateParams.url !== 'favTour' && $stateParams.url !== 'hisTour') {
 						$alert.generic($scope, 'Error', err.errors[0]);
 					}
@@ -218,6 +228,7 @@ angular.module('challonger.controllers', [])
 						}
 					})
 					.error(function(err) {
+						$vib.med();
 						$alert.generic($scope, 'Error', err.errors[0]);
 					})
 					.finally(function() {
@@ -228,6 +239,7 @@ angular.module('challonger.controllers', [])
 	};
 
 	$scope.open = function(id) {
+		$vib.vshort();
 		if ($scope.active !== id) {
 			$scope.active = id;
 		} else {
@@ -290,8 +302,9 @@ angular.module('challonger.controllers', [])
 	});
 })
 
-.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert) {
+.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib) {
 	var API_KEY;
+	$vib.vshort();
 	$scope.$on('$ionicView.enter', function() {
 		$scope.loading = true;
 		$scope.editEnabled = false;
@@ -320,6 +333,7 @@ angular.module('challonger.controllers', [])
 				$scope.tournament = response;
 			})
 			.error(function(err) {
+				$vib.med();
 				$alert.generic($scope, 'Error', err.errors[0]);
 			})
 			.finally(function() {
@@ -435,9 +449,11 @@ angular.module('challonger.controllers', [])
 			buttons: buttons,
 			cancelText: 'Cancel',
 			cancel: function() {
+				$vib.vshort();
 				hideSheet();
 			},
 			buttonClicked: function(index) {
+				$vib.vshort();
 				switch (index) {
 					case 0:
 						$scope.editEnabled = !$scope.editEnabled;
@@ -467,6 +483,7 @@ angular.module('challonger.controllers', [])
 	$scope.scrBtn = {
 		click: function(matchId, player, index) {
 			if ($scope.editEnabled) {
+				$vib.vshort();
 				if ($scope.tournament.tournament.state === 'complete') {
 					$alert.genericNoBack($scope, 'Error: Tournament Complete', 'Cannot change score of a completed tournament.');
 					return false;
@@ -477,12 +494,14 @@ angular.module('challonger.controllers', [])
 		},
 		longClick: function(matchId, player, index) {
 			if ($scope.editEnabled) {
+				$vib.med();
 				$scope.matchScores[matchId][index][player]--;
 				$scope.matchScores[matchId].dirty = true;
 			}
 		},
 		winSelect: function(matchId, winnerId) {
 			if ($scope.editEnabled) {
+				$vib.vshort();
 				if ($scope.tournament.tournament.state === 'complete') {
 					$alert.genericNoBack($scope, 'Error: Tournament Complete', 'Cannot change winner of a completed tournament.');
 					return false;
@@ -492,6 +511,7 @@ angular.module('challonger.controllers', [])
 			}
 		},
 		addSet: function(matchId) {
+			$vib.vshort();
 			$scope.matchScores[matchId].push({
 				p1: 0,
 				p2: 0,
@@ -499,10 +519,12 @@ angular.module('challonger.controllers', [])
 			$scope.matchScores[matchId].dirty = true;
 		},
 		rmSet: function(matchId) {
+			$vib.vshort();
 			$scope.matchScores[matchId].pop();
 			$scope.matchScores[matchId].dirty = true;
 		},
 		saveMatch: function(matchId, completeFlag, sameScoreFlag, playerFlag) {
+			$vib.vshort();
 			var tmpScr = '';
 			// console.log($scope.matchScores[matchId]);
 
@@ -577,6 +599,7 @@ angular.module('challonger.controllers', [])
 									$scope.checkConnection();
 								})
 								.error(function(err) {
+									$vib.med();
 									$alert.genericNoBack($scope, 'Error', err.errors[0]);
 								});
 						}
@@ -585,37 +608,47 @@ angular.module('challonger.controllers', [])
 			}
 		},
 		urlCopyOpen: function(url) {
+			$vib.vshort();
 			$alert.urlCopyOpen($scope, 'Challonge URL', 'Copy the Challonge URL to the clipboard, or open in a browser.', url);
 		},
 		signUpUrlCopyOpen: function(url) {
+			$vib.vshort();
 			$alert.urlCopyOpen($scope, 'Sign Up URL', 'Copy the sign up URL to the clipboard, or open in a browser.', url);
 		},
 		imgCopyOpen: function(url) {
+			$vib.vshort();
 			$alert.urlCopyOpen($scope, 'Live Image URL', 'Copy the live image URL to the clipboard, or open in a browser.', url);
 		},
 		edit: {
 			value: function(tid, value) {
+				$vib.vshort();
 				$tournament.tournament.update.value(tid, value, $scope);
 			},
 			description: function(tid, description) {
+				$vib.vshort();
 				$tournament.tournament.update.description(tid, description, $scope);
 			},
 			state: function(tid, state) {
+				$vib.vshort();
 				$tournament.tournament.update.state(tid, state, $scope);
 			},
 			type: function(tid, type) {
+				$vib.vshort();
 				$tournament.tournament.update.type(tid, type, $scope);
 			},
 			signUpCap: function(tid, cap) {
+				$vib.vshort();
 				$tournament.tournament.update.signUpCap(tid, cap, $scope);
 			},
 			openSignup: function(tid, bool) {
+				$vib.vshort();
 				$tournament.tournament.update.openSignup(tid, bool, $scope);
 			},
 			reorder: function(tid, participant, pid, fromIndex, toIndex) {
 				if (!$scope.editEnabled) {
 					return false;
 				}
+				$vib.vshort();
 				// console.log(pid);
 				// console.log(tid);
 
@@ -639,11 +672,13 @@ angular.module('challonger.controllers', [])
 				if (!$scope.editEnabled) {
 					return false;
 				}
+				$vib.vshort();
 				$tournament.participant.update(tid, pid, $scope);
 			}
 		},
 		create: {
 			participant: function(tid) {
+				$vib.vshort();
 				$tournament.participant.create(tid, $scope);
 			}
 		}
@@ -671,7 +706,8 @@ angular.module('challonger.controllers', [])
 	};
 })
 
-.controller('CreateCtrl', function($scope, $localStorage, $API, $connection, $alert, $http) {
+.controller('CreateCtrl', function($scope, $localStorage, $API, $connection, $alert, $http, $vib) {
+	$vib.vshort();
 	$scope.$on('$ionicView.enter', function(e) {
 		API_KEY = $localStorage.get('API_KEY');
 		if (!API_KEY) {
@@ -683,6 +719,7 @@ angular.module('challonger.controllers', [])
 
 	$scope.save = function(tournament) {
 		// console.log(tournament);
+		$vib.vshort();
 		if (!$connection.isConnected()) {
 			return $alert.genericNoBack($scope, 'No internet connention detected.', 'No internet connection was detected, please check your internet connection and try again.');
 		} else {
@@ -690,26 +727,41 @@ angular.module('challonger.controllers', [])
 			$http.post($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'), tournament)
 				.success(function(response) {
 					// console.log(response);
+					$vib.short();
 					return $alert.newUrlCopyOpen($scope, 'New Tournament', 'Tournament successfully created. Copy the url from the input below, or open the tournament by clicking \'Open\'.', response.tournament.full_challonge_url, response.tournament.id);
 				})
 				.error(function(err) {
 					// console.log(err);
+					$vib.med();
 					return $alert.genericNoBack($scope, 'Error', err.errors[0]);
 				});
 		}
 	};
 })
 
-.controller('SettingsCtrl', function($scope, $localStorage, $ionicModal) {
+.controller('SettingsCtrl', function($scope, $localStorage, $ionicModal, $vib) {
+	$vib.vshort();
 	if ($localStorage.get('API_KEY')) {
 		$scope.API_KEY = $localStorage.get('API_KEY');
 	}
 
+	if ($localStorage.get('enableVibration')) {
+		if ($localStorage.get('enableVibration') === 'true') {
+			$scope.enableVibration = true;
+		} else {
+			$scope.enableVibration = false;
+		}
+	} else {
+		$scope.enableVibration = true;
+	}
+
 	$scope.openChallonge = function () {
+		$vib.vshort();
 		window.open('https://challonge.com/settings/developer', '_system', 'location=yes');
 	};
 
 	$scope.saveKey = function(v) {
+		$vib.vshort();
 		if (v.length === 0) {
 			$scope.apiError = {
 				message: 'API Key is required.'
@@ -734,6 +786,15 @@ angular.module('challonger.controllers', [])
 		};
 	};
 
+	$scope.changeVibration = function (enabled) {
+		$vib.short();
+		if (enabled) {
+			$localStorage.set('enableVibration', 'true');
+		} else {
+			$localStorage.set('enableVibration', 'false');
+		}
+	};
+
 	$ionicModal.fromTemplateUrl('setting-api-modal.html', {
 		scope: $scope,
 		animation: 'slide-in-up'
@@ -741,6 +802,7 @@ angular.module('challonger.controllers', [])
 		$scope.modal = modal;
 	});
 	$scope.openModal = function() {
+		$vib.vshort();
 		$scope.modal.show();
 	};
 	$scope.closeModal = function() {

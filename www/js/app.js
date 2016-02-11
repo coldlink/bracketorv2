@@ -95,6 +95,36 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 	$urlRouterProvider.otherwise('/app/home');
 })
 
+.factory('$vib', function($cordovaVibration, $localStorage) {
+	return {
+		vshort: function() {
+			if ($localStorage.get('enableVibration') === 'true') {
+				$cordovaVibration.vibrate(25);
+			}
+		},
+		short: function() {
+			if ($localStorage.get('enableVibration') === 'true') {
+				$cordovaVibration.vibrate(50);
+			}
+		},
+		med: function() {
+			if ($localStorage.get('enableVibration') === 'true') {
+				$cordovaVibration.vibrate(100);
+			}
+		},
+		long: function() {
+			if ($localStorage.get('enableVibration') === 'true') {
+				$cordovaVibration.vibrate(200);
+			}
+		},
+		ms: function(time) {
+			if ($localStorage.get('enableVibration') === 'true') {
+				$cordovaVibration.vibrate(time);
+			}
+		}
+	};
+})
+
 .factory('$localStorage', function($window) {
 	return {
 		set: function(k, v) {
@@ -116,7 +146,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 	};
 })
 
-.factory('$connection', function($ionicPopup, $ionicHistory) {
+.factory('$connection', function($ionicPopup, $ionicHistory, $vib) {
 	return {
 		isConnected: function() {
 			if (window.Connection) {
@@ -130,6 +160,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 			}
 		},
 		noInternet: function(scope) {
+			$vib.med();
 			scope.showAlert = function() {
 				var alertPopup = $ionicPopup.alert({
 					title: 'No internet connention detected.',
@@ -157,7 +188,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 	};
 })
 
-.factory('$alert', function($ionicPopup, $ionicHistory, $state) {
+.factory('$alert', function($ionicPopup, $ionicHistory, $state, $vib) {
 	return {
 		generic: function(scope, title, msg) {
 			scope.showAlert = function() {
@@ -166,6 +197,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					template: msg
 				});
 				alertPopup.then(function() {
+					$vib.vshort();
 					$ionicHistory.goBack();
 				});
 			};
@@ -178,6 +210,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					template: msg
 				});
 				alertPopup.then(function() {
+					$vib.vshort();
 					return false;
 				});
 			};
@@ -190,6 +223,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					template: 'Tournament successfully deleted.'
 				});
 				alertPopup.then(function() {
+					$vib.vshort();
 					$ionicHistory.goBack();
 				});
 			};
@@ -203,6 +237,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					buttons: [{
 						text: 'Cancel',
 						onTap: function(e) {
+							$vib.vshort();
 							callback(false);
 							return false;
 						}
@@ -210,6 +245,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						text: 'Continue',
 						type: 'button-assertive',
 						onTap: function(e) {
+							$vib.vshort();
 							callback(true);
 							return false;
 						}
@@ -229,12 +265,14 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					buttons: [{
 						text: 'Close',
 						onTap: function(e) {
+							$vib.vshort();
 							return false;
 						}
-					} , {
+					}, {
 						text: '<b>Open</b>',
 						type: 'button-assertive',
 						onTap: function(e) {
+							$vib.vshort();
 							window.open(url, '_system', 'location=yes');
 							return false;
 						}
@@ -243,7 +281,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 			};
 			scope.showAlert();
 		},
-		newUrlCopyOpen: function (scope, title, subtitle, url, tid) {
+		newUrlCopyOpen: function(scope, title, subtitle, url, tid) {
 			scope.showAlert = function() {
 				scope.current = url;
 				var alertPopup = $ionicPopup.alert({
@@ -254,13 +292,17 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					buttons: [{
 						text: 'Close',
 						onTap: function(e) {
+							$vib.vshort();
 							return false;
 						}
 					}, {
 						text: '<b>Open</b>',
 						type: 'button-assertive',
 						onTap: function(e) {
-							$state.go('app.tournament', {id: tid});
+							$vib.vshort();
+							$state.go('app.tournament', {
+								id: tid
+							});
 							return false;
 						}
 					}]
@@ -285,6 +327,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					buttons: [{
 						text: 'Cancel',
 						onTap: function(e) {
+							$vib.vshort();
 							callback();
 							return false;
 						}
@@ -292,6 +335,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						text: '<b>Save</b>',
 						type: 'button-assertive',
 						onTap: function(e) {
+							$vib.vshort();
 							if (!scope.current) {
 								if (value.required) {
 									scope.prevDef = true;
@@ -328,6 +372,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					buttons: [{
 						text: 'Cancel',
 						onTap: function(e) {
+							$vib.vshort();
 							callback();
 							return false;
 						}
@@ -335,6 +380,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						text: '<b>Save</b>',
 						type: 'button-assertive',
 						onTap: function(e) {
+							$vib.vshort();
 							if (!scope.current) {
 								if (value.required) {
 									scope.prevDef = true;
@@ -370,6 +416,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					buttons: [{
 						text: 'Cancel',
 						onTap: function(e) {
+							$vib.vshort();
 							callback();
 							return false;
 						}
@@ -377,6 +424,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						text: '<b>Save</b>',
 						type: 'button-assertive',
 						onTap: function(e) {
+							$vib.vshort();
 							if (!scope.current) {
 								if (value.required) {
 									scope.prevDef = true;
@@ -411,6 +459,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					buttons: [{
 						text: 'Cancel',
 						onTap: function(e) {
+							$vib.vshort();
 							callback();
 							return false;
 						}
@@ -418,6 +467,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						text: '<b>Save</b>',
 						type: 'button-assertive',
 						onTap: function(e) {
+							$vib.vshort();
 							callback(scope.current);
 							return false;
 						}
@@ -442,6 +492,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					buttons: [{
 						text: 'Cancel',
 						onTap: function(e) {
+							$vib.vshort();
 							callback();
 							return false;
 						}
@@ -449,6 +500,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						text: '<b>Save<b>',
 						type: 'button-assertive',
 						onTap: function(e) {
+							$vib.vshort();
 							if (scope.current === 0) {
 								scope.current = null;
 							}
@@ -476,6 +528,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					buttons: [{
 						text: 'Cancel',
 						onTap: function(e) {
+							$vib.vshort();
 							callback();
 							return false;
 						}
@@ -483,6 +536,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						text: '<b>Save<b>',
 						type: 'button-assertive',
 						onTap: function(e) {
+							$vib.vshort();
 							callback(scope.current);
 							return false;
 						}
@@ -491,12 +545,12 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 			};
 			scope.showAlert();
 		},
-		newParticipant: function (scope, title, callback) {
+		newParticipant: function(scope, title, callback) {
 			scope.prevDef = false;
 			scope.popErr = null;
-			scope.showAlert = function () {
+			scope.showAlert = function() {
 				scope.current = {};
-				scope.changeCurrent = function (newCurrent) {
+				scope.changeCurrent = function(newCurrent) {
 					scope.current = newCurrent;
 				};
 				var alertPopup = $ionicPopup.alert({
@@ -505,14 +559,16 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					scope: scope,
 					buttons: [{
 						text: 'Cancel',
-						onTap: function (e) {
+						onTap: function(e) {
+							$vib.vshort();
 							callback();
 							return false;
 						}
 					}, {
 						text: '<b>Add</b>',
 						type: 'button-assertive',
-						onTap: function (e) {
+						onTap: function(e) {
+							$vib.vshort();
 							if (!scope.current.participant.name) {
 								scope.prevDef = true;
 								scope.popErr = "A display name is required.";
@@ -526,12 +582,12 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 			};
 			scope.showAlert();
 		},
-		editParticipant: function (scope, value, callback) {
+		editParticipant: function(scope, value, callback) {
 			scope.prevDef = false;
 			scope.popErr = null;
-			scope.showAlert = function () {
+			scope.showAlert = function() {
 				scope.current = value;
-				scope.changeCurrent = function (newCurrent) {
+				scope.changeCurrent = function(newCurrent) {
 					scope.current = newCurrent;
 				};
 				var alertPopup = $ionicPopup.alert({
@@ -540,21 +596,24 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					scope: scope,
 					buttons: [{
 						text: 'Close',
-						onTap: function (e) {
+						onTap: function(e) {
+							$vib.vshort();
 							callback();
 							return false;
 						}
 					}, {
 						text: 'Delete',
 						type: 'button-energized',
-						onTap: function (e) {
+						onTap: function(e) {
+							$vib.vshort();
 							callback(null, true);
 							return false;
 						}
 					}, {
 						text: 'Edit',
 						type: 'button-assertive',
-						onTap: function (e) {
+						onTap: function(e) {
+							$vib.vshort();
 							callback(scope.current, false);
 							return false;
 						}
@@ -566,64 +625,67 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 	};
 })
 
-.factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory) {
+.factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory, $vib) {
 	return {
 		participant: {
 			create: function(tId, scope) {
-					$alert.newParticipant(scope, 'Add Participant', function(newPart) {
-						// console.log(newPart);
-						if (!newPart) {
-							return false;
-						}
-						return $http.post($API.url() + 'tournaments/' + tId + '/participants.json?api_key=' + $localStorage.get('API_KEY'), newPart)
-							.success(function(response) {
-								// console.log(response);
-								scope.checkConnection();
-							})
-							.error(function(err) {
-								scope.prevDef = true;
-								scope.popErr = err.errors[0];
-								scope.showAlert();
-							});
-					});
+				$alert.newParticipant(scope, 'Add Participant', function(newPart) {
+					// console.log(newPart);
+					if (!newPart) {
+						return false;
+					}
+					return $http.post($API.url() + 'tournaments/' + tId + '/participants.json?api_key=' + $localStorage.get('API_KEY'), newPart)
+						.success(function(response) {
+							// console.log(response);
+							scope.checkConnection();
+						})
+						.error(function(err) {
+							$vib.med();
+							scope.prevDef = true;
+							scope.popErr = err.errors[0];
+							scope.showAlert();
+						});
+				});
 			},
-			update: function (tId, pId, scope) {
+			update: function(tId, pId, scope) {
 				var part = {
 					participant: {
-							name: scope.listParticipants[pId].display_name,
-							seed: scope.listParticipants[pId].seed
+						name: scope.listParticipants[pId].display_name,
+						seed: scope.listParticipants[pId].seed
 					}
 				};
 				if (scope.listParticipants[pId].challonge_username) {
 					part.participant.challonge_username = scope.listParticipants[pId].challonge_username;
 				}
-				$alert.editParticipant(scope, part, function (newPart, delFlag) {
+				$alert.editParticipant(scope, part, function(newPart, delFlag) {
 					// console.log(newPart);
 					if (delFlag) {
 						return $http.delete($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'))
-						.success(function (response) {
-							// console.log(response);
-							scope.checkConnection();
-						})
-						.error(function (err) {
-							scope.prevDef = true;
-							scope.popErr = err.errors[0];
-							scope.showAlert();
-						});
+							.success(function(response) {
+								// console.log(response);
+								scope.checkConnection();
+							})
+							.error(function(err) {
+								$vib.med();
+								scope.prevDef = true;
+								scope.popErr = err.errors[0];
+								scope.showAlert();
+							});
 					}
 					if (!newPart) {
 						return false;
 					}
 					return $http.put($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'), newPart)
-					.success(function (response) {
-						// console.log(response);
-						scope.checkConnection();
-					})
-					.error(function (err) {
-						scope.prevDef = true;
-						scope.popErr = err.errors[0];
-						scope.showAlert();
-					});
+						.success(function(response) {
+							// console.log(response);
+							scope.checkConnection();
+						})
+						.error(function(err) {
+							$vib.med();
+							scope.prevDef = true;
+							scope.popErr = err.errors[0];
+							scope.showAlert();
+						});
 				});
 			}
 		},
@@ -684,6 +746,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						}
 						return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), data)
 							.error(function(err) {
+								$vib.med();
 								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
@@ -705,6 +768,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 								description: newDesc
 							})
 							.error(function(err) {
+								$vib.med();
 								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
@@ -747,6 +811,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 										$alert.deleted(scope);
 									})
 									.error(function(err) {
+										$vib.med();
 										// console.log(err);
 										scope.prevDef = true;
 										scope.popErr = err.errors[0];
@@ -761,6 +826,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 									})
 									.error(function(err) {
 										if (err) {
+											$vib.med();
 											// console.log(err);
 											scope.prevDef = true;
 											scope.popErr = err.errors[0];
@@ -781,6 +847,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 								tournament_type: newType
 							})
 							.error(function(err) {
+								$vib.med();
 								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
@@ -803,6 +870,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 								signup_cap: newCap
 							})
 							.error(function(err) {
+								$vib.med();
 								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
@@ -825,6 +893,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 								open_signup: newBool
 							})
 							.error(function(err) {
+								$vib.med();
 								// console.log(err);
 								scope.prevDef = true;
 								scope.popErr = err.errors[0];
