@@ -188,6 +188,32 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 	};
 })
 
+.factory('$toast', function($window) {
+	return {
+		lb: function(message, success, error) {
+			$window.plugins.toast.showLongBottom(message, success, error);
+		},
+		lc: function(message, success, error) {
+			$window.plugins.toast.showLongCenter(message, success, error);
+		},
+		lt: function(message, success, error) {
+			$window.plugins.toast.showLongTop(message, success, error);
+		},
+		sb: function(message, success, error) {
+			$window.plugins.toast.showShortBottom(message, success, error);
+		},
+		sc: function(message, success, error) {
+			$window.plugins.toast.showShortCenter(message, success, error);
+		},
+		st: function(message, success, error) {
+			$window.plugins.toast.showShortTop(message, success, error);
+		},
+		show: function(message, duration, position, success, error) {
+			$window.plugins.toast.show(message, duration, position, success, error);
+		}
+	};
+})
+
 .factory('$alert', function($ionicPopup, $ionicHistory, $state, $vib) {
 	return {
 		generic: function(scope, title, msg) {
@@ -625,7 +651,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 	};
 })
 
-.factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory, $vib) {
+.factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory, $vib, $toast) {
 	return {
 		participant: {
 			create: function(tId, scope) {
@@ -637,6 +663,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					return $http.post($API.url() + 'tournaments/' + tId + '/participants.json?api_key=' + $localStorage.get('API_KEY'), newPart)
 						.success(function(response) {
 							// console.log(response);
+							$toast.sb('Participant Added!');
 							scope.checkConnection();
 						})
 						.error(function(err) {
@@ -663,6 +690,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 						return $http.delete($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'))
 							.success(function(response) {
 								// console.log(response);
+								$toast.sb('Participant Deleted!');
 								scope.checkConnection();
 							})
 							.error(function(err) {
@@ -678,6 +706,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 					return $http.put($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'), newPart)
 						.success(function(response) {
 							// console.log(response);
+							$toast.sb('Participant Updated!');
 							scope.checkConnection();
 						})
 						.error(function(err) {
@@ -754,6 +783,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 							})
 							.success(function(response) {
 								// console.log(response);
+								$toast.sb('Tournament Updated!');
 								scope.checkConnection();
 							});
 					});
@@ -776,6 +806,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 							})
 							.success(function(response) {
 								// console.log(response);
+								$toast.sb('Tournament Updated!');
 								scope.tournament = response;
 								scope.checkConnection();
 							});
@@ -821,6 +852,17 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 								$http.post(eurl)
 									.success(function(response) {
 										// console.log(response);
+										switch (newState) {
+											case 'start':
+												$toast.sb('Tournament Started!');
+												break;
+											case 'reset':
+												$toast.sb('Tournament Reset!');
+												break;
+											case 'finalize':
+												$toast.sb('Tournament Finalized!');
+												break;
+										}
 										scope.tournament = response;
 										scope.checkConnection();
 									})
@@ -855,6 +897,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 							})
 							.success(function(response) {
 								// console.log(response);
+								$toast.sb('Tournament Updated!');
 								scope.tournament = response;
 								scope.checkConnection();
 							});
@@ -878,6 +921,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 							})
 							.success(function(response) {
 								// console.log(response);
+								$toast.sb('Tournament Updated!');
 								scope.tournament = response;
 								scope.checkConnection();
 							});
@@ -901,6 +945,7 @@ angular.module('challonger', ['ionic', 'challonger.controllers', 'ngCordova', 'a
 							})
 							.success(function(response) {
 								// console.log(response);
+								$toast.sb('Tournament Updated!');
 								scope.tournament = response;
 								scope.checkConnection();
 							});

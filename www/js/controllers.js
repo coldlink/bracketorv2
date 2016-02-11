@@ -6,7 +6,6 @@ angular.module('challonger.controllers', [])
 
 .controller('AboutCtrl', function ($scope, $vib) {
 	$vib.vshort();
-
 	$scope.openTwitter = function () {
 		$vib.vshort();
 		window.open('https://www.twitter.com/coldlink_', '_system', 'location=yes');
@@ -185,8 +184,6 @@ angular.module('challonger.controllers', [])
 
 	$scope.doRefresh = function() {
 		$scope.tournaments = [];
-		console.log($stateParams);
-		console.log($stateParams.url);
 		switch ($stateParams.url) {
 			case 'favTour':
 				if ($localStorage.getObject('favTour')) {
@@ -302,7 +299,7 @@ angular.module('challonger.controllers', [])
 	});
 })
 
-.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib) {
+.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib, $toast) {
 	var API_KEY;
 	$vib.vshort();
 	$scope.$on('$ionicView.enter', function() {
@@ -457,6 +454,11 @@ angular.module('challonger.controllers', [])
 				switch (index) {
 					case 0:
 						$scope.editEnabled = !$scope.editEnabled;
+						if ($scope.editEnabled) {
+							$toast.st('Editing Enabled!');
+						} else {
+							$toast.st('Editing Disabled!');
+						}
 						return true;
 					case 1:
 						var temp = [];
@@ -465,11 +467,14 @@ angular.module('challonger.controllers', [])
 
 							if (temp.indexOf($scope.tournament.tournament.id) !== -1) {
 								temp.splice(temp.indexOf($scope.tournament.tournament.id), 1);
+								$toast.st('Bookmark Removed!');
 							} else {
 								temp.push($scope.tournament.tournament.id);
+								$toast.st('Bookmark Added!');
 							}
 						} else {
 							temp.push($scope.tournament.tournament.id);
+							$toast.st('Bookmark Added!');
 						}
 						$localStorage.setObject('favTour', temp);
 						return true;
@@ -494,7 +499,7 @@ angular.module('challonger.controllers', [])
 		},
 		longClick: function(matchId, player, index) {
 			if ($scope.editEnabled) {
-				$vib.med();
+				$vib.vshort();
 				$scope.matchScores[matchId][index][player]--;
 				$scope.matchScores[matchId].dirty = true;
 			}
@@ -596,6 +601,7 @@ angular.module('challonger.controllers', [])
 									}
 								})
 								.success(function() {
+									$toast.sb('Match Saved!');
 									$scope.checkConnection();
 								})
 								.error(function(err) {
@@ -739,7 +745,7 @@ angular.module('challonger.controllers', [])
 	};
 })
 
-.controller('SettingsCtrl', function($scope, $localStorage, $ionicModal, $vib) {
+.controller('SettingsCtrl', function($scope, $localStorage, $ionicModal, $vib, $toast) {
 	$vib.vshort();
 	if ($localStorage.get('API_KEY')) {
 		$scope.API_KEY = $localStorage.get('API_KEY');
@@ -789,8 +795,10 @@ angular.module('challonger.controllers', [])
 	$scope.changeVibration = function (enabled) {
 		$vib.short();
 		if (enabled) {
+			$toast.sb('Vibration Enabled');
 			$localStorage.set('enableVibration', 'true');
 		} else {
+			$toast.sb('Vibration Disabled');
 			$localStorage.set('enableVibration', 'false');
 		}
 	};
