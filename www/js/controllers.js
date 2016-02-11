@@ -442,6 +442,10 @@ angular.module('challonger.controllers', [])
 			});
 		}
 
+		buttons.push({
+			text: 'Refresh Tournament'
+		});
+
 		var hideSheet = $ionicActionSheet.show({
 			buttons: buttons,
 			cancelText: 'Cancel',
@@ -478,6 +482,10 @@ angular.module('challonger.controllers', [])
 						}
 						$localStorage.setObject('favTour', temp);
 						return true;
+					case 2:
+						$scope.checkConnection();
+						$toast.sb('Tournament Refreshing...');
+						return true;
 					default:
 						return false;
 				}
@@ -500,6 +508,10 @@ angular.module('challonger.controllers', [])
 		longClick: function(matchId, player, index) {
 			if ($scope.editEnabled) {
 				$vib.vshort();
+				if ($scope.tournament.tournament.state === 'complete') {
+					$alert.genericNoBack($scope, 'Error: Tournament Complete', 'Cannot change score of a completed tournament.');
+					return false;
+				}
 				$scope.matchScores[matchId][index][player]--;
 				$scope.matchScores[matchId].dirty = true;
 			}
