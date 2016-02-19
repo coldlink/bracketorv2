@@ -1,7 +1,26 @@
+/**
+ * Tournament Controller for state 'app.tournament'
+ * @class TournamentCtrl
+ * @constructor
+ * @param $scope 						Angular scope
+ * @param $stateParams  		ui.router to get url query parameters
+ * @param $http							Angular $http service
+ * @param $connection				js/services/connection.js
+ * @param $API 							js/services/api.js
+ * @param $localStorage 		js/services/localStorage.js
+ * @param $ionicActionSheet	http://ionicframework.com/docs/api/service/$ionicActionSheet/
+ * @param $ionicPlatform		http://ionicframework.com/docs/api/service/$ionicPlatform/
+ * @param $tournament				js/services/tournaments
+ * @param $q								angular promises
+ * @param $alert						js/services/alert.js
+ * @param $vib 							js/services/vib.js
+ * @param $toast 						js/services/toast.js
+ */
 angular.module('challonger')
 	.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib, $toast) {
 		var API_KEY;
 		$vib.vshort();
+		//on view enter set loading, disable editing, get api_key, and start refresh by checking connection
 		$scope.$on('$ionicView.enter', function() {
 			$scope.loading = true;
 			$scope.editEnabled = false;
@@ -9,38 +28,47 @@ angular.module('challonger')
 			$scope.checkConnection();
 		});
 
+		//on leave remove tournament object, participants, and scores
 		$scope.$on('$ionicView.leave', function() {
 			$scope.tournament = null;
 			$scope.listParticipants = {};
 			$scope.matchScores = {};
 		});
 
+		//check for internet connection
 		$scope.checkConnection = function() {
+			//throw alert if no connection detected
 			if (!$connection.isConnected()) {
 				$connection.noInternet($scope);
 			} else {
+				//if connection found, continue to refresh
 				$scope.doRefresh();
 			}
 		};
 
 		$scope.doRefresh = function() {
+			//get tournament from api using the id
 			$http.get($API.url() + 'tournaments/' + $stateParams.id + '.json?api_key=' + API_KEY + '&include_participants=1&include_matches=1')
 				.success(function(response) {
-					// console.log(response);
+					//on success set tournament object as response
 					$scope.tournament = response;
 				})
 				.error(function(err) {
+					//thow error if something goes wrond
 					$vib.med();
 					$alert.generic($scope, 'Error', err.errors[0]);
 				})
 				.finally(function() {
+					//remove participants from tournament object, and set to another object, used for editing and participants without screwing up the tournament object, key is participant id
 					$scope.listParticipants = {};
 					for (var i = 0; i < $scope.tournament.tournament.participants.length; i++) {
 						$scope.listParticipants[$scope.tournament.tournament.participants[i].participant.id] = $scope.tournament.tournament.participants[i].participant;
 					}
 
+					//split the matches into a new object with the match id as key
 					$scope.matchScores = {};
 					$scope.tournament.tournament.matches.forEach(function(match) {
+						//split scores from csv to p1 score and p2 score object, used to split out sets
 						var tempScr = match.match.scores_csv.split(',');
 						$scope.matchScores[match.match.id] = [];
 						for (var i = 0; i < tempScr.length; i++) {
@@ -50,24 +78,32 @@ angular.module('challonger')
 								p2: tempSet[1] ? tempSet[1] : 0,
 							};
 							$scope.matchScores[match.match.id].push(tempSetObj);
+							//dirty checks if edited
 							$scope.matchScores[match.match.id].dirty = false;
+							//set current state
 							$scope.matchScores[match.match.id].state = match.match.state;
+							//set identifier
 							$scope.matchScores[match.match.id].ident = match.match.identifier;
+							//set winner id
 							$scope.matchScores[match.match.id].winner_id = match.match.winner_id;
+							//set p1 id - used to check for the participant in the listParticipants object
 							$scope.matchScores[match.match.id].p1id = match.match.player1_id;
+							//set p2 id
 							$scope.matchScores[match.match.id].p2id = match.match.player2_id;
 						}
 					});
-					// console.log($scope.listParticipants);
-					// console.log($scope.matchScores);
 
+					//add the tourmanet to the history
 					var temp = [];
+					//check if a tournament history object exists in local storage
 					if ($localStorage.getObject('hisTour')) {
 						temp = $localStorage.getObject('hisTour');
 
+						//if tournament found, remove from history (to push to front of history obejct)
 						if (temp.indexOf($scope.tournament.tournament.id) !== -1) {
 							temp.splice(temp.indexOf($scope.tournament.tournament.id), 1);
 						} else {
+							//if longer that 25 history tournaments splice the oldest added one
 							if (temp.length === 25) {
 								temp.splice(0, 1);
 							}
@@ -77,14 +113,17 @@ angular.module('challonger')
 							temp.splice(0, 1);
 						}
 					}
+					//push the tourmanet to the history object, and add to local storage
 					temp.push($scope.tournament.tournament.id);
 					$localStorage.setObject('hisTour', temp);
 
+					//set refresh complete
 					$scope.loading = false;
 					$scope.$broadcast('scroll.refreshComplete');
 				});
 		};
 
+		//convert tournament state from api to application format
 		$scope.state = function(state) {
 			switch (state) {
 				case "pending":
@@ -98,6 +137,7 @@ angular.module('challonger')
 			}
 		};
 
+		//convert tournament type from api to application format
 		$scope.tournamentType = function(type) {
 			switch (type) {
 				case 'single elimination':
@@ -111,9 +151,12 @@ angular.module('challonger')
 			}
 		};
 
+		//create the action sheet menu using $ionicActionSheet
 		$scope.menu = function() {
 			var buttons = [];
 
+			//check if editing enabled/disabled, and push correct button to buttons array
+			//e.g if editing is enabled, push the "Disable Editing" button so user can disable editing.
 			if ($scope.editEnabled) {
 				buttons.push({
 					text: 'Disable Editing'
@@ -124,6 +167,7 @@ angular.module('challonger')
 				});
 			}
 
+			//check if tournament is in tournament history, and push the correct button (add bookmark/remove bookmark)
 			if ($localStorage.getObject('favTour')) {
 				var temp = $localStorage.getObject('favTour');
 
@@ -142,12 +186,15 @@ angular.module('challonger')
 				});
 			}
 
+			//alternate refresh button, can also refresh by pulling down
 			buttons.push({
 				text: 'Refresh Tournament'
 			});
 
+			//set button functions
 			var hideSheet = $ionicActionSheet.show({
 				buttons: buttons,
+				//on cancel close sheet
 				cancelText: 'Cancel',
 				cancel: function() {
 					$vib.vshort();
@@ -156,6 +203,7 @@ angular.module('challonger')
 				buttonClicked: function(index) {
 					$vib.vshort();
 					switch (index) {
+						//enable/diable editing
 						case 0:
 							$scope.editEnabled = !$scope.editEnabled;
 							if ($scope.editEnabled) {
@@ -164,11 +212,15 @@ angular.module('challonger')
 								$toast.st('Editing Disabled!');
 							}
 							return true;
+						//add/remove bookmark
 						case 1:
 							var temp = [];
+							//check for bookmarked tournament object
 							if ($localStorage.getObject('favTour')) {
+								//if found set temp as the object
 								temp = $localStorage.getObject('favTour');
 
+								//if bookmark exists (using tournament id), remove (splice) the tourmanet from the array, otherwise push the tournament id to the array
 								if (temp.indexOf($scope.tournament.tournament.id) !== -1) {
 									temp.splice(temp.indexOf($scope.tournament.tournament.id), 1);
 									$toast.st('Bookmark Removed!');
@@ -177,12 +229,15 @@ angular.module('challonger')
 									$toast.st('Bookmark Added!');
 								}
 							} else {
+								//if no bookmark object found also push tournmaent to array
 								temp.push($scope.tournament.tournament.id);
 								$toast.st('Bookmark Added!');
 							}
+							//set tournament object
 							$localStorage.setObject('favTour', temp);
 							return true;
 						case 2:
+							//refresh the tournament by first checking the connection
 							$scope.checkConnection();
 							$toast.sb('Tournament Refreshing...');
 							return true;
@@ -193,32 +248,41 @@ angular.module('challonger')
 			});
 		};
 
+		//match button clicks
 		$scope.scrBtn = {
+			//+1 to score, used to be short click, now + button press
 			click: function(matchId, player, index) {
 				if ($scope.editEnabled) {
 					$vib.vshort();
+					//check if tournament is completed, alert if true
 					if ($scope.tournament.tournament.state === 'complete') {
 						$alert.genericNoBack($scope, 'Error: Tournament Complete', 'Cannot change score of a completed tournament.');
 						return false;
 					}
+					//+1 to player, set match to dirty
 					$scope.matchScores[matchId][index][player]++;
 					$scope.matchScores[matchId].dirty = true;
 				}
 			},
+			//-1 to score, used to be long click, now - button press
 			longClick: function(matchId, player, index) {
 				if ($scope.editEnabled) {
 					$vib.vshort();
+					//check if tournament is completed, alert if true
 					if ($scope.tournament.tournament.state === 'complete') {
 						$alert.genericNoBack($scope, 'Error: Tournament Complete', 'Cannot change score of a completed tournament.');
 						return false;
 					}
+					//-1 to player, set match to dirty
 					$scope.matchScores[matchId][index][player]--;
 					$scope.matchScores[matchId].dirty = true;
 				}
 			},
+			//select match winner, also required
 			winSelect: function(matchId, winnerId) {
 				if ($scope.editEnabled) {
 					$vib.vshort();
+					//check if tournament is completed, alert if true
 					if ($scope.tournament.tournament.state === 'complete') {
 						$alert.genericNoBack($scope, 'Error: Tournament Complete', 'Cannot change winner of a completed tournament.');
 						return false;
@@ -422,4 +486,4 @@ angular.module('challonger')
 					return 3;
 			}
 		};
-	})
+	});
