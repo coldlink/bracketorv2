@@ -184,7 +184,7 @@
                 </div>
               </div>
               <div class="item row row-center" ng-if="match.match.state !== 'pending'" ng-repeat="score in matchScores[match.match.id] track by $index">
-                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="col text-right">
+                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="text-right">
                   <button class="button button-clear button-light icon ion-minus-circled" ng-click="scrBtn.longClick(match.match.id, 'p1', $index)"></button>
                 </div>
                 <div class="col text-center item-text-wrap">
@@ -192,13 +192,13 @@
                     {{score.p1}}
                   </button>
                 </div>
-                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="col text-left">
+                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="text-left">
                   <button class="button button-clear button-light icon ion-plus-circled" ng-click="scrBtn.click(match.match.id, 'p1', $index)"></button>
                 </div>
-                <div class="col text-center">
+                <div ng-hide="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="col text-center">
                   -
                 </div>
-                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="col text-right">
+                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="text-right">
                   <button class="button button-clear button-light icon ion-minus-circled" ng-click="scrBtn.longClick(match.match.id, 'p2', $index)"></button>
                 </div>
                 <div class="col text-center item-text-wrap">
@@ -206,7 +206,7 @@
                     {{score.p2}}
                   </button>
                 </div>
-                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="col text-left">
+                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="text-left">
                   <button class="button button-clear button-light icon ion-plus-circled" ng-click="scrBtn.click(match.match.id, 'p2', $index)"></button>
                 </div>
               </div>

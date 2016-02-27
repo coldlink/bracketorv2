@@ -51,6 +51,9 @@ angular.module('challonger')
 						if (!newPart) {
 							return false;
 						}
+						if (newPart.participant.challonge_username === part.participant.challonge_username) {
+							newPart.participant.challonge_username = '';
+						}
 						return $http.put($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'), newPart)
 							.success(function(response) {
 								// console.log(response);
