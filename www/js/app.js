@@ -18,6 +18,14 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 			}
 		});
 	})
+	/** Global Angular Config.
+	* @class config
+	* @requires $ionicConfigProvider
+	*/
+	.config(function ($ionicConfigProvider) {
+		$ionicConfigProvider.scrolling.jsScrolling(false);
+		$ionicConfigProvider.views.maxCache(0);
+	})
 	/**
 	 * Routes Configuration.
 	 * Configures all routes and views
@@ -77,6 +85,7 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 			})
 			//tournament results page
 			.state('app.results', {
+				cache: false,
 				url: '/results/:url',
 				views: {
 					'menuContent': {
@@ -87,6 +96,7 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 			})
 			//single tournament view page
 			.state('app.tournament', {
+				cache: false,
 				url: '/tournament/:id',
 				views: {
 					'menuContent': {
@@ -97,6 +107,7 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 			})
 			//create tournament page
 			.state('app.create', {
+				cache: false,
 				url: '/create',
 				views: {
 					'menuContent': {
