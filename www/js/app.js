@@ -24,7 +24,7 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 	*/
 	.config(function ($ionicConfigProvider) {
 		$ionicConfigProvider.scrolling.jsScrolling(false);
-		$ionicConfigProvider.views.maxCache(0);
+		$ionicConfigProvider.views.maxCache(5);
 	})
 	/**
 	 * Routes Configuration.

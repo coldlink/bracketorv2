@@ -46,6 +46,31 @@ angular.module('challonger')
 			}
 		};
 
+		$scope.getLiveIamge = function() {
+			console.log($scope.tournament.tournament.live_image_url);
+			$http.get($scope.tournament.tournament.live_image_url)
+				.success(function(response) {
+					var temp = angular.element(response);
+					console.log(typeof temp);
+					console.log(temp);
+					$scope.liveImage = temp;
+					console.log($scope.liveImage[2]);
+					console.log($scope.liveImage[2].getElementsByClassName('match'));
+					for (var i = 0; i < $scope.liveImage[2].getElementsByClassName('match').length; i++) {
+						console.log($scope.liveImage[2].getElementsByClassName('match').item(i));
+						console.log(i);
+						$scope.liveImage[2].getElementsByClassName('match').item(i).addEventListener('click', function () {
+							console.log(this.getAttribute('data-match-id'));
+							console.log($scope.matchScores[this.getAttribute('data-match-id').toString()]);
+						},false);
+					}
+				})
+				.error(function(err) {
+					$vib.med();
+					$alert.generic($scope, 'Error', err.toString());
+				});
+		};
+
 		$scope.doRefresh = function() {
 			//get tournament from api using the id
 			$http.get($API.url() + 'tournaments/' + $stateParams.id + '.json?api_key=' + API_KEY + '&include_participants=1&include_matches=1')
@@ -120,6 +145,7 @@ angular.module('challonger')
 					//set refresh complete
 					$scope.loading = false;
 					$scope.$broadcast('scroll.refreshComplete');
+					$scope.getLiveIamge();
 				});
 		};
 
@@ -212,7 +238,7 @@ angular.module('challonger')
 								$toast.st('Editing Disabled!');
 							}
 							return true;
-						//add/remove bookmark
+							//add/remove bookmark
 						case 1:
 							var temp = [];
 							//check for bookmarked tournament object
@@ -486,4 +512,13 @@ angular.module('challonger')
 					return 3;
 			}
 		};
-	});
+	})
+
+.directive('liveImage', function() {
+	return {
+		restrict: 'E',
+		link: function(scope, elem, attrs) {
+			elem.replaceWith(scope.liveImage);
+		}
+	};
+});

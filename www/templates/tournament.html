@@ -290,5 +290,16 @@
         </ion-content>
       </ion-view>
     </ion-tab>
+
+    <ion-tab icon="ion-clock" title="SVG Test">
+      <ion-view title="SVG Test">
+        <ion-content>
+          <ion-refresher ng-if="!loading" on-refresh="checkConnection()" pulling-text="Pull to refresh..."></ion-refresher>
+          <ion-scroll zooming="true" direction="xy" style="height: 100%;">
+            <live-image></live-image>
+          </ion-scroll>
+        </ion-content>
+      </ion-view>
+    </ion-tab>
   </ion-tabs>
 </ion-view>
