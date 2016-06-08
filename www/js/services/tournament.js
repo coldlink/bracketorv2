@@ -217,6 +217,7 @@ angular.module('challonger')
 												case 'finalize':
 													$toast.sb('Tournament Finalized!');
 													$window.location.reload();
+													$scope.checkConnection();
 													break;
 											}
 										})

@@ -115,6 +115,7 @@ angular.module('challonger')
 						.error(function(err) {
 							//throw alert on any error with the returned error message
 							$vib.med();
+							console.log(err);
 							$alert.generic($scope, 'Error', err.errors[0]);
 						})
 						.finally(function() {
