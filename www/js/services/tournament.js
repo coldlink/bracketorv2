@@ -1,5 +1,5 @@
 angular.module('challonger')
-	.factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory, $vib, $toast) {
+	.factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory, $vib, $toast, $window) {
 		return {
 			participant: {
 				create: function(tId, scope) {
@@ -206,15 +206,17 @@ angular.module('challonger')
 											switch (newState) {
 												case 'start':
 													$toast.sb('Tournament Started!');
+													scope.tournament = response;
 													break;
 												case 'reset':
 													$toast.sb('Tournament Reset!');
+													scope.tournament = response;
 													break;
 												case 'finalize':
 													$toast.sb('Tournament Finalized!');
+													$window.location.reload();
 													break;
 											}
-											scope.tournament = response;
 											scope.checkConnection();
 										})
 										.error(function(err) {
