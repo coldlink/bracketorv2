@@ -17,7 +17,7 @@
  * @param $toast 						js/services/toast.js
  */
 angular.module('challonger')
-	.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib, $toast) {
+	.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib, $toast, $sce, $document) {
 		var API_KEY;
 		$vib.vshort();
 		//on view enter set loading, disable editing, get api_key, and start refresh by checking connection
@@ -46,24 +46,23 @@ angular.module('challonger')
 			}
 		};
 
-		$scope.getLiveIamge = function() {
-			console.log($scope.tournament.tournament.live_image_url);
+		$scope.getLiveImage = function() {
 			$http.get($scope.tournament.tournament.live_image_url)
 				.success(function(response) {
-					var temp = angular.element(response);
-					console.log(typeof temp);
+					var temp = angular.element(response)[2];
+					temp.removeChild(temp.children[1]);
+					temp.removeChild(temp.children[1]);
+					temp.children[1].setAttribute('y', 0);
+					temp.setAttribute('transform', 'rotate(180 0 0)');
 					console.log(temp);
-					$scope.liveImage = temp;
-					console.log($scope.liveImage[2]);
-					console.log($scope.liveImage[2].getElementsByClassName('match'));
-					for (var i = 0; i < $scope.liveImage[2].getElementsByClassName('match').length; i++) {
-						console.log($scope.liveImage[2].getElementsByClassName('match').item(i));
-						console.log(i);
-						$scope.liveImage[2].getElementsByClassName('match').item(i).addEventListener('click', function () {
+
+					for (var i = 0; i < temp.getElementsByClassName('match').length; i++) {
+						temp.getElementsByClassName('match').item(i).addEventListener('click', function () {
 							console.log(this.getAttribute('data-match-id'));
 							console.log($scope.matchScores[this.getAttribute('data-match-id').toString()]);
-						},false);
+						});
 					}
+					$scope.liveImage = temp;
 				})
 				.error(function(err) {
 					$vib.med();
@@ -145,7 +144,8 @@ angular.module('challonger')
 					//set refresh complete
 					$scope.loading = false;
 					$scope.$broadcast('scroll.refreshComplete');
-					$scope.getLiveIamge();
+					// $document.getElementById('liveImageIframe').contentWindow.location.reload();
+					$scope.getLiveImage();
 				});
 		};
 
@@ -457,8 +457,7 @@ angular.module('challonger')
 						return false;
 					}
 					$vib.vshort();
-					// console.log(pid);
-					// console.log(tid);
+
 
 					$scope.tournament.tournament.participants.splice(fromIndex, 1);
 					$scope.tournament.tournament.participants.splice(toIndex, 0, participant);
@@ -513,12 +512,16 @@ angular.module('challonger')
 			}
 		};
 	})
-
-.directive('liveImage', function() {
-	return {
-		restrict: 'E',
-		link: function(scope, elem, attrs) {
-			elem.replaceWith(scope.liveImage);
-		}
-	};
-});
+	.directive('liveImage', function() {
+		return {
+			restrict: 'EA',
+			link: function(scope, elem, attrs) {
+				scope.$watch('liveImage', function (val) {
+					if (elem.children()) {
+						elem.children().remove();
+					}
+					elem.append(val);
+				});
+			}
+		};
+	});
