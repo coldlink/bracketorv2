@@ -58,11 +58,14 @@ angular.module('challonger')
 						if ($scope.matchScores[temp.getElementsByClassName('match').item(i).getAttribute('data-match-id').toString()].state !== 'pending') {
 							temp.getElementsByClassName('match').item(i).addEventListener('click', function () {
 								if ($scope.editEnabled) {
-									$alert.matchPopUp($scope, $scope.matchScores[this.getAttribute('data-match-id').toString()], function (value, bool) {
-										if (value && bool) {
-											console.log(value, bool);
+									var matchid = this.getAttribute('data-match-id').toString();
+									var scrPopUpCb = function (value) {
+										if (value) {
+											$scope.matchScores[matchid] = value;
+											$scope.scrBtn.saveMatch(matchid);
 										}
-									});
+									};
+									$alert.matchPopUp($scope, $scope.matchScores[matchid], scrPopUpCb);
 								}
 							});
 						}

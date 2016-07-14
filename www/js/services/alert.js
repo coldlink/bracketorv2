@@ -439,10 +439,6 @@ angular.module('challonger')
 				scope.showAlert = function() {
 					scope.current = value;
 					scope.current.index = 0;
-					scope.current.newSet = {
-						p1: 0,
-						p2: 0
-					};
 					scope.changeCurrent = function(newCurrent) {
 						scope.current = newCurrent;
 					};
@@ -457,7 +453,7 @@ angular.module('challonger')
 							</div>
 							<div class="col text-center">{{'Set ' + (current.index + 1)}}</div>
 							<div class="col text-right">
-								<button ng-if="current.index === current.length - 1" class="button button-small button-clear button-light icon ion-plus-circled" ng-click="current.push(current.newSet); current.index = current.index + 1; changeCurrent(current);"></button>
+								<button ng-if="current.index === current.length - 1" class="button button-small button-clear button-light icon ion-plus-circled" ng-click="current.push({p1: 0, p2: 0}); current.index = current.index + 1; changeCurrent(current);"></button>
 							</div>
 							<div class="col text-right">
 								<button ng-if="current.index !== current.length - 1 && current.length > 0" class="button button-small button-clear button-light icon ion-chevron-right" ng-click="current.index = current.index + 1"></button>
