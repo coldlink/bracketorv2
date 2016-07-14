@@ -53,14 +53,25 @@ angular.module('challonger')
 					temp.removeChild(temp.children[1]);
 					temp.removeChild(temp.children[1]);
 					temp.children[1].setAttribute('y', 0);
-					temp.setAttribute('transform', 'rotate(180 0 0)');
-					console.log(temp);
 
 					for (var i = 0; i < temp.getElementsByClassName('match').length; i++) {
-						temp.getElementsByClassName('match').item(i).addEventListener('click', function () {
-							console.log(this.getAttribute('data-match-id'));
-							console.log($scope.matchScores[this.getAttribute('data-match-id').toString()]);
-						});
+						if ($scope.matchScores[temp.getElementsByClassName('match').item(i).getAttribute('data-match-id').toString()].state !== 'pending') {
+							temp.getElementsByClassName('match').item(i).addEventListener('click', function () {
+								if ($scope.editEnabled) {
+									$alert.matchPopUp($scope, $scope.matchScores[this.getAttribute('data-match-id').toString()], function (value, bool) {
+										if (value && bool) {
+											console.log(value, bool);
+										}
+									});
+								}
+							});
+						}
+					}
+
+					for (var i = 0; i < temp.getElementsByTagName('image').length; i++) {
+						if (temp.getElementsByTagName('image')[i].getAttribute('xlink:href') && temp.getElementsByTagName('image')[i].getAttribute('xlink:href').indexOf('//') === 0) {
+							temp.getElementsByTagName('image')[i].setAttribute('xlink:href', 'https:' + temp.getElementsByTagName('image')[i].getAttribute('xlink:href'))
+						}
 					}
 					$scope.liveImage = temp;
 				})
@@ -98,8 +109,8 @@ angular.module('challonger')
 						for (var i = 0; i < tempScr.length; i++) {
 							var tempSet = tempScr[i].split('-');
 							tempSetObj = {
-								p1: tempSet[0] ? tempSet[0] : 0,
-								p2: tempSet[1] ? tempSet[1] : 0,
+								p1: tempSet[0] ? parseInt(tempSet[0]) : 0,
+								p2: tempSet[1] ? parseInt(tempSet[1]) : 0,
 							};
 							$scope.matchScores[match.match.id].push(tempSetObj);
 							//dirty checks if edited
@@ -144,7 +155,7 @@ angular.module('challonger')
 					//set refresh complete
 					$scope.loading = false;
 					$scope.$broadcast('scroll.refreshComplete');
-					// $document.getElementById('liveImageIframe').contentWindow.location.reload();
+
 					$scope.getLiveImage();
 				});
 		};

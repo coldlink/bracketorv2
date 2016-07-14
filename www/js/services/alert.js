@@ -432,6 +432,78 @@ angular.module('challonger')
 					});
 				};
 				scope.showAlert();
+			},
+			matchPopUp: function(scope, value, callback) {
+				scope.prevDef = false;
+				scope.popErr = null;
+				scope.showAlert = function() {
+					scope.current = value;
+					scope.changeCurrent = function(newCurrent) {
+						scope.current = newCurrent;
+					};
+					var alertPopup = $ionicPopup.show({
+						template: `
+						<div class="row row-center">
+						  <div class="col text-left">{{current.ident}}</div>
+						  <div class="col text-right">{{current.state.charAt(0).toUpperCase() + current.state.substr(1).toLowerCase()}}</div>
+						</div>
+						<div class="row row-center">
+							<div class="col text-center item-text-wrap">
+								<button class="button button-clear" ng-class="current.p1id === current.winner_id && current.state !== 'pending' ? 'button-assertive' : 'button-light'" ng-click="current.winner_id = current.p1id; changeCurrent(current)">{{(current.p1id ? listParticipants[current.p1id].display_name : '')}}</button>
+							</div>
+						</div>
+						<div class="row row-center">
+						  <div class="col">
+						    <button class="button button-clear button-light icon ion-minus-circled" ng-click="current[0].p1 = current[0].p1 - 1; changeCurrent(current)"></button>
+						  </div>
+						  <div class="col">
+						    <button class="button button-clear" ng-class="current[0].p1 > current[0].p2 ? 'button-assertive' : 'button-light'">
+						      {{current[0].p1}}
+						    </button>
+						  </div>
+						  <div class="col">
+						    <button class="button button-clear button-light icon ion-plus-circled" ng-click="current[0].p1 = current[0].p1 + 1; changeCurrent(current)"></button>
+						  </div>
+						</div>
+						<div class="row row-center">
+							<div class="col">
+								<button class="button button-clear button-light icon ion-minus-circled" ng-click="current[0].p2 = current[0].p2 - 1; changeCurrent(current)"></button>
+							</div>
+							<div class="col">
+								<button class="button button-clear" ng-class="current[0].p2 > current[0].p2 ? 'button-assertive' : 'button-light'">
+									{{current[0].p2}}
+								</button>
+							</div>
+							<div class="col">
+								<button class="button button-clear button-light icon ion-plus-circled" ng-click="current[0].p2 = current[0].p2 + 1; changeCurrent(current)"></button>
+							</div>
+						</div>
+						<div class="row row-center">
+							<div class="col text-center item-text-wrap">
+								<button class="button button-clear" ng-class="current.p2id === current.winner_id && current.state !== 'pending' ? 'button-assertive' : 'button-light'" ng-click="current.winner_id = current.p2id; changeCurrent(current)">{{(current.p2id ? listParticipants[current.p2id].display_name : '')}}</button>
+							</div>
+						</div>
+						`,
+						scope: scope,
+						buttons: [{
+							text: 'Cancel',
+							onTap: function(e) {
+								$vib.vshort();
+								callback();
+								return false;
+							}
+						}, {
+							text: 'Save',
+							type: 'button-assertive',
+							onTap: function(e) {
+								$vib.vshort();
+								callback(scope.current, false);
+								return false;
+							}
+						}]
+					});
+				};
+				scope.showAlert();
 			}
 		};
 	});
