@@ -438,14 +438,30 @@ angular.module('challonger')
 				scope.popErr = null;
 				scope.showAlert = function() {
 					scope.current = value;
+					scope.current.index = 0;
+					scope.current.newSet = {
+						p1: 0,
+						p2: 0
+					};
 					scope.changeCurrent = function(newCurrent) {
 						scope.current = newCurrent;
 					};
 					var alertPopup = $ionicPopup.show({
 						template: `
 						<div class="row row-center">
-						  <div class="col text-left">{{current.ident}}</div>
-						  <div class="col text-right">{{current.state.charAt(0).toUpperCase() + current.state.substr(1).toLowerCase()}}</div>
+							<div class="col text-left">
+								<button ng-if="current.index !== 0" class="button button-small button-clear button-light icon ion-chevron-left" ng-click="current.index = current.index - 1"></button>
+							</div>
+							<div class="col text-left">
+								<button ng-if="current.index === current.length - 1 && current.index > 0" class="button button-small button-clear button-light icon ion-minus-circled" ng-click="current.index = current.index - 1; current.pop(); changeCurrent(current);"></button>
+							</div>
+							<div class="col text-center">{{'Set ' + (current.index + 1)}}</div>
+							<div class="col text-right">
+								<button ng-if="current.index === current.length - 1" class="button button-small button-clear button-light icon ion-plus-circled" ng-click="current.push(current.newSet); current.index = current.index + 1; changeCurrent(current);"></button>
+							</div>
+							<div class="col text-right">
+								<button ng-if="current.index !== current.length - 1 && current.length > 0" class="button button-small button-clear button-light icon ion-chevron-right" ng-click="current.index = current.index + 1"></button>
+							</div>
 						</div>
 						<div class="row row-center">
 							<div class="col text-center item-text-wrap">
@@ -453,29 +469,30 @@ angular.module('challonger')
 							</div>
 						</div>
 						<div class="row row-center">
-						  <div class="col">
-						    <button class="button button-clear button-light icon ion-minus-circled" ng-click="current[0].p1 = current[0].p1 - 1; changeCurrent(current)"></button>
-						  </div>
-						  <div class="col">
-						    <button class="button button-clear" ng-class="current[0].p1 > current[0].p2 ? 'button-assertive' : 'button-light'">
-						      {{current[0].p1}}
-						    </button>
-						  </div>
-						  <div class="col">
-						    <button class="button button-clear button-light icon ion-plus-circled" ng-click="current[0].p1 = current[0].p1 + 1; changeCurrent(current)"></button>
-						  </div>
+						 <div class="col text-center">
+						  <button class="button button-small button-clear button-light icon ion-minus-circled" ng-click="current[current.index].p1 = current[current.index].p1 - 1; changeCurrent(current)"></button>
+						 </div>
+						 <div class="col text-center">
+						  <button class="button button-clear" ng-class="current[current.index].p1 > current[current.index].p2 ? 'button-assertive' : 'button-light'">
+						   {{current[current.index].p1}}
+						  </button>
+						 </div>
+						 <div class="col text-center">
+						  <button class="button button-small button-clear button-light icon ion-plus-circled" ng-click="current[current.index].p1 = current[current.index].p1 + 1; changeCurrent(current)"></button>
+						 </div>
 						</div>
+						<hr>
 						<div class="row row-center">
-							<div class="col">
-								<button class="button button-clear button-light icon ion-minus-circled" ng-click="current[0].p2 = current[0].p2 - 1; changeCurrent(current)"></button>
+							<div class="col text-center">
+								<button class="button button-small button-clear button-light icon ion-minus-circled" ng-click="current[current.index].p2 = current[current.index].p2 - 1; changeCurrent(current)"></button>
 							</div>
-							<div class="col">
-								<button class="button button-clear" ng-class="current[0].p2 > current[0].p2 ? 'button-assertive' : 'button-light'">
-									{{current[0].p2}}
+							<div class="col text-center">
+								<button class="button button-clear" ng-class="current[current.index].p2 > current[current.index].p2 ? 'button-assertive' : 'button-light'">
+									{{current[current.index].p2}}
 								</button>
 							</div>
-							<div class="col">
-								<button class="button button-clear button-light icon ion-plus-circled" ng-click="current[0].p2 = current[0].p2 + 1; changeCurrent(current)"></button>
+							<div class="col text-center">
+								<button class="button button-small button-clear button-light icon ion-plus-circled" ng-click="current[current.index].p2 = current[current.index].p2 + 1; changeCurrent(current)"></button>
 							</div>
 						</div>
 						<div class="row row-center">
@@ -484,6 +501,8 @@ angular.module('challonger')
 							</div>
 						</div>
 						`,
+						title: 'Edit Match - ' + scope.current.ident,
+						subTitle: scope.current.state.charAt(0).toUpperCase() + scope.current.state.substr(1).toLowerCase(),
 						scope: scope,
 						buttons: [{
 							text: 'Cancel',
