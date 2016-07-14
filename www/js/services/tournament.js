@@ -22,6 +22,36 @@ angular.module('challonger')
 							});
 					});
 				},
+				bulk: function (tId, scope) {
+					$alert.bulkParticipants(scope, 'Bulk Add Participants', function (participants) {
+						if (!participants) {
+							return false;
+						}
+						var bulkParticipants = [];
+						participants = participants.split('\n');
+						participants.map(function (val) {
+							if (val) {
+								bulkParticipants.push({
+									name: val
+								});
+							}
+						});
+
+						//POST https://api.challonge.com/v1/tournaments/{tournament}/participants/bulk_add.{json|xml}
+						return $http.post($API.url() + 'tournaments/' + tId + '/participants/bulk_add.json?api_key=' + $localStorage.get('API_KEY'), { participants: bulkParticipants})
+							.success(function (response) {
+								// console.log(response);
+								$toast.sb('Participants Added!');
+								scope.checkConnection();
+							})
+							.error(function(err) {
+								$vib.med();
+								scope.prevDef = true;
+								scope.popErr = err.errors[0];
+								scope.showAlert();
+							});
+					});
+				},
 				update: function(tId, pId, scope) {
 					var part = {
 						participant: {

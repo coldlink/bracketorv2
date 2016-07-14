@@ -54,28 +54,31 @@ angular.module('challonger')
 					temp.removeChild(temp.children[1]);
 					temp.children[1].setAttribute('y', 0);
 
-					for (var i = 0; i < temp.getElementsByClassName('match').length; i++) {
-						if ($scope.matchScores[temp.getElementsByClassName('match').item(i).getAttribute('data-match-id').toString()].state !== 'pending') {
-							temp.getElementsByClassName('match').item(i).addEventListener('click', function () {
-								if ($scope.editEnabled) {
-									var matchid = this.getAttribute('data-match-id').toString();
-									var scrPopUpCb = function (value) {
-										if (value) {
-											$scope.matchScores[matchid] = value;
-											$scope.scrBtn.saveMatch(matchid);
-										}
-									};
-									$alert.matchPopUp($scope, $scope.matchScores[matchid], scrPopUpCb);
-								}
-							});
+					if ($scope.tournament.tournament.state !== 'pending') {
+						for (var i = 0; i < temp.getElementsByClassName('match').length; i++) {
+							if ($scope.matchScores[temp.getElementsByClassName('match').item(i).getAttribute('data-match-id').toString()].state !== 'pending') {
+								temp.getElementsByClassName('match').item(i).addEventListener('click', function () {
+									if ($scope.editEnabled) {
+										var matchid = this.getAttribute('data-match-id').toString();
+										var scrPopUpCb = function (value) {
+											if (value) {
+												$scope.matchScores[matchid] = value;
+												$scope.scrBtn.saveMatch(matchid);
+											}
+										};
+										$alert.matchPopUp($scope, $scope.matchScores[matchid], scrPopUpCb);
+									}
+								});
+							}
+						}
+
+						for (var i = 0; i < temp.getElementsByTagName('image').length; i++) {
+							if (temp.getElementsByTagName('image')[i].getAttribute('xlink:href') && temp.getElementsByTagName('image')[i].getAttribute('xlink:href').indexOf('//') === 0) {
+								temp.getElementsByTagName('image')[i].setAttribute('xlink:href', 'https:' + temp.getElementsByTagName('image')[i].getAttribute('xlink:href'));
+							}
 						}
 					}
 
-					for (var i = 0; i < temp.getElementsByTagName('image').length; i++) {
-						if (temp.getElementsByTagName('image')[i].getAttribute('xlink:href') && temp.getElementsByTagName('image')[i].getAttribute('xlink:href').indexOf('//') === 0) {
-							temp.getElementsByTagName('image')[i].setAttribute('xlink:href', 'https:' + temp.getElementsByTagName('image')[i].getAttribute('xlink:href'))
-						}
-					}
 					$scope.liveImage = temp;
 				})
 				.error(function(err) {
@@ -501,6 +504,10 @@ angular.module('challonger')
 				participant: function(tid) {
 					$vib.vshort();
 					$tournament.participant.create(tid, $scope);
+				},
+				bulk: function (tid) {
+					$vib.vshort();
+					$tournament.participant.bulk(tid, $scope);
 				}
 			}
 		};

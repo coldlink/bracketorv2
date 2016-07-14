@@ -393,6 +393,43 @@ angular.module('challonger')
 				};
 				scope.showAlert();
 			},
+			bulkParticipants: function(scope, title, callback) {
+				scope.prevDef = false;
+				scope.popErr = null;
+				scope.showAlert = function() {
+					scope.current = {};
+					scope.changeCurrent = function(newCurrent) {
+						scope.current = newCurrent;
+					};
+					var alertPopup = $ionicPopup.alert({
+						template: '<p class="assertive" ng-if="prevDef">{{popErr || "An input is required."}}</p><textarea class="darki" placeholder="Participant Display Name" ng-model="current.participants" ng-change="changeCurrent(current)"></textarea><small>Enter each new participant on a new line.</small>',
+						title: title,
+						scope: scope,
+						buttons: [{
+							text: 'Cancel',
+							onTap: function(e) {
+								$vib.vshort();
+								callback();
+								return false;
+							}
+						}, {
+							text: '<b>Add</b>',
+							type: 'button-assertive',
+							onTap: function(e) {
+								$vib.vshort();
+								if (!scope.current.participants) {
+									scope.prevDef = true;
+									scope.popErr = "At least one participant is required.";
+									e.preventDefault();
+								}
+								callback(scope.current.participants);
+								return false;
+							}
+						}]
+					});
+				};
+				scope.showAlert();
+			},
 			editParticipant: function(scope, value, callback) {
 				scope.prevDef = false;
 				scope.popErr = null;
