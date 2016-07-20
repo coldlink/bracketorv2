@@ -228,7 +228,14 @@
     <ion-tab icon="ion-network" title="Bracket">
       <ion-view title="Bracket">
         <ion-content>
-          <ion-scroll zooming="true" direction="xy" style="height: 100%;">
+          <div class="list card" ng-if="tournament.tournament.participants_count <= 1">
+            <div class="item row row-center">
+              <div class="col text-center item-text-wrap">
+                Bracket will become visible once there are 2 or more participants.
+              </div>
+            </div>
+          </div>
+          <ion-scroll ng-if="tournament.tournament.participants_count > 1" zooming="true" direction="xy" style="height: 100%;">
             <div style="width: 100%; height: 100%" live-image></div>
           </ion-scroll>
         </ion-content>

@@ -162,7 +162,9 @@ angular.module('challonger')
 					$scope.loading = false;
 					$scope.$broadcast('scroll.refreshComplete');
 
-					$scope.getLiveImage();
+					if ($scope.tournament.tournament.participants_count > 1) {
+						$scope.getLiveImage();						
+					}
 				});
 		};
 
