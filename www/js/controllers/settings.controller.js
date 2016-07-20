@@ -57,6 +57,11 @@ angular.module('challonger')
 			}
 		};
 
+		$scope.openChallonge = function () {
+			$vib.vshort();
+			window.open('https://challonge.com/users/new', '_system', 'location=yes');
+		};
+
 		$ionicModal.fromTemplateUrl('setting-api-modal.html', {
 			scope: $scope,
 			animation: 'slide-in-up'

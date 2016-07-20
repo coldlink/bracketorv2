@@ -7,9 +7,9 @@
       </div>
       <div class="item item-input-inset">
         <label class="item-input-wrapper">
-          <input ng-model="API_KEY" placeholder="API Key" type="password">
+          <input style="color: black" ng-model="API_KEY" placeholder="API Key" type="password">
         </label>
-        <button class="button button-primary button-small" ng-click="saveKey(API_KEY)">
+        <button class="button button-assertive button-small" ng-click="saveKey(API_KEY)">
           Save Key
         </button>
       </div>
@@ -18,6 +18,16 @@
       </div>
       <div class="item item-text-wrap text-center">
         Click the '?' icon to get help to find your API Key.
+      </div>
+    </div>
+    <div class="list">
+      <div class="item item-divider item-body">
+        Don't have a Challonge account? Visit challonge.com to create a new account.
+      </div>
+      <div class="item item-divider item-body">
+        <button class="button button-assertive button-full" ng-click="openChallonge()">
+          Open Challonge In Browser
+        </button>
       </div>
     </div>
     <div class="list">
