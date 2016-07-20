@@ -51,6 +51,11 @@ angular.module('challonger')
 			} else {
 				// callback on all tournaments get
 				if (cb) {
+					$scope.tournaments.sort(function (a, b) {
+						var da = new Date(a.tournament.updated_at).getTime();
+						var db = new Date(b.tournament.updated_at).getTime();
+						return db - da;
+					});
 					cb();
 				}
 			}
@@ -107,10 +112,16 @@ angular.module('challonger')
 							//if only 1 tournament found, an array is not sent, so put the response inside an array, otherwise just set to tournament Array
 							//fixes issue with getting single result tournaments
 							if (!Array.isArray(response)) {
-								$scope.tournaments = [response];
-							} else {
-								$scope.tournaments = response;
+								response = [response];
 							}
+
+							response.sort(function (a, b) {
+								var da = new Date(a.tournament.updated_at).getTime();
+								var db = new Date(b.tournament.updated_at).getTime();
+								return db - da;
+							});
+
+							$scope.tournaments = response;
 						})
 						.error(function(err) {
 							//throw alert on any error with the returned error message
@@ -179,11 +190,6 @@ angular.module('challonger')
 			$state.go('app.tournament', {
 				id: id
 			});
-		};
-
-		//filter to list tournaments in order of date created
-		$scope.createdAtOrder = function(tournament) {
-			return new Date(tournament.tournament.created_at);
 		};
 
 		//on view enter, set loading, close any current tournaments, and check for connection. checkConnection() will automatically call doRefresh() after.
