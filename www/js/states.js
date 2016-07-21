@@ -14,16 +14,6 @@
 	 */
 	function stateConfig($stateProvider, $urlRouterProvider) {
 		$stateProvider
-			//about page
-			.state('app.about', {
-				url: '/about',
-				views: {
-					'menuContent': {
-						templateUrl: 'templates/about.html',
-						controller: 'AboutCtrl'
-					}
-				}
-			})
 			//settings page
 			.state('app.settings', {
 				url: '/settings',
@@ -41,16 +31,6 @@
 					'menuContent': {
 						templateUrl: 'templates/browse.html',
 						controller: 'BrowseCtrl'
-					}
-				}
-			})
-			//homepage
-			.state('app.home', {
-				url: '/home',
-				views: {
-					'menuContent': {
-						templateUrl: 'templates/home.html',
-						controller: 'HomeCtrl'
 					}
 				}
 			})

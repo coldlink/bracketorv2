@@ -10,8 +10,8 @@
 			.state('app', {
 				url: '/app',
 				abstract: true,
-				templateUrl: 'templates/menu.html',
-				controller: 'AppCtrl'
+				templateUrl: 'js/app/menu/menu.html',
+				controller: 'MenuCtrl as menu'
 			});
 	}
 })();
