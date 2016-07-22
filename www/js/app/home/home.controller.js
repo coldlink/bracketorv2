@@ -1,7 +1,8 @@
 (function() {
 	'use strict';
 
-	angular.module('challonger')
+	angular
+		.module('challonger')
 		.controller('HomeCtrl', HomeCtrl);
 
 		function HomeCtrl() {

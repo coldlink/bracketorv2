@@ -14,16 +14,6 @@
 	 */
 	function stateConfig($stateProvider, $urlRouterProvider) {
 		$stateProvider
-			//settings page
-			.state('app.settings', {
-				url: '/settings',
-				views: {
-					'menuContent': {
-						templateUrl: 'templates/settings.html',
-						controller: 'SettingsCtrl'
-					}
-				}
-			})
 			//browse tournaments page
 			.state('app.browse', {
 				url: '/browse',
