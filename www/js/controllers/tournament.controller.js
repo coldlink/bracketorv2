@@ -50,9 +50,10 @@ angular.module('challonger')
 			$http.get($scope.tournament.tournament.live_image_url)
 				.success(function(response) {
 					var temp = angular.element(response)[2];
-					temp.removeChild(temp.children[1]);
-					temp.removeChild(temp.children[1]);
-					temp.children[1].setAttribute('y', 0);
+					window.testingtemp = temp;
+					temp.removeChild(temp.childNodes[5]);
+					temp.removeChild(temp.childNodes[3]);
+					temp.childNodes[5].setAttribute('y', 0);
 
 					if ($scope.tournament.tournament.state !== 'pending') {
 						for (var i = 0; i < temp.getElementsByClassName('match').length; i++) {
@@ -71,11 +72,11 @@ angular.module('challonger')
 								});
 							}
 						}
+					}
 
-						for (var i = 0; i < temp.getElementsByTagName('image').length; i++) {
-							if (temp.getElementsByTagName('image')[i].getAttribute('xlink:href') && temp.getElementsByTagName('image')[i].getAttribute('xlink:href').indexOf('//') === 0) {
-								temp.getElementsByTagName('image')[i].setAttribute('xlink:href', 'https:' + temp.getElementsByTagName('image')[i].getAttribute('xlink:href'));
-							}
+					for (var i = 0; i < temp.getElementsByTagName('image').length; i++) {
+						if (temp.getElementsByTagName('image')[i].getAttribute('xlink:href') && temp.getElementsByTagName('image')[i].getAttribute('xlink:href').indexOf('//') === 0) {
+							temp.getElementsByTagName('image')[i].setAttribute('xlink:href', 'https:' + temp.getElementsByTagName('image')[i].getAttribute('xlink:href'));
 						}
 					}
 
@@ -163,7 +164,7 @@ angular.module('challonger')
 					$scope.$broadcast('scroll.refreshComplete');
 
 					if ($scope.tournament.tournament.participants_count > 1) {
-						$scope.getLiveImage();						
+						$scope.getLiveImage();
 					}
 				});
 		};
