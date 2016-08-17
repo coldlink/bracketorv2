@@ -6,7 +6,7 @@
  * @requires ngCordova
  * @requires angular-svg-round-progress		SVG Progress Bar used on tournament results page - https://github.com/crisbeto/angular-svg-round-progressbar
  */
-angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'])
+angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress', 'ui.materialize'])
 	.run(function($ionicPlatform) {
 		$ionicPlatform.ready(function() {
 			if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -19,10 +19,10 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 		});
 	})
 	/** Global Angular Config.
-	* @class config
-	* @requires $ionicConfigProvider
-	*/
-	.config(function ($ionicConfigProvider) {
+	 * @class config
+	 * @requires $ionicConfigProvider
+	 */
+	.config(function($ionicConfigProvider) {
 		$ionicConfigProvider.scrolling.jsScrolling(false);
 		$ionicConfigProvider.views.maxCache(5);
 	})
@@ -36,7 +36,7 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 	 */
 	.config(function($stateProvider, $urlRouterProvider) {
 		$stateProvider
-			//side menu
+		//side menu
 			.state('app', {
 				url: '/app',
 				abstract: true,
@@ -118,4 +118,20 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 			});
 		// if none of the above states are matched, use this as the fallback
 		$urlRouterProvider.otherwise('/app/home');
-	});
+	})
+	//update directive from https://github.com/jadjoubran/angular-material-design-lite
+	// .directive('mdlUpgrade', function($timeout) {
+	// 	return {
+	// 		restrict: 'A',
+	// 		compile: function() {
+	// 			return {
+	// 				post: function postLink(scope, element) {
+	// 					$timeout(function() {
+	// 						componentHandler.upgradeElements(element[0]);
+	// 					}, 0);
+	// 				}
+	// 			};
+	// 		},
+	// 	};
+	// })
+	;

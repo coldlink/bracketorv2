@@ -1,34 +1,44 @@
 <ion-view view-title="Bracketor">
   <ion-content>
-    <div class="list card">
+    <div class="list card z-depth-0">
       <div class="item item-avatar">
         <img src="img/challonger.png">
-        <h2>BracketorV2</h2>
+        <h2>Bracketor</h2>
         <p>An unofficial Challonge app for mobile.</p>
       </div>
     </div>
-    <div class="list card">
-      <a class="item item-icon-left" href="#/app/browse">
-        <i class="icon ion-log-in"></i>
-        Browse Tournaments
+    <div class="divider"></div>
+    <ul class="collection">
+      <a href="#/app/browse" class="collection-item">
+        <div>Browse Tournaments<span class="secondary-content">
+            <i class="material-icons">equalizer</i>
+          </span>
+        </div>
       </a>
-      <a class="item item-icon-left" href="#/app/create">
-        <i class="icon ion-plus-round"></i>
-        Create a Tournament
+      <a href="#/app/create" class="collection-item">
+        <div>Create a Tournament<span class="secondary-content">
+            <i class="material-icons">playlist_add</i>
+          </span>
+        </div>
       </a>
-      <a class="item item-icon-left" ui-sref="app.settings">
-        <i class="icon ion-gear-b"></i>
-        Settings
+      <a ui-sref="app.settings" class="collection-item">
+        <div>Settings<span class="secondary-content">
+            <i class="material-icons">settings</i>
+          </span>
+        </div>
       </a>
-      <a class="item item-icon-left" ui-sref="app.about">
-        <i class="icon ion-information-circled"></i>
-        About
+      <a ui-sref="app.about" class="collection-item">
+        <div>About<span class="secondary-content">
+            <i class="material-icons">info_outline</i>
+          </span>
+        </div>
       </a>
-    </div>
-    <div class="list card">
+    </ul>
+    <div class="divider"></div>
+    <div class="list card z-depth-0">
       <div class="item">
         <h2>Latest Update - 2016-08-03</h2>
-        <p>v2.0.9</p>
+        <p>v2.1.0</p>
       </div>
       <div class="item item-body">
         <p class="no-margin-top">

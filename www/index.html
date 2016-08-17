@@ -6,8 +6,27 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title>BracketorV2</title>
 
-    <link href="css/ionic.app.min.css" rel="stylesheet">
+    <!-- ionic base css (build from scss) -->
+    <!-- <link href="css/ionic.app.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="lib/ionic/css/ionic.css" media="screen" title="no title" charset="utf-8">
+
+    <!-- materialize -->
+    <link rel="stylesheet" href="css/materialize.css">
+    <link rel="stylesheet" href="css/icon.css">
+
+    <!-- custom styles -->
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- jquery -->
+    <script src="js/jquery-3.1.0.min.js"></script>
+
+    <!-- materialize -->
+    <script src="js/materialize.min.js"></script>
+
+    <!-- mdl test -->
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+    <script src="https://code.getmdl.io/1.1.3/material.min.js"></script> -->
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
@@ -28,6 +47,7 @@
     <script src="js/controllers/tournament.controller.js"></script>
     <script src="js/controllers/create.controller.js"></script>
     <script src="js/controllers/settings.controller.js"></script>
+    <script src="js/controllers/sidemenu.contoller.js"></script>
 
     <!-- services -->
     <script src="js/services/vib.js"></script>
@@ -40,9 +60,59 @@
 
     <!-- external -->
     <script src="js/roundProgress.min.js"></script>
+    <script src="js/angular-materialize.min.js"></script>
   </head>
 
   <body ng-app="challonger">
+    <!-- side nav nevu -->
+    <ul id="nav-mobile" class="side-nav" ng-controller="SideMenuCtrl">
+      <li>
+        <div class="userView">
+          <a href="/#/app/home"><img class="circle" src="img/challonger.png"></a>
+          <span>
+            <span class="name">Bracketor</span>
+          </span>
+          <span>
+            <span class="email">Unofficial Challonge App for mobile.</span>
+          </span>
+          <span>
+            <span class="email">v2.1.0</span>
+          </span>
+        </div>
+      </li>
+      <li>
+        <div class="divider"></div>
+      </li>
+      <li>
+        <a class="subheader">Quick Access</a>
+      </li>
+      <li>
+        <a class="waves-effect" href="#!">Get Tournaments</a>
+      </li>
+      <li>
+        <div class="divider"></div>
+      </li>
+      <li>
+        <a class="subheader">Menu</a>
+      </li>
+      <li>
+        <a class="waves-effect" ui-sref="app.browse">
+          <i class="material-icons">equalizer</i>Browse Tournaments</a>
+      </li>
+      <li>
+        <a class="waves-effect" ui-sref="app.create">
+          <i class="material-icons">playlist_add</i>Create Tournament</a>
+      </li>
+      <li>
+        <a class="waves-effect" ui-sref="app.settings">
+          <i class="material-icons">settings</i>Settings</a>
+      </li>
+      <li>
+        <a class="waves-effect" ui-sref="app.about">
+          <i class="material-icons">info_outline</i>About</a>
+      </li>
+    </ul>
+    <!-- side nav nevu end-->
     <ion-nav-view></ion-nav-view>
   </body>
 
