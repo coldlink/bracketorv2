@@ -1,38 +1,77 @@
 <ion-view view-title="Settings">
   <ion-content>
-    <div class="list">
-      <div class="item item-divider item-body">
-        <i class="icon ion-help-circled padding-right" ng-click="openModal()"></i>
-        API Key
-      </div>
-      <div class="item item-input-inset">
-        <label class="item-input-wrapper">
-          <input style="color: black" ng-model="API_KEY" placeholder="API Key" type="password">
+    <ul class="collection">
+      <li class="collection-item padding-5">
+        <div class="row valign-wrapper">
+          <div class="col col-80">
+            <label>Need help finding your Challonge API Key?</label>
+          </div>
+          <div class="col col-20">
+            <button class="btn-floating btn-large waves-effect" ng-click="openModal()">
+              <i class="material-icons">find_in_page</i>
+            </button>
+          </div>
+        </div>
+      </li>
+      <li class="collection-item padding-5">
+        <div class="row valign-wrapper">
+            <div class="col col-80">
+              <label for="api_key">API Key</label>
+              <input ng-model="API_KEY" name="api_key" type="password" class="validate" length="40">
+            </div>
+            <div class="col col-20">
+              <button class="btn-floating btn-large waves-effect" ng-click="saveKey(API_KEY)">
+                <i class="material-icons">save</i>
+              </button>
+          </div>
+        </div>
+      </li>
+      <li class="collection-item">
+        <div class="switch">
+          <label>Enable Vibration</label>
+          <label class="input-field">
+            <input type="checkbox" ng-change="changeVibration(enableVibration)" ng-model="enableVibration">
+            <span class="lever"></span>
+          </label>
+        </div>
+      </li>
+      <li class="collection-item">
+        <label>Auto Refresh<br>
+          <small>
+            How long before automatically refreshing the current tournament.</small>
         </label>
-        <button class="button button-assertive button-small" ng-click="saveKey(API_KEY)">
-          Save Key
-        </button>
-      </div>
-      <div class="item item-text-wrap text-center" ng-class="apiError.type ? apiError.type : 'assertive'" ng-if="apiError">
-        {{apiError.message}}
-      </div>
-      <div class="item item-text-wrap text-center">
-        Click the '?' icon to get help to find your API Key.
-      </div>
-    </div>
-    <div class="list">
-      <div class="item item-divider item-body">
-        Don't have a Challonge account? Visit challonge.com to create a new account.
-      </div>
-      <div class="item item-divider item-body">
-        <button class="button button-assertive button-full" ng-click="openChallonge()">
+        <div input-field>
+          <select class="browser-default" ng-model="autorefresh">
+            <option ng-value="10000">10 Secs</option>
+            <option ng-value="15000">15 Secs</option>
+            <option ng-value="30000">30 Secs</option>
+            <option ng-value="60000">1 Min</option>
+            <option ng-value="120000">2 Min</option>
+            <option ng-value="300000">5 Min</option>
+          </select>
+        </div>
+      </li>
+      <li class="collection-item">
+        <label>Request Timeout<br>
+          <small>How long to wait for a response for the server.</small>
+        </label>
+        <div input-field>
+          <select class="browser-default" ng-model="timeout">
+            <option ng-value="5000">5 Secs</option>
+            <option ng-value="10000">10 Secs</option>
+            <option ng-value="15000">15 Secs</option>
+            <option ng-value="30000">30 Secs</option>
+          </select>
+        </div>
+      </li>
+      <li class="collection-item center-align">
+        <label>Don't have a Challonge account? Visit challonge.com to create a new account.</label>
+        <br><br>
+        <button class="waves-effect btn" ng-click="openChallongeNew()">
           Open Challonge In Browser
         </button>
-      </div>
-    </div>
-    <div class="list">
-      <ion-checkbox ng-change="changeVibration(enableVibration)" ng-model="enableVibration">Enable Vibration?</ion-checkbox>
-    </div>
+      </li>
+    </ul>
   </ion-content>
 </ion-view>
 <script id="setting-api-modal.html" type="text/ng-template">
@@ -46,7 +85,7 @@
         <div class="col">
           <p class="no-margin">
             Get your API key by logging into Challonge and copying your API key from the Developer API Settings. Get your API Key from
-            <a style="color: #fff" ng-click="openChallonge()" href="#">Challonge</a>
+            <a ng-click="openChallonge()" href="#">Challonge</a>
             or using the page below:
           </p>
         </div>

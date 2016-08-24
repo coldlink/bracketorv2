@@ -6,64 +6,68 @@
         <ion-spinner></ion-spinner>
       </div>
     </div>
-    <div class="list card" ng-if="!tournament.tournament.group_stages_enabled" ng-repeat="tournament in tournaments track by tournament.tournament.id">
-      <a class="item item-icon-left" ng-click="open(tournament.tournament.id)">
-        <i class="icon" ng-class="active === tournament.tournament.id ? 'ion-chevron-down' : 'ion-chevron-right'"></i>
-        {{tournament.tournament.name}}
-      </a>
-      <div class="item item-body no-margin" ng-if="active === tournament.tournament.id">
-        <div class="row">
-          <div class="col text-center">
-            <h2>
-              <b>{{tournament.tournament.participants_count}}</b>
-            </h2>
-            <small>Participants</small>
+    <ul class="collapsible popout" data-collapsible="accordion">
+      <li class="z-depth-0" ng-repeat="tournament in tournaments track by tournament.tournament.id">
+        <div class="collapsible-header truncate" ng-click="open(tournament.tournament.id)">
+          <i class="icon" ng-class="active === tournament.tournament.id ? 'ion-chevron-down' : 'ion-chevron-right'"></i><b>{{tournament.tournament.name}}</b>
+        </div>
+        <div class="collapsible-body">
+          <div ng-if="active === tournament.tournament.id">
+            <div class="row">
+              <div class="col text-center">
+                <p>
+                  <b>{{tournament.tournament.participants_count}}</b>
+                </p>
+                <small>Participants</small>
+              </div>
+              <div class="col text-center">
+                <p>
+                  <b>{{typeToTwo(tournament.tournament.tournament_type)}}</b>
+                </p>
+                <small>Type</small>
+              </div>
+              <div class="col text-center">
+                <p>
+                  <b>
+                    <i class="icon" ng-class="stateToIcon(tournament.tournament.state)"></i>
+                  </b>
+                </p>
+                <small>State</small>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col center-align">
+                <p>
+                  <div class="progress">
+                    <div class="determinate" ng-style="{'width': tournament.tournament.progress_meter + '%'}"></div>
+                  </div>
+                  Progress:
+                  {{tournament.tournament.progress_meter}}%
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col center-align">
+                <p>{{tournament.tournament.created_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</p>
+                <small>Created At</small>
+              </div>
+              <div class="col text-center">
+                <p>{{tournament.tournament.updated_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</p>
+                <small>Last Updated</small>
+              </div>
+            </div>
           </div>
-          <div class="col text-center">
-            <h2>
-              <b>{{typeToTwo(tournament.tournament.tournament_type)}}</b>
-            </h2>
-            <small>Type</small>
-          </div>
-          <div class="col text-center">
-            <h2>
-              <b>
-                <i class="icon" ng-class="stateToIcon(tournament.tournament.state)"></i>
-              </b>
-            </h2>
-            <small>State</small>
+          <div class="row">
+            <div class="col">
+              <p class="center-align">
+                <a class="waves-effect btn" ng-click="goToTournament(tournament.tournament.id)">
+                  <i class="material-icons left">cloud_download</i>View Tournament</a>
+              </p>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <!-- <div class="col text-center">
-            <progress max="100" value="{{tournament.tournament.progress_meter}}">{{tournament.tournament.progress_meter}}%</progress>
-          </div> -->
-          <div class="col col-33 text-right">
-            <div round-progress max="100" current="tournament.tournament.progress_meter" color="rgb(255, 119, 34)" bgcolor="#eaeaea" radius="25" stroke="5" semi="false" rounded="true" clockwise="false" responsive="false" duration="800" animation="easeInOutQuart" animation-delay="0"></div>
-          </div>
-          <div class="col text-left">
-            <p>
-              Progress:
-              {{tournament.tournament.progress_meter}}%
-            </p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col text-center">
-            <h3>{{tournament.tournament.created_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</h3>
-            <small>Created At</small>
-          </div>
-          <div class="col text-center">
-            <h3>{{tournament.tournament.updated_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</h3>
-            <small>Last Updated</small>
-          </div>
-        </div>
-      </div>
-      <a class="item item-icon-left assertive" ng-click="goToTournament(tournament.tournament.id)" ng-if="active === tournament.tournament.id">
-        <i class="icon ion-log-in"></i>
-        View tournament
-      </a>
-    </div>
-    <div class="spacer" style="height: 300px;"></div>
+      </li>
+    </ul>
+    <!-- <div class="spacer" style="height: 300px;"></div> -->
   </ion-content>
 </ion-view>

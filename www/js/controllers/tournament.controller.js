@@ -84,6 +84,7 @@ angular.module('challonger')
 				})
 				.error(function(err) {
 					$vib.med();
+					console.log(err);
 					$alert.generic($scope, 'Error', err.toString());
 				});
 		};

@@ -44,6 +44,7 @@ angular.module('challonger')
 				message: 'API Key Saved',
 				type: 'positive'
 			};
+			$toast.sb('API Key Saved');
 		};
 
 		$scope.changeVibration = function(enabled) {
@@ -57,7 +58,7 @@ angular.module('challonger')
 			}
 		};
 
-		$scope.openChallonge = function () {
+		$scope.openChallongeNew = function () {
 			$vib.vshort();
 			window.open('https://challonge.com/users/new', '_system', 'location=yes');
 		};
@@ -67,9 +68,10 @@ angular.module('challonger')
 			animation: 'slide-in-up'
 		}).then(function(modal) {
 			$scope.modal = modal;
+			console.log($scope.modal);
 		});
 		$scope.openModal = function() {
-			$vib.vshort();
+			//$vib.vshort();
 			$scope.modal.show();
 		};
 		$scope.closeModal = function() {

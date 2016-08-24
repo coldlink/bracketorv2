@@ -20,86 +20,94 @@
       <ul class="collapsible popout z-depth-0" data-collapsible="accordion" watch>
         <li class="z-depth-0">
           <div class="collapsible-header">
-            <i></i>Created Tournaments</div>
+            <i></i>
+            <b>Created Tournaments</b>
+          </div>
           <div class="collapsible-body">
-            <p class="no-margin-top">View and edit tournaments that you have created.</p>
-            <a class="item item-icon-left assertive" ng-click="click('created')">
-              <i class="icon ion-log-in"></i>
-              Get tournaments
-            </a>
+            <p>View and edit tournaments that you have created.</p>
+            <p class="center-align">
+              <a class="waves-effect btn" ng-click="click('created')">
+                <i class="material-icons left">cloud_download</i>Get Tournaments</a>
+            </p>
           </div>
         </li>
         <li class="z-depth-0">
           <div class="collapsible-header">
-            <i></i>Tournaments by Organization</div>
+            <i></i>
+            <b>Tournaments by Organization</b>
+          </div>
           <div class="collapsible-body">
             <p>Find tournaments created by any organization using a Challonge subdomain.</p>
-            <label class="item item-input">
-              <input ng-model="subdomain" placeholder="Insert Organization Here" type="text">
-            </label>
-            <code>
-              >
-              {{subdomain ? subdomain : '{Organization}'}}.challonge.com
-            </code>
-            <div ng-if="error" ng-class="error.type ? error.type : 'assertive'" class="item item-text-wrap text-center">
-              {{error.message}}
+            <div class="input-field padding-1rem-left-right">
+              <input name="subdomain" type="text" ng-model="subdomain">
+              <label for="subdomain">Organization/Subdomain</label>
             </div>
-            <a class="item item-icon-left assertive" ng-click="click('subdomain', subdomain)">
-              <i class="icon ion-log-in"></i>
-              Get tournaments
-            </a>
+            <p ng-if="error" ng-class="error.type ? error.type : 'assertive'" class="text-center">
+              {{error.message}}
+            </p>
+            <p>
+              <code>
+                &gt;
+                {{subdomain ? subdomain : '{Organization}'}}.challonge.com
+              </code>
+            </p>
+            <p class="center-align">
+              <a class="waves-effect btn" ng-click="click('subdomain', subdomain)">
+                <i class="material-icons left">cloud_download</i>Get Tournaments</a>
+            </p>
           </div>
         </li>
         <li class="z-depth-0">
           <div class="collapsible-header">
-            <i></i>Single Tournament</div>
+            <i></i>
+            <b>Single Tournament</b>
+          </div>
           <div class="collapsible-body">
-              <div class="content">
-                <p class="no-margin-top">Find a single tournament from a Challonge URL.</p>
-              </div>
-              <ul class="list">
-                <li>
-                  <label class="checkbox">
-                    <ion-checkbox ng-model="incSubdomain">Include Organization</ion-checkbox>
-                  </label>
-                </li>
-                <li ng-show="incSubdomain">
-                  <label class="item item-input">
-                    <input ng-model="subdomain" placeholder="Insert Organization Here" type="text">
-                  </label>
-                </li>
-                <br ng-show="incSubdomain">
-                <li>
-                  <label class="item item-input">
-                    <input ng-model="url" placeholder="Insert URL Here" type="text">
-                  </label>
-                </li>
-              </ul>
+            <p class="no-margin-top">Find a single tournament from a Challonge URL.</p>
+            <p class="switch">
+              <label class="input-field">
+                <input type="checkbox" ng-model="incSubdomain">
+                <span class="lever"></span>
+              </label>
+              <label>Include Organization/Subdomain</label>
+            </p>
+            <div ng-show="incSubdomain" class="input-field padding-1rem-left-right">
+              <input name="subdomain" type="text" ng-model="subdomain">
+              <label for="subdomain">Organization/Subdomain</label>
+            </div>
+            <div class="input-field padding-1rem-left-right">
+              <input name="url" type="text" ng-model="url">
+              <label for="url">URL</label>
+            </div>
+            <p ng-if="error" ng-class="error.type ? error.type : 'assertive'" class="text-center">
+              {{error.message}}
+            </p>
+            <p>
               <code>
-                >
+                &gt;
                 {{incSubdomain ? (subdomain ? subdomain + '.' : '{Organization}.') : ''}}challonge.com/{{url ? url : '{URL}'}}
               </code>
-              <div ng-if="error" ng-class="error.type ? error.type : 'assertive'" class="item item-text-wrap text-center">
-                {{error.message}}
-              </div>
-            <a class="item item-icon-left assertive" ng-click="click('single', subdomain, url, incSubdomain)">
-              <i class="icon ion-log-in"></i>
-              Get tournament
-            </a>
+            </p>
+            <p class="center-align">
+              <a class="waves-effect btn" ng-click="click('single', subdomain, url, incSubdomain)">
+                <i class="material-icons left">cloud_download</i>Get Tournaments</a>
+            </p>
           </div>
         </li>
         <li class="z-depth-0">
           <div class="collapsible-header">
-            <i></i>History/Bookmarked</div>
+            <i></i>
+            <b>History/Bookmarked</b>
+          </div>
           <div class="collapsible-body">
-            <a class="item item-icon-left" ng-click="click('hisTour')">
-              <i class="icon ion-clock"></i>
-              Tournament History
-            </a>
-            <a class="item item-icon-left" ng-click="click('favTour')">
-              <i class="icon ion-heart"></i>
-              Bookmarked Tournaments
-            </a>
+            <p class="center-align">
+              <a class="waves-effect btn btn-full-width" ng-click="click('hisTour')">
+                <i class="material-icons left">history</i>Tournament History</a>
+            </p>
+            <p class="center-align">
+              <a class="waves-effect btn btn-full-width" ng-click="click('favTour')">
+                <i class="material-icons left">book</i>Bookmarked Tournaments</a>
+            </p>
           </div>
         </li>
       </ul>

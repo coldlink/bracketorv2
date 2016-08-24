@@ -24,112 +24,81 @@
                 <div class="spacer" style="height: 40px;"></div>
               </div>
             </div>
-            <div class="list card">
-              <div class="item item-text-wrap item-button-right">
-                <h2>{{tournament.tournament.name}}</h2>
-                <p>Tournament Name</p>
-                <button class="button button-clear" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.name, type: 'name', required: true})" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list card">
-              <div class="item item-text-wrap item-button-right">
-                <h2>{{state(tournament.tournament.state)}}</h2>
-                <p>Tournament State</p>
-                <button class="button button-clear" ng-click="scrBtn.edit.state(tournament.tournament.id, {value: tournament.tournament.state, type: 'state', required: true})" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list card">
-              <div class="item item-text-wrap item-button-right">
-                <h2>{{tournamentType(tournament.tournament.tournament_type)}}</h2>
-                <p>Tournament Type</p>
-                <button class="button button-clear" ng-click="scrBtn.edit.type(tournament.tournament.id, {value: tournament.tournament.tournament_type, type: 'type', required: true})" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list card">
-              <div class="item item-text-wrap item-button-right">
-                <h2>{{tournament.tournament.game_name ? tournament.tournament.game_name : 'N/A'}}</h2>
-                <p>Game Name</p>
-                <button class="button button-clear" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.game_name, type: 'game_name', required: false})" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list card">
-              <div class="item item-text-wrap item-button-right">
-                <h2 ng-if="!tournament.tournament.description">N/A</h2>
-                <h2 ng-bind-html="tournament.tournament.description" ng-if="tournament.tournament.description"></h2>
-                <p>Description</p>
-                <button class="button button-clear" ng-click="scrBtn.edit.description(tournament.tournament.id, tournament.tournament.description)" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list card">
-              <div class="item item-text-wrap item-button-right">
-                <h2>{{tournament.tournament.subdomain ? tournament.tournament.subdomain : 'N/A'}}</h2>
-                <p>Organization</p>
-                <button class="button button-clear" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.subdomain, type: 'subdomain', required: false})" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list card">
-              <div class="item item-text-wrap">
-                <h2>{{tournament.tournament.participants_count}}</h2>
-                <p>Participants Count</p>
-              </div>
-            </div>
-            <div class="list card">
-              <div class="item item-text-wrap item-button-right">
-                <h2>{{tournament.tournament.signup_cap ? tournament.tournament.signup_cap : 'N/A'}}</h2>
-                <p>Sign Up Cap</p>
-                <button class="button button-clear" ng-click="scrBtn.edit.signUpCap(tournament.tournament.id, {value: tournament.tournament.signup_cap, type: 'signup_cap', required: false})" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list card">
-              <div class="item item-text-wrap">
-                <h2>{{tournament.tournament.updated_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</h2>
-                <p>Last Updated</p>
-              </div>
-            </div>
-            <div class="list card">
-              <div class="item item-text-wrap">
-                <h2>{{tournament.tournament.created_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}</h2>
-                <p>Created At</p>
-              </div>
-            </div>
-            <div class="list card" ng-click="!editEnabled ? scrBtn.urlCopyOpen(tournament.tournament.full_challonge_url) : flase">
-              <div class="item item-text-wrap item-button-right">
-                <h2>{{tournament.tournament.full_challonge_url}}</h2>
-                <p>Challonge URL</p>
-                <button class="button button-clear" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.url, type: 'url', required: true})" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list card" ng-click="(!editEnabled && tournament.tournament.sign_up_url) ? scrBtn.signUpUrlCopyOpen(tournament.tournament.sign_up_url) : flase">
-              <div class="item item-text-wrap item-button-right">
-                <h2>{{tournament.tournament.sign_up_url ? tournament.tournament.sign_up_url : 'N/A'}}</h2>
-                <p>Sign Up URL</p>
-                <button class="button button-clear" ng-click="scrBtn.edit.openSignup(tournament.tournament.id, {value: tournament.tournament.open_signup, type: 'open_signup', required: false})" ng-if="editEnabled">
-                  <i class="icon ion-edit"></i>
-                </button>
-              </div>
-            </div>
-            <div class="list card" ng-click="scrBtn.imgCopyOpen(tournament.tournament.live_image_url)">
-              <div class="item item-text-wrap">
-                <h2>{{tournament.tournament.live_image_url}}</h2>
-                <p>Live Image URL</p>
-              </div>
-            </div>
+            <ul class="collection">
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title">{{tournament.tournament.name}}<br>
+                  <small>Tournament Name</small>
+                </span>
+                <span class="badge valign material-icons" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.name, type: 'name', required: true})" ng-if="editEnabled">edit</span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title">{{state(tournament.tournament.state)}}<br>
+                  <small>Tournament State</small>
+                </span>
+                <span class="badge valign material-icons" ng-click="scrBtn.edit.state(tournament.tournament.id, {value: tournament.tournament.state, type: 'state', required: true})" ng-if="editEnabled">edit</span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title">{{tournamentType(tournament.tournament.tournament_type)}}<br>
+                  <small>Tournament Type</small>
+                </span>
+                <span class="badge valign material-icons" ng-click="scrBtn.edit.type(tournament.tournament.id, {value: tournament.tournament.tournament_type, type: 'type', required: true})" ng-if="editEnabled">edit</span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title">{{tournament.tournament.game_name ? tournament.tournament.game_name : 'N/A'}}<br>
+                  <small>Game Name</small>
+                </span>
+                <span class="badge valign material-icons" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.game_name, type: 'game_name', required: false})" ng-if="editEnabled">edit</span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title" ng-if="!tournament.tournament.description">N/A<br><small>Description</small></span>
+                <span class="title" ng-if="tournament.tournament.description"><span ng-bind-html="tournament.tournament.description"></span><br><small>Description</small></span>
+                <span class="badge valign material-icons" ng-click="scrBtn.edit.description(tournament.tournament.id, tournament.tournament.description)" ng-if="editEnabled">edit</span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title">{{tournament.tournament.subdomain ? tournament.tournament.subdomain : 'N/A'}}<br>
+                  <small>Organization/Subdomain</small>
+                </span>
+                <span class="badge valign material-icons" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.subdomain, type: 'subdomain', required: false})" ng-if="editEnabled">edit</span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title">{{tournament.tournament.participants_count}}<br>
+                  <small>Participants Count</small>
+                </span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title">{{tournament.tournament.signup_cap ? tournament.tournament.signup_cap : 'N/A'}}<br>
+                  <small>Sign Up Cap</small>
+                </span>
+                <span class="badge valign material-icons" ng-click="scrBtn.edit.signUpCap(tournament.tournament.id, {value: tournament.tournament.signup_cap, type: 'signup_cap', required: false})" ng-if="editEnabled">edit</span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title">{{tournament.tournament.updated_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}<br>
+                  <small>Last Updated At</small>
+                </span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding">
+                <span class="title">{{tournament.tournament.created_at | date:"yyyy/MM/dd '-' HH:mm 'UTC'Z"}}<br>
+                  <small>Created At</small>
+                </span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding" ng-click="!editEnabled ? scrBtn.urlCopyOpen(tournament.tournament.full_challonge_url) : flase">
+                <span class="title truncate">{{tournament.tournament.full_challonge_url}}<br>
+                  <small>Challonge URL</small>
+                </span>
+                <span class="badge valign material-icons" ng-click="scrBtn.edit.value(tournament.tournament.id, {value: tournament.tournament.url, type: 'url', required: true})" ng-if="editEnabled">edit</span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding" ng-click="(!editEnabled && tournament.tournament.sign_up_url) ? scrBtn.signUpUrlCopyOpen(tournament.tournament.sign_up_url) : flase">
+                <span class="title truncate">{{tournament.tournament.sign_up_url ? tournament.tournament.sign_up_url : 'N/A'}}<br>
+                  <small>Sign Up URL</small>
+                </span>
+                <span class="badge valign material-icons" ng-click="scrBtn.edit.openSignup(tournament.tournament.id, {value: tournament.tournament.open_signup, type: 'open_signup', required: false})" ng-if="editEnabled">edit</span>
+              </li>
+              <li class="collection-item avatar no-min-height valign-wrapper collection-padding" ng-click="scrBtn.imgCopyOpen(tournament.tournament.live_image_url)">
+                <span class="title">{{tournament.tournament.live_image_url}}<br>
+                  <small>Bracket Image URL</small>
+                </span>
+              </li>
+            </ul>
           </div>
         </ion-content>
       </ion-view>
@@ -174,13 +143,21 @@
               </div>
               <div class="item row row-center">
                 <div class="col text-center item-text-wrap">
-                  <button class="button button-clear" ng-class="match.match.player1_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-light'" ng-click="scrBtn.winSelect(match.match.id, match.match.player1_id)">{{match.match.player1_id ? listParticipants[match.match.player1_id].display_name :  (match.match.player1_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player1_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player1_prereq_match_id].ident))}}</button>
+                  <button
+                    class="button button-clear"
+                    ng-class="match.match.player1_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-light'"
+                    ng-click="scrBtn.winSelect(match.match.id, match.match.player1_id)">{{match.match.player1_id
+                    ? listParticipants[match.match.player1_id].display_name : (match.match.player1_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player1_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player1_prereq_match_id].ident))}}</button>
                 </div>
                 <div class="col col-10 text-center">
                   -
                 </div>
                 <div class="col text-center item-text-wrap">
-                  <button class="button button-clear" ng-class="match.match.player2_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-light'" ng-click="scrBtn.winSelect(match.match.id, match.match.player2_id)">{{match.match.player2_id ? listParticipants[match.match.player2_id].display_name : (match.match.player2_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player2_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player2_prereq_match_id].ident))}}</button>
+                  <button
+                    class="button button-clear"
+                    ng-class="match.match.player2_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-light'"
+                    ng-click="scrBtn.winSelect(match.match.id, match.match.player2_id)">{{match.match.player2_id
+                    ? listParticipants[match.match.player2_id].display_name : (match.match.player2_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player2_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player2_prereq_match_id].ident))}}</button>
                 </div>
               </div>
               <div class="item row row-center" ng-if="match.match.state !== 'pending'" ng-repeat="score in matchScores[match.match.id] track by $index">
@@ -268,7 +245,10 @@
                 <h2>{{participant.participant.display_name}}</h2>
                 <p>{{participant.participant.challonge_username}}</p>
                 <i class="icon">{{participant.participant.seed}}</i>
-                <ion-reorder-button class="button-light" ng-click="scrBtn.edit.participant(tournament.tournament.id, participant.participant.id)" on-reorder="scrBtn.edit.reorder(tournament.tournament.id, participant, participant.participant.id, $fromIndex, $toIndex)">{{participant.participant.seed}}&emsp;
+                <ion-reorder-button
+                  class="button-light"
+                  ng-click="scrBtn.edit.participant(tournament.tournament.id, participant.participant.id)"
+                  on-reorder="scrBtn.edit.reorder(tournament.tournament.id, participant, participant.participant.id, $fromIndex, $toIndex)">{{participant.participant.seed}}&emsp;
                   <i class="ion-navicon"></i>
                 </ion-reorder-button>
               </ion-item>
