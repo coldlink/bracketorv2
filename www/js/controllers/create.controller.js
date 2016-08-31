@@ -10,6 +10,10 @@ angular.module('challonger')
 			}
 		});
 
+		$scope.apply = function (tournament) {
+			$scope.tournament = tournament;
+		}
+
 		$scope.save = function(tournament) {
 			// console.log(tournament);
 			$vib.vshort();

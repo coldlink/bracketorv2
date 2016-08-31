@@ -52,33 +52,33 @@
       </li>
       <li class="collection-item">
         <form action="#">
-            <p>
-              <input ng-change="changeQuickAccess(quickAccess)" value="created" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test1" />
-              <label for="test1">Created Tournaments</label>
-            </p>
-            <p>
-              <input ng-change="changeQuickAccess(quickAccess)" value="subdomain" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test2" />
-              <label for="test2">Tournaments by Organization</label>
-            </p>
-            <p>
-              <input ng-change="changeQuickAccess(quickAccess)" value="bookmark" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test3"  />
-              <label for="test3">Bookmarked Tournaments</label>
-            </p>
-              <p>
-                <input ng-change="changeQuickAccess(quickAccess)" value="history" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test4" />
-                <label for="test4">Tournament History</label>
-            </p>
-            <span ng-if="quickAccess.action === 'subdomain'">
-              <div class="input-field">
-                <input ng-change="changeQuickAccess(quickAccess)" name="subdomain" type="text" ng-model="quickAccess.subdomain">
-                <label for="subdomain">Organization/Subdomain</label>
-              </div>
-              <code>
-                &gt;
-                {{quickAccess.subdomain ? quickAccess.subdomain : '{Organization}'}}.challonge.com
-              </code>
-            </span>
-          </form>
+          <p>
+            <input ng-change="changeQuickAccess(quickAccess)" value="created" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test1"/>
+            <label for="test1">Created Tournaments</label>
+          </p>
+          <p>
+            <input ng-change="changeQuickAccess(quickAccess)" value="subdomain" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test2"/>
+            <label for="test2">Tournaments by Organization</label>
+          </p>
+          <p>
+            <input ng-change="changeQuickAccess(quickAccess)" value="bookmark" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test3"/>
+            <label for="test3">Bookmarked Tournaments</label>
+          </p>
+          <p>
+            <input ng-change="changeQuickAccess(quickAccess)" value="history" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test4"/>
+            <label for="test4">Tournament History</label>
+          </p>
+          <span ng-if="quickAccess.action === 'subdomain'">
+            <div class="input-field">
+              <input ng-change="changeQuickAccess(quickAccess)" name="subdomain" type="text" ng-model="quickAccess.subdomain">
+              <label for="subdomain">Organization/Subdomain</label>
+            </div>
+            <code>
+              &gt;
+              {{quickAccess.subdomain ? quickAccess.subdomain : '{Organization}'}}.challonge.com
+            </code>
+          </span>
+        </form>
       </li>
     </ul>
     <ul class="collection with-header">
