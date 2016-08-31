@@ -1,5 +1,5 @@
 angular.module('challonger')
-	.controller('CreateCtrl', function($scope, $localStorage, $API, $connection, $alert, $http, $vib) {
+	.controller('CreateCtrl', function($scope, $localStorage, $API, $connection, $alert, $http, $vib, $http_defaults) {
 		$vib.vshort();
 		$scope.$on('$ionicView.enter', function(e) {
 			API_KEY = $localStorage.get('API_KEY');
@@ -17,7 +17,7 @@ angular.module('challonger')
 				return $alert.genericNoBack($scope, 'No internet connention detected.', 'No internet connection was detected, please check your internet connection and try again.');
 			} else {
 				// console.log($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'));
-				$http.post($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'), tournament)
+				$http.post($API.url() + 'tournaments.json?api_key=' + $localStorage.get('API_KEY'), tournament, $http_defaults)
 					.success(function(response) {
 						// console.log(response);
 						$vib.short();

@@ -1,5 +1,5 @@
 angular.module('challonger')
-	.factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory, $vib, $toast, $window) {
+	.factory('$tournament', function($http, $alert, $API, $localStorage, $state, $ionicHistory, $vib, $toast, $window, $http_defaults) {
 		return {
 			participant: {
 				create: function(tId, scope) {
@@ -8,7 +8,7 @@ angular.module('challonger')
 						if (!newPart) {
 							return false;
 						}
-						return $http.post($API.url() + 'tournaments/' + tId + '/participants.json?api_key=' + $localStorage.get('API_KEY'), newPart)
+						return $http.post($API.url() + 'tournaments/' + tId + '/participants.json?api_key=' + $localStorage.get('API_KEY'), newPart, $http_defaults)
 							.success(function(response) {
 								// console.log(response);
 								$toast.sb('Participant Added!');
@@ -38,7 +38,7 @@ angular.module('challonger')
 						});
 
 						//POST https://api.challonge.com/v1/tournaments/{tournament}/participants/bulk_add.{json|xml}
-						return $http.post($API.url() + 'tournaments/' + tId + '/participants/bulk_add.json?api_key=' + $localStorage.get('API_KEY'), { participants: bulkParticipants})
+						return $http.post($API.url() + 'tournaments/' + tId + '/participants/bulk_add.json?api_key=' + $localStorage.get('API_KEY'), { participants: bulkParticipants}, $http_defaults)
 							.success(function (response) {
 								// console.log(response);
 								$toast.sb('Participants Added!');
@@ -65,7 +65,7 @@ angular.module('challonger')
 					$alert.editParticipant(scope, part, function(newPart, delFlag) {
 						// console.log(newPart);
 						if (delFlag) {
-							return $http.delete($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'))
+							return $http.delete($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'), $http_defaults)
 								.success(function(response) {
 									// console.log(response);
 									$toast.sb('Participant Deleted!');
@@ -84,7 +84,7 @@ angular.module('challonger')
 						if (newPart.participant.challonge_username === part.participant.challonge_username) {
 							newPart.participant.challonge_username = '';
 						}
-						return $http.put($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'), newPart)
+						return $http.put($API.url() + 'tournaments/' + tId + '/participants/' + pId + '.json?api_key=' + $localStorage.get('API_KEY'), newPart, $http_defaults)
 							.success(function(response) {
 								// console.log(response);
 								$toast.sb('Participant Updated!');
@@ -154,7 +154,7 @@ angular.module('challonger')
 									};
 									break;
 							}
-							return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), data)
+							return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), data, $http_defaults)
 								.error(function(err) {
 									$vib.med();
 									// console.log(err);
@@ -177,7 +177,7 @@ angular.module('challonger')
 							}
 							return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
 									description: newDesc
-								})
+								}, $http_defaults)
 								.error(function(err) {
 									$vib.med();
 									// console.log(err);
@@ -213,7 +213,7 @@ angular.module('challonger')
 							}
 							if (eurl !== undefined) {
 								if (newState === 'destroy') {
-									$http.delete(eurl)
+									$http.delete(eurl, $http_defaults)
 										.success(function(response) {
 											// console.log(response);
 											$ionicHistory.nextViewOptions({
@@ -230,7 +230,7 @@ angular.module('challonger')
 											scope.showAlert();
 										});
 								} else {
-									$http.post(eurl)
+									$http.post(eurl, $http_defaults)
 										.success(function(response) {
 											// console.log(response);
 											switch (newState) {
@@ -270,7 +270,7 @@ angular.module('challonger')
 							}
 							return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
 									tournament_type: newType
-								})
+								}, $http_defaults)
 								.error(function(err) {
 									$vib.med();
 									// console.log(err);
@@ -294,7 +294,7 @@ angular.module('challonger')
 							}
 							return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
 									signup_cap: newCap
-								})
+								}, $http_defaults)
 								.error(function(err) {
 									$vib.med();
 									// console.log(err);
@@ -318,7 +318,7 @@ angular.module('challonger')
 							}
 							return $http.put($API.url() + 'tournaments/' + tId + '.json?api_key=' + $localStorage.get('API_KEY'), {
 									open_signup: newBool
-								})
+								}, $http_defaults)
 								.error(function(err) {
 									$vib.med();
 									// console.log(err);

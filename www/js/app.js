@@ -119,19 +119,13 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 		// if none of the above states are matched, use this as the fallback
 		$urlRouterProvider.otherwise('/app/home');
 	})
-	//update directive from https://github.com/jadjoubran/angular-material-design-lite
-	// .directive('mdlUpgrade', function($timeout) {
-	// 	return {
-	// 		restrict: 'A',
-	// 		compile: function() {
-	// 			return {
-	// 				post: function postLink(scope, element) {
-	// 					$timeout(function() {
-	// 						componentHandler.upgradeElements(element[0]);
-	// 					}, 0);
-	// 				}
-	// 			};
-	// 		},
-	// 	};
-	// })
-	;
+	.run(function ($localStorage) {
+		if (!$localStorage.get('http_defaults')) {
+			$localStorage.setObject('http_defaults', {
+				timeout: 10000
+			});
+		}
+	})
+	.factory('$http_defaults', function ($localStorage) {
+		return $localStorage.getObject('http_defaults');
+	})

@@ -17,7 +17,7 @@
  * @param $toast 						js/services/toast.js
  */
 angular.module('challonger')
-	.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib, $toast, $sce, $document) {
+	.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib, $toast, $sce, $document, $http_defaults, $interval) {
 		var API_KEY;
 		$vib.vshort();
 		//on view enter set loading, disable editing, get api_key, and start refresh by checking connection
@@ -47,7 +47,7 @@ angular.module('challonger')
 		};
 
 		$scope.getLiveImage = function() {
-			$http.get($scope.tournament.tournament.live_image_url)
+			$http.get($scope.tournament.tournament.live_image_url, $http_defaults)
 				.success(function(response) {
 					var temp = angular.element(response)[2];
 					window.testingtemp = temp;
@@ -91,7 +91,7 @@ angular.module('challonger')
 
 		$scope.doRefresh = function() {
 			//get tournament from api using the id
-			$http.get($API.url() + 'tournaments/' + $stateParams.id + '.json?api_key=' + API_KEY + '&include_participants=1&include_matches=1')
+			$http.get($API.url() + 'tournaments/' + $stateParams.id + '.json?api_key=' + API_KEY + '&include_participants=1&include_matches=1', $http_defaults)
 				.success(function(response) {
 					//on success set tournament object as response
 					$scope.tournament = response;
@@ -422,7 +422,7 @@ angular.module('challonger')
 											scores_csv: tmpScr,
 											winner_id: $scope.matchScores[matchId].winner_id
 										}
-									})
+									}, $http_defaults)
 									.success(function() {
 										$toast.sb('Match Saved!');
 										$scope.checkConnection();
@@ -487,7 +487,7 @@ angular.module('challonger')
 							participant: {
 								seed: toIndex + 1
 							}
-						})
+						}, $http_defaults)
 						.success(function(response) {
 							// console.log(response);
 							$scope.checkConnection();
@@ -536,6 +536,10 @@ angular.module('challonger')
 					return 3;
 			}
 		};
+
+		$interval(function () {
+			$scope.checkConnection();
+		}, parseInt($localStorage.get('autorefresh')))
 	})
 	.directive('liveImage', function() {
 		return {

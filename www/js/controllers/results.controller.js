@@ -13,7 +13,7 @@
  * @param $vib 					js/services/vib.js
  */
 angular.module('challonger')
-	.controller('ResultsCtrl', function($scope, $stateParams, $http, $connection, $state, $API, $localStorage, $alert, $vib) {
+	.controller('ResultsCtrl', function($scope, $stateParams, $http, $connection, $state, $API, $localStorage, $alert, $vib, $http_defaults) {
 		$vib.vshort();
 		//set alert parameters for no favourite tournaments, and no history
 		var alerts = {
@@ -32,7 +32,7 @@ angular.module('challonger')
 		function getTbyId(i, ids, cb) {
 			if (i < ids.length) {
 				//get tournament by given id
-				$http.get($API.url() + 'tournaments/' + ids[i] + '.json?api_key=' + $localStorage.get('API_KEY'))
+				$http.get($API.url() + 'tournaments/' + ids[i] + '.json?api_key=' + $localStorage.get('API_KEY'), $http_defaults)
 					.success(function(response) {
 						//if found push tournament to the list of tournaments
 						$scope.tournaments.push(response);
@@ -107,7 +107,7 @@ angular.module('challonger')
 					break;
 				//if no flag for favTour or hisTour, get the tournament from the challonge api using the given request url
 				default:
-					$http.get($stateParams.url)
+					$http.get($stateParams.url, $http_defaults)
 						.success(function(response) {
 							//if only 1 tournament found, an array is not sent, so put the response inside an array, otherwise just set to tournament Array
 							//fixes issue with getting single result tournaments

@@ -15,6 +15,20 @@ angular.module('challonger')
 			$scope.enableVibration = true;
 		}
 
+		if ($localStorage.get('autorefresh')) {
+			$scope.autorefresh = $localStorage.get('autorefresh');
+		} else {
+			$scope.autorefresh = '60000';
+			$localStorage.set('autorefresh', '60000');
+		}
+
+		if ($localStorage.get('reqtimeout')) {
+			$scope.reqtimeout = $localStorage.get('reqtimeout');
+		} else {
+			$scope.reqtimeout = '10000';
+			$localStorage.set('reqtimeout', '10000');
+		}
+
 		$scope.openChallonge = function() {
 			$vib.vshort();
 			window.open('https://challonge.com/settings/developer', '_system', 'location=yes');
@@ -58,7 +72,22 @@ angular.module('challonger')
 			}
 		};
 
-		$scope.openChallongeNew = function () {
+		$scope.changeAutoRefresh = function(autorefresh) {
+			$vib.short();
+			$toast.sb('Auto Refresh Saved');
+			$localStorage.set('autorefresh', autorefresh);
+		}
+
+		$scope.changeReqTimeout = function(reqtimeout) {
+			$vib.short();
+			$toast.sb('Request Timeout Saved');
+			$localStorage.set('reqtimeout', reqtimeout);
+			$localStorage.setObject('http_defaults', {
+				timeout: parseInt(reqtimeout)
+			})
+		}
+
+		$scope.openChallongeNew = function() {
 			$vib.vshort();
 			window.open('https://challonge.com/users/new', '_system', 'location=yes');
 		};
@@ -68,7 +97,6 @@ angular.module('challonger')
 			animation: 'slide-in-up'
 		}).then(function(modal) {
 			$scope.modal = modal;
-			console.log($scope.modal);
 		});
 		$scope.openModal = function() {
 			//$vib.vshort();
