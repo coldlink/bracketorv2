@@ -119,13 +119,20 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 		// if none of the above states are matched, use this as the fallback
 		$urlRouterProvider.otherwise('/app/home');
 	})
-	.run(function ($localStorage) {
+	.run(function($localStorage) {
 		if (!$localStorage.get('http_defaults')) {
 			$localStorage.setObject('http_defaults', {
 				timeout: 10000
 			});
 		}
+
+		if (!$localStorage.getObject('quickAccess')) {
+			$localStorage.setObject('quickAccess', {
+				action: 'created',
+				subdomain: null
+			});
+		}
 	})
-	.factory('$http_defaults', function ($localStorage) {
+	.factory('$http_defaults', function($localStorage) {
 		return $localStorage.getObject('http_defaults');
-	})
+	});

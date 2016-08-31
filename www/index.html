@@ -86,9 +86,10 @@
       <li>
         <a class="subheader">Quick Access</a>
       </li>
-      <li>
-        <a class="waves-effect" href="#!">Get Tournaments</a>
+      <li ng-if="API_KEY">
+        <a class="waves-effect" ng-click="openQuickAccess()">Get Tournaments</a>
       </li>
+      <li ng-if="!API_KEY"><a ui-sref="settings">No API Key Found. Check the settings.</a></li>
       <li>
         <div class="divider"></div>
       </li>

@@ -29,6 +29,10 @@ angular.module('challonger')
 			$localStorage.set('reqtimeout', '10000');
 		}
 
+		if ($localStorage.get('quickAccess')) {
+			$scope.quickAccess = $localStorage.getObject('quickAccess');
+		}
+
 		$scope.openChallonge = function() {
 			$vib.vshort();
 			window.open('https://challonge.com/settings/developer', '_system', 'location=yes');
@@ -84,6 +88,13 @@ angular.module('challonger')
 			$localStorage.set('reqtimeout', reqtimeout);
 			$localStorage.setObject('http_defaults', {
 				timeout: parseInt(reqtimeout)
+			})
+		}
+
+		$scope.changeQuickAccess = function (quickAccess) {
+			$localStorage.setObject('quickAccess', {
+				action: quickAccess.action,
+				subdomain: quickAccess.subdomain
 			})
 		}
 

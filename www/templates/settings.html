@@ -1,30 +1,8 @@
 <ion-view view-title="Settings">
   <ion-content>
-    <ul class="collection">
-      <li class="collection-item padding-5">
-        <div class="row valign-wrapper">
-          <div class="col col-80">
-            <label>Need help finding your Challonge API Key?</label>
-          </div>
-          <div class="col col-20">
-            <button class="btn-floating btn-large waves-effect" ng-click="openModal()">
-              <i class="material-icons">find_in_page</i>
-            </button>
-          </div>
-        </div>
-      </li>
-      <li class="collection-item padding-5">
-        <div class="row valign-wrapper">
-            <div class="col col-80">
-              <label for="api_key">API Key</label>
-              <input ng-model="API_KEY" name="api_key" type="password" class="validate" length="40">
-            </div>
-            <div class="col col-20">
-              <button class="btn-floating btn-large waves-effect" ng-click="saveKey(API_KEY)">
-                <i class="material-icons">save</i>
-              </button>
-          </div>
-        </div>
+    <ul class="collection with-header">
+      <li class="collection-header">
+        Global Settings
       </li>
       <li class="collection-item">
         <div class="switch">
@@ -63,6 +41,73 @@
             <option value="15000">15 Secs</option>
             <option value="30000">30 Secs</option>
           </select>
+        </div>
+      </li>
+    </ul>
+    <ul class="collection with-header">
+      <li class="collection-header">
+        Quick Access
+        <br>
+        <small>Set which tournaments are viewed when "Get Tournaments" is pressed in the side menu.</small>
+      </li>
+      <li class="collection-item">
+        <form action="#">
+            <p>
+              <input ng-change="changeQuickAccess(quickAccess)" value="created" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test1" />
+              <label for="test1">Created Tournaments</label>
+            </p>
+            <p>
+              <input ng-change="changeQuickAccess(quickAccess)" value="subdomain" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test2" />
+              <label for="test2">Tournaments by Organization</label>
+            </p>
+            <p>
+              <input ng-change="changeQuickAccess(quickAccess)" value="bookmark" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test3"  />
+              <label for="test3">Bookmarked Tournaments</label>
+            </p>
+              <p>
+                <input ng-change="changeQuickAccess(quickAccess)" value="history" ng-model="quickAccess.action" class="with-gap" name="group1" type="radio" id="test4" />
+                <label for="test4">Tournament History</label>
+            </p>
+            <span ng-if="quickAccess.action === 'subdomain'">
+              <div class="input-field">
+                <input ng-change="changeQuickAccess(quickAccess)" name="subdomain" type="text" ng-model="quickAccess.subdomain">
+                <label for="subdomain">Organization/Subdomain</label>
+              </div>
+              <code>
+                &gt;
+                {{quickAccess.subdomain ? quickAccess.subdomain : '{Organization}'}}.challonge.com
+              </code>
+            </span>
+          </form>
+      </li>
+    </ul>
+    <ul class="collection with-header">
+      <li class="collection-header">
+        Challonge API Key
+      </li>
+      <li class="collection-item padding-5">
+        <div class="row valign-wrapper">
+          <div class="col col-80">
+            <label for="api_key">API Key</label>
+            <input ng-model="API_KEY" name="api_key" type="password" class="validate" length="40">
+          </div>
+          <div class="col col-20">
+            <button class="btn-floating btn-large waves-effect" ng-click="saveKey(API_KEY)">
+              <i class="material-icons">save</i>
+            </button>
+          </div>
+        </div>
+      </li>
+      <li class="collection-item padding-5">
+        <div class="row valign-wrapper">
+          <div class="col col-80">
+            <label>Need help finding your Challonge API Key?</label>
+          </div>
+          <div class="col col-20">
+            <button class="btn-floating btn-large waves-effect" ng-click="openModal()">
+              <i class="material-icons">find_in_page</i>
+            </button>
+          </div>
         </div>
       </li>
       <li class="collection-item center-align">
