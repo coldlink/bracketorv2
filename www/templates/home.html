@@ -1,124 +1,89 @@
 <ion-view view-title="Bracketor">
   <ion-content>
-    <div class="row">
-      <div class="col">
-        <div class="card z-depth-0 grey darken-3">
-          <div class="card-stacked">
-            <div class="card-content">
-              <p class="white-text">I am a very simple card. I am good at containing small bits of information.</p>
-            </div>
-            <div class="card-action text-center padding-10">
-              <a class="waves-effect waves-light btn">View</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card z-depth-0 grey darken-3">
-          <div class="card-stacked">
-            <div class="card-content">
-              <p class="white-text">I am a very simple card. I am good at containing small bits of information.</p>
-            </div>
-            <div class="card-action text-center padding-10">
-              <a class="waves-effect waves-light btn">View</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <div class="card z-depth-0 grey darken-3">
-          <div class="card-stacked">
-            <div class="card-content">
-              <p class="white-text">I am a very simple card. I am good at containing small bits of information.</p>
-            </div>
-            <div class="card-action text-center padding-10">
-              <a class="waves-effect waves-light btn">View</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col">
-        <div class="card z-depth-0 grey darken-3">
-          <div class="card-stacked">
-            <div class="card-content">
-              <p class="white-text">I am a very simple card. I am good at containing small bits of information.</p>
-            </div>
-            <div class="card-action text-center padding-10">
-              <a class="waves-effect waves-light btn">View</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- <div class="list card z-depth-0">
-      <div class="item item-avatar">
-        <img src="img/challonger.png">
-        <h2>Bracketor</h2>
-        <p>An unofficial Challonge app for mobile.</p>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <ul class="collection">
-      <a href="#/app/browse" class="collection-item">
-        <div>Browse Tournaments<span class="secondary-content">
+    <div class="row" style="height: 50%">
+      <div class="col card waves-effect" ng-click="open('app.browse')" style="padding: 5px">
+        <div class="Aligner" style="height: 40%">
+          <a class="Aligner-item--bottom btn-floating btn-large waves-effect waves-light red z-depth-0">
             <i class="material-icons">equalizer</i>
-          </span>
+          </a>
         </div>
-      </a>
-      <a href="#/app/create" class="collection-item">
-        <div>Create a Tournament<span class="secondary-content">
-            <i class="material-icons">playlist_add</i>
-          </span>
-        </div>
-      </a>
-      <a ui-sref="app.settings" class="collection-item">
-        <div>Settings<span class="secondary-content">
-            <i class="material-icons">settings</i>
-          </span>
-        </div>
-      </a>
-      <a ui-sref="app.about" class="collection-item">
-        <div>About<span class="secondary-content">
-            <i class="material-icons">info_outline</i>
-          </span>
-        </div>
-      </a>
-    </ul>
-    <div class="divider"></div>
-    <div class="list card z-depth-0">
-      <div class="item">
-        <h2>Latest Update - 2016-08-03</h2>
-        <p>v2.1.0</p>
-      </div>
-      <div class="item item-body">
-        <p class="no-margin-top">
-          Welcome to the new version of Bracketor. Made using the Ionic Framework. Now supporting Swiss Style tournaments, tournament view history, bookmarked tournaments, and matches with sets.
-          <br><br>
-          Please report any bugs you encounter or any feature requests through GitHub or Twitter. Links are available in the about section.
-          <br><br>
-          <h3>Changelog:</h3>
-          <p>
-            v2.0.9
-            <br>
-            <small>-&emsp;Fix major issue where tournaments could not be viewed or created on older devices.</small>
-            <small>-&emsp;Fix issue where bracket view would not work on older devices.</small>
-          </p>
-          <p>
-            v2.0.8
-            <br>
-            <small>-&emsp;Added a bracket view tab to the tournament view, edit matches by enabling editing and then clicking on the match in the bracket.</small>
-            <small>-&emsp;Bulk add participants in the participants tab.</small>
-            <small>-&emsp;Rotation enabled!</small>
-            <small>-&emsp;Tournaments now sorted by last updated time.</small>
-          </p>
+        <p class="text-center">
+          <br>
+          <b>Browse Tournaments</b>
+        </p>
+        <p>
+          <small>
+            <ul class="text-center">
+              <li>Created Tournaments</li>
+              <li>Tournaments by Organization</li>
+              <li>Single Tournament</li>
+              <li>Bookmarked and History</li>
+            </ul>
+          </small>
         </p>
       </div>
-      <a class="item item-icon-left assertive" ui-sref="app.about">
-        <i class="icon ion-information-circled"></i>
-        Go to About
-      </a>
-    </div> -->
+      <div class="col card waves-effect" ng-click="open('app.create')" style="padding: 5px">
+        <div class="Aligner" style="height: 40%">
+          <a class="Aligner-item--bottom btn-floating btn-large waves-effect waves-light red z-depth-0">
+            <i class="material-icons">playlist_add</i>
+          </a>
+        </div>
+        <p class="text-center">
+          <br>
+          <b>Create a Tournament</b>
+        </p>
+        <p>
+          <small>
+            <ul class="text-center">
+              <li>Single Elimination</li>
+              <li>Double Elimination</li>
+              <li>Round Robin</li>
+              <li>Swiss Style</li>
+            </ul>
+          </small>
+        </p>
+      </div>
+    </div>
+    <div class="row" style="height: 50%">
+      <div class="col card waves-effect" ng-click="open('app.settings')" style="padding: 5px">
+        <div class="Aligner" style="height: 40%">
+          <a class="Aligner-item--bottom btn-floating btn-large waves-effect waves-light red z-depth-0">
+            <i class="material-icons">settings</i>
+          </a>
+        </div>
+        <p class="text-center">
+          <br>
+          <b>Settings</b>
+        </p>
+        <p>
+          <small>
+            <ul class="text-center">
+              <li>Customise vibration, refresh, and timeout</li>
+              <li>Set quick access option</li>
+              <li>Change API Key</li>
+            </ul>
+          </small>
+        </p>
+      </div>
+      <div class="col card waves-effect" ng-click="open('app.about')" style="padding: 5px">
+        <div class="Aligner" style="height: 40%">
+          <a class="Aligner-item--bottom btn-floating btn-large waves-effect waves-light red z-depth-0">
+            <i class="material-icons">info_outline</i>
+          </a>
+        </div>
+        <p class="text-center">
+          <br>
+          <b>About</b>
+        </p>
+        <p>
+          <small>
+            <ul class="text-center">
+              <li>Contact and issues</li>
+              <li>Changelog</li>
+            </ul>
+          </small>
+        </p>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

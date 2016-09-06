@@ -132,6 +132,10 @@ angular.module('challonger', ['ionic', 'ngCordova', 'angular-svg-round-progress'
 				subdomain: null
 			});
 		}
+
+		if (!$localStorage.get('autorefresh')) {
+			$localStorage.set('autorefresh', '60000');
+		}
 	})
 	.factory('$http_defaults', function($localStorage) {
 		return $localStorage.getObject('http_defaults');

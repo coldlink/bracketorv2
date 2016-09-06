@@ -19,12 +19,16 @@
 angular.module('challonger')
 	.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib, $toast, $sce, $document, $http_defaults, $interval) {
 		var API_KEY;
+		var autorefresh;
 		$vib.vshort();
 		//on view enter set loading, disable editing, get api_key, and start refresh by checking connection
 		$scope.$on('$ionicView.enter', function() {
 			$scope.loading = true;
 			$scope.editEnabled = false;
 			API_KEY = $localStorage.get('API_KEY');
+			autorefresh = $interval(function () {
+				$scope.checkConnection();
+			}, parseInt($localStorage.get('autorefresh')));
 			$scope.checkConnection();
 		});
 
@@ -33,6 +37,7 @@ angular.module('challonger')
 			$scope.tournament = null;
 			$scope.listParticipants = {};
 			$scope.matchScores = {};
+			$interval.cancel(autorefresh);
 		});
 
 		//check for internet connection
@@ -536,10 +541,6 @@ angular.module('challonger')
 					return 3;
 			}
 		};
-
-		$interval(function () {
-			$scope.checkConnection();
-		}, parseInt($localStorage.get('autorefresh')))
 	})
 	.directive('liveImage', function() {
 		return {

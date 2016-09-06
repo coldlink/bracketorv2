@@ -77,18 +77,18 @@ angular.module('challonger')
 		};
 
 		$scope.changeAutoRefresh = function(autorefresh) {
-			$vib.short();
-			$toast.sb('Auto Refresh Saved');
 			$localStorage.set('autorefresh', autorefresh);
+			$toast.sb('Auto Refresh Saved');
+			$vib.short();
 		}
 
 		$scope.changeReqTimeout = function(reqtimeout) {
-			$vib.short();
-			$toast.sb('Request Timeout Saved');
 			$localStorage.set('reqtimeout', reqtimeout);
 			$localStorage.setObject('http_defaults', {
 				timeout: parseInt(reqtimeout)
 			})
+			$toast.sb('Request Timeout Saved');
+			$vib.short();
 		}
 
 		$scope.changeQuickAccess = function (quickAccess) {
