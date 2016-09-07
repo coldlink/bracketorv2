@@ -17,7 +17,7 @@
  * @param $toast 						js/services/toast.js
  */
 angular.module('challonger')
-	.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib, $toast, $sce, $document, $http_defaults, $interval) {
+	.controller('TournamentCtrl', function($scope, $stateParams, $http, $connection, $API, $localStorage, $ionicActionSheet, $ionicPlatform, $tournament, $q, $alert, $vib, $toast, $sce, $document, $http_defaults, $interval, $chunk) {
 		var API_KEY;
 		var autorefresh;
 		$vib.vshort();
@@ -26,7 +26,7 @@ angular.module('challonger')
 			$scope.loading = true;
 			$scope.editEnabled = false;
 			API_KEY = $localStorage.get('API_KEY');
-			autorefresh = $interval(function () {
+			autorefresh = $interval(function() {
 				$scope.checkConnection();
 			}, parseInt($localStorage.get('autorefresh')));
 			$scope.checkConnection();
@@ -63,10 +63,10 @@ angular.module('challonger')
 					if ($scope.tournament.tournament.state !== 'pending') {
 						for (var i = 0; i < temp.getElementsByClassName('match').length; i++) {
 							if ($scope.matchScores[temp.getElementsByClassName('match').item(i).getAttribute('data-match-id').toString()].state !== 'pending') {
-								temp.getElementsByClassName('match').item(i).addEventListener('click', function () {
+								temp.getElementsByClassName('match').item(i).addEventListener('click', function() {
 									if ($scope.editEnabled) {
 										var matchid = this.getAttribute('data-match-id').toString();
-										var scrPopUpCb = function (value) {
+										var scrPopUpCb = function(value) {
 											if (value) {
 												$scope.matchScores[matchid] = value;
 												$scope.scrBtn.saveMatch(matchid);
@@ -100,13 +100,38 @@ angular.module('challonger')
 				.success(function(response) {
 					//on success set tournament object as response
 					$scope.tournament = response;
-				})
-				.error(function(err) {
-					//thow error if something goes wrond
-					$vib.med();
-					$alert.generic($scope, 'Error', err.errors[0]);
-				})
-				.finally(function() {
+
+					//sort matches
+					$scope.tournament.tournament.matches = $scope.tournament.tournament.matches.sort(function(a, b) {
+							switch (a.match.state) {
+								case 'open':
+									if (a.match.state === b.match.state) {
+										return 0;
+									} else {
+										return -1;
+									}
+								case 'pending':
+									if (a.match.state === b.match.state) {
+										return 0;
+									} else if (b.match.state === 'open') {
+										return 1;
+									} else {
+										return -1;
+									}
+								case 'complete':
+									if (a.match.state === b.match.state) {
+										return 0;
+									} else {
+										return 1;
+									}
+							}
+					});
+
+					console.log($scope.tournament.tournament.matches);
+						//save chunked match data
+					$scope.matches = $chunk($scope.tournament.tournament.matches, 2);
+					console.log($scope.matches);
+
 					//remove participants from tournament object, and set to another object, used for editing and participants without screwing up the tournament object, key is participant id
 					$scope.listParticipants = {};
 					for (var i = 0; i < $scope.tournament.tournament.participants.length; i++) {
@@ -141,6 +166,8 @@ angular.module('challonger')
 						}
 					});
 
+					console.log($scope.matchScores)
+
 					//add the tourmanet to the history
 					var temp = [];
 					//check if a tournament history object exists in local storage
@@ -172,6 +199,11 @@ angular.module('challonger')
 					if ($scope.tournament.tournament.participants_count > 1) {
 						$scope.getLiveImage();
 					}
+				})
+				.error(function(err) {
+					//thow error if something goes wrond
+					$vib.med();
+					$alert.generic($scope, 'Error', err.errors[0]);
 				});
 		};
 
@@ -514,7 +546,7 @@ angular.module('challonger')
 					$vib.vshort();
 					$tournament.participant.create(tid, $scope);
 				},
-				bulk: function (tid) {
+				bulk: function(tid) {
 					$vib.vshort();
 					$tournament.participant.bulk(tid, $scope);
 				}
@@ -541,12 +573,21 @@ angular.module('challonger')
 					return 3;
 			}
 		};
+
+		$scope.calcTotalScore = function (matchScores) {
+			var total = [0, 0]
+			matchScores.forEach(function (elem) {
+				total[0] += elem.p1;
+				total[1] += elem.p2
+			})
+			return total;
+		}
 	})
 	.directive('liveImage', function() {
 		return {
 			restrict: 'EA',
 			link: function(scope, elem, attrs) {
-				scope.$watch('liveImage', function (val) {
+				scope.$watch('liveImage', function(val) {
 					if (elem.children()) {
 						elem.children().remove();
 					}
