@@ -166,15 +166,15 @@
                     ? listParticipants[match.match.player2_id].display_name : (match.match.player2_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player2_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player2_prereq_match_id].ident))}}
                   </div>
                 </div>
-                <hr style="margin: 0" ng-if="editEnabled && match.match.state !== 'pending'">
-                <div class="row row-center" ng-if="editEnabled && match.match.state !== 'pending'">
-                  <div class="col text-center">
-                    <a class="btn-floating btn-small waves-effect waves-light red" ng-click="scrBtn.editMatchOpen(match.match.id)"><i class="material-icons">edit</i></a>
+                <hr style="margin: 0">
+                <div class="row row-center">
+                  <div class="col">
+                    <button type="button" name="button">Edit</button>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- <div class="list card" ng-repeat="match in tournament.tournament.matches">
+            <div class="list card" ng-repeat="match in tournament.tournament.matches">
               <div class="item row row-center">
                 <div class="col col-33 text-left">
                   {{match.match.identifier}}
@@ -241,7 +241,7 @@
                   </div>
                 </div>
               </div>
-            </div> -->
+            </div>
           </div>
         </ion-content>
       </ion-view>
