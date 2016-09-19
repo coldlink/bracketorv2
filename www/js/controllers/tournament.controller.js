@@ -334,6 +334,15 @@ angular.module('challonger')
 
 		//match button clicks
 		$scope.scrBtn = {
+			editMatchOpen: function (matchId) {
+				var scrPopUpCb = function(value) {
+					if (value) {
+						$scope.matchScores[matchId] = value;
+						$scope.scrBtn.saveMatch(matchId);
+					}
+				};
+				$alert.matchPopUp($scope, $scope.matchScores[matchId], scrPopUpCb);
+			},
 			//+1 to score, used to be short click, now + button press
 			click: function(matchId, player, index) {
 				if ($scope.editEnabled) {
