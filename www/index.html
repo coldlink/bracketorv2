@@ -7,8 +7,8 @@
     <title>BracketorV2</title>
 
     <!-- ionic base css (build from scss) -->
-    <!-- <link href="css/ionic.app.min.css" rel="stylesheet"> -->
-    <link rel="stylesheet" href="lib/ionic/css/ionic.css" media="screen" title="no title" charset="utf-8">
+    <link href="css/ionic.app.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="lib/ionic/css/ionic.css" media="screen" title="no title" charset="utf-8"> -->
 
     <!-- materialize -->
     <link rel="stylesheet" href="css/materialize.css">
@@ -22,11 +22,6 @@
 
     <!-- materialize -->
     <script src="js/materialize.min.js"></script>
-
-    <!-- mdl test -->
-    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
-    <script src="https://code.getmdl.io/1.1.3/material.min.js"></script> -->
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
@@ -85,37 +80,37 @@
         <div class="divider"></div>
       </li>
       <li>
-        <a class="subheader">Quick Access</a>
+        <a class="subheader white-text"><b>Quick Access</b></a>
       </li>
       <li ng-if="API_KEY">
-        <a class="waves-effect" ng-click="openQuickAccess()">Get Tournaments</a>
+        <a class="waves-effect white-text" ng-click="openQuickAccess()">Get Tournaments</a>
       </li>
-      <li ng-if="!API_KEY"><a ui-sref="settings">No API Key Found. Check the settings.</a></li>
+      <li ng-if="!API_KEY"><a class="white-text" ui-sref="settings">No API Key Found. Check the settings.</a></li>
       <li>
         <div class="divider"></div>
       </li>
       <li>
-        <a class="subheader">Menu</a>
+        <a class="subheader white-text"><b>Menu</b></a>
       </li>
       <li>
-        <a class="waves-effect" ui-sref="app.home">
-          <i class="material-icons">apps</i>Home</a>
+        <a class="waves-effect white-text" ui-sref="app.home">
+          <i class="material-icons white-text">apps</i>Home</a>
       </li>
       <li>
-        <a class="waves-effect" ui-sref="app.browse">
-          <i class="material-icons">equalizer</i>Browse Tournaments</a>
+        <a class="waves-effect white-text" ui-sref="app.browse">
+          <i class="material-icons white-text">equalizer</i>Browse Tournaments</a>
       </li>
       <li>
-        <a class="waves-effect" ui-sref="app.create">
-          <i class="material-icons">playlist_add</i>Create Tournament</a>
+        <a class="waves-effect white-text" ui-sref="app.create">
+          <i class="material-icons white-text">playlist_add</i>Create Tournament</a>
       </li>
       <li>
-        <a class="waves-effect" ui-sref="app.settings">
-          <i class="material-icons">settings</i>Settings</a>
+        <a class="waves-effect white-text" ui-sref="app.settings">
+          <i class="material-icons white-text">settings</i>Settings</a>
       </li>
       <li>
-        <a class="waves-effect" ui-sref="app.about">
-          <i class="material-icons">info_outline</i>About</a>
+        <a class="waves-effect white-text" ui-sref="app.about">
+          <i class="material-icons white-text">info_outline</i>About</a>
       </li>
     </ul>
     <!-- side nav nevu end-->

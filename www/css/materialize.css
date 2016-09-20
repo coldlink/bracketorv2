@@ -3092,7 +3092,7 @@ td, th {
 }
 
 .collection .collection-item {
-  background-color: #fff;
+  /*background-color: #fff;*/
   line-height: 1.5rem;
   padding: 10px 20px;
   margin: 0;
@@ -3161,7 +3161,7 @@ td, th {
 }
 
 .collection.with-header .collection-header {
-  background-color: #fff;
+  /*background-color: #fff;*/
   border-bottom: 1px solid #e0e0e0;
   padding: 10px 20px;
 }
@@ -4530,7 +4530,7 @@ small {
 .card {
   position: relative;
   margin: 0.5rem 0 1rem 0;
-  background-color: #fff;
+  /*background-color: #fff;*/
   transition: box-shadow .25s;
   border-radius: 2px;
 }
@@ -5382,7 +5382,7 @@ button.btn-floating {
   min-height: 3rem;
   line-height: 3rem;
   padding: 0 1rem;
-  background-color: #fff;
+  /*background-color: #fff;*/
   border-bottom: 1px solid #ddd;
 }
 
@@ -6468,7 +6468,7 @@ select.browser-default {
 }
 
 select {
-  background-color: rgba(255, 255, 255, 0.9);
+  /*background-color: rgba(255, 255, 255, 0.9);*/
   width: 100%;
   padding: 5px;
   border: 1px solid #f2f2f2;
@@ -6815,7 +6815,7 @@ input[type=range]:focus::-ms-fill-upper {
   height: calc(100% + 60px);
   height: -moz-calc(100%);
   padding-bottom: 60px;
-  background-color: #fff;
+  background-color: #444;
   z-index: 999;
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;

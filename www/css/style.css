@@ -80,3 +80,9 @@ input .darki {
 .Aligner-item--bottom {
   align-self: flex-end;
 }
+.backgroud-clear {
+  background-color: transparent !important;
+}
+.white-text {
+   color: white !important;
+ }
