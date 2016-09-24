@@ -3238,7 +3238,7 @@ nav ul a span.badge {
   height: 4px;
   display: block;
   width: 100%;
-  background-color: #acece6;
+  background-color: #ffe0b2;
   border-radius: 2px;
   margin: 0.5rem 0 1rem 0;
   overflow: hidden;
@@ -3249,12 +3249,12 @@ nav ul a span.badge {
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: #26a69a;
+  background-color: #e65100;
   transition: width .3s linear;
 }
 
 .progress .indeterminate {
-  background-color: #26a69a;
+  background-color: #e65100;
 }
 
 .progress .indeterminate:before {
@@ -4530,7 +4530,7 @@ small {
 .card {
   position: relative;
   margin: 0.5rem 0 1rem 0;
-  /*background-color: #fff;*/
+  background-color: #565656;
   transition: box-shadow .25s;
   border-radius: 2px;
 }
@@ -5596,7 +5596,7 @@ button:focus {
 
 label {
   font-size: 0.8rem;
-  color: #9e9e9e;
+  /*color: #9e9e9e;*/
 }
 
 /* Text Inputs + Textarea
@@ -5720,8 +5720,8 @@ input[type=tel]:focus:not([readonly]),
 input[type=number]:focus:not([readonly]),
 input[type=search]:focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid #26a69a;
-  box-shadow: 0 1px 0 0 #26a69a;
+  border-bottom: 1px solid #e65100;
+  box-shadow: 0 1px 0 0 #e65100;
 }
 
 input:not([type]):focus:not([readonly]) + label,
@@ -5737,7 +5737,7 @@ input[type=tel]:focus:not([readonly]) + label,
 input[type=number]:focus:not([readonly]) + label,
 input[type=search]:focus:not([readonly]) + label,
 textarea.materialize-textarea:focus:not([readonly]) + label {
-  color: #26a69a;
+  color: #e65100;
 }
 
 input:not([type]).valid, input:not([type]):focus.valid,
@@ -5913,7 +5913,7 @@ textarea.materialize-textarea + label:after {
 }
 
 .input-field label {
-  color: #9e9e9e;
+  /*color: #9e9e9e;*/
   position: absolute;
   top: 0.8rem;
   font-size: 1rem;
@@ -5935,7 +5935,7 @@ textarea.materialize-textarea + label:after {
 }
 
 .input-field .prefix.active {
-  color: #26a69a;
+  color: #e65100;
 }
 
 .input-field .prefix ~ input,
@@ -6114,12 +6114,12 @@ textarea.materialize-textarea {
 [type="radio"]:checked + label:after,
 [type="radio"].with-gap:checked + label:before,
 [type="radio"].with-gap:checked + label:after {
-  border: 2px solid #26a69a;
+  border: 2px solid #e65100;
 }
 
 [type="radio"]:checked + label:after,
 [type="radio"].with-gap:checked + label:after {
-  background-color: #26a69a;
+  background-color: #e65100;
   z-index: 0;
 }
 
@@ -6402,11 +6402,11 @@ form p:last-child {
 }
 
 .switch label input[type=checkbox]:checked + .lever {
-  background-color: #84c7c1;
+  background-color: #ffe0b2;
 }
 
 .switch label input[type=checkbox]:checked + .lever:after {
-  background-color: #26a69a;
+  background-color: #e65100;
   left: 24px;
 }
 
