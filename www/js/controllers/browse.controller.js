@@ -97,7 +97,7 @@ angular.module('challonger')
 							return false;
 						}
 						//show error if url doesnt match regex
-						if (eurl.search(/[^A-Za-z0-9\-]/) !== -1) {
+						if (eurl.search(/[^A-Za-z0-9\_]/) !== -1) {
 							$scope.error = errors.urlRegEx;
 							return false;
 						}

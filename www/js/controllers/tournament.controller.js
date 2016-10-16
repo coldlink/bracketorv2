@@ -127,10 +127,8 @@ angular.module('challonger')
 							}
 					});
 
-					console.log($scope.tournament.tournament.matches);
-						//save chunked match data
+					//save chunked match data
 					$scope.matches = $chunk($scope.tournament.tournament.matches, 2);
-					console.log($scope.matches);
 
 					//remove participants from tournament object, and set to another object, used for editing and participants without screwing up the tournament object, key is participant id
 					$scope.listParticipants = {};
@@ -165,8 +163,6 @@ angular.module('challonger')
 							$scope.matchScores[match.match.id].p2id = match.match.player2_id;
 						}
 					});
-
-					console.log($scope.matchScores)
 
 					//add the tourmanet to the history
 					var temp = [];
