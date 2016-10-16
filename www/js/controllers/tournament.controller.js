@@ -94,6 +94,19 @@ angular.module('challonger')
 				});
 		};
 
+		$scope.getStandings = function () {
+			$http.get('http://' + ($scope.tournament.tournament.subdomain ? $scope.tournament.tournament.subdomain + '.' : '') + 'challonge.com/' + $scope.tournament.tournament.url + '/module?multiplier=1.0&match_width_multiplier=1.0&show_final_results=0&show_standings=1&theme=2&subdomain=' + ($scope.tournament.tournament.subdomain ? $scope.tournament.tournament.subdomain : ''))
+				.success(function(response) {
+					var parser = new DOMParser();
+					$scope.scoreCard = parser.parseFromString(response, 'text/html').querySelector('#scorecard').querySelector('table');
+				})
+				.error(function(err) {
+					$vib.med();
+					console.log(err);
+					$alert.generic($scope, 'Error', err.toString());
+				})
+		}
+
 		$scope.doRefresh = function() {
 			//get tournament from api using the id
 			$http.get($API.url() + 'tournaments/' + $stateParams.id + '.json?api_key=' + API_KEY + '&include_participants=1&include_matches=1', $http_defaults)
@@ -191,6 +204,8 @@ angular.module('challonger')
 					//set refresh complete
 					$scope.loading = false;
 					$scope.$broadcast('scroll.refreshComplete');
+
+					$scope.getStandings();
 
 					if ($scope.tournament.tournament.participants_count > 1) {
 						$scope.getLiveImage();
@@ -408,7 +423,7 @@ angular.module('challonger')
 						}
 					});
 				} else {
-					if (!$scope.matchScores[matchId].winner_id) {
+					if (!$scope.matchScores[matchId].winner_id && !$scope.isRRorSwiss($scope.tournament)) {
 						$alert.genericNoBack($scope, 'Error: No Winner Selected', 'A winner must be selected before a match can be saved. Select a winner by tapping on the winners name.');
 						return false;
 					}
@@ -427,7 +442,7 @@ angular.module('challonger')
 						}
 					}
 
-					if (p1scr === p2scr && !sameScoreFlag) {
+					if ((p1scr === p2scr && !sameScoreFlag) && !$scope.isRRorSwiss($scope.tournament)) {
 						$alert.matchSameScr($scope, 'Warning: Same Score', 'Both players have the same overall score. If this is correct then click \'Continue\' to proceed, else click \'Cancel\' to cancel saving and check.', function(arg) {
 							if (!arg) {
 								return false;
@@ -437,7 +452,7 @@ angular.module('challonger')
 							}
 						});
 					} else {
-						if (p1scr > p2scr && $scope.matchScores[matchId].winner_id === $scope.matchScores[matchId].p2id && !playerFlag) {
+						if ((p1scr > p2scr && $scope.matchScores[matchId].winner_id === $scope.matchScores[matchId].p2id && !playerFlag) && !$scope.isRRorSwiss($scope.tournament)) {
 							$alert.matchSameScr($scope, 'Warning: Possible Mismatched Winner', 'The winner you selected does not match the result of the scores you entered (assuming high score wins). Click \'Cancel\' to make changes or \'Continue\' to submit as-is.', function(arg) {
 								if (!arg) {
 									return false;
@@ -447,7 +462,7 @@ angular.module('challonger')
 								}
 							});
 						} else {
-							if (p2scr > p1scr && $scope.matchScores[matchId].winner_id === $scope.matchScores[matchId].p1id && !playerFlag) {
+							if ((p2scr > p1scr && $scope.matchScores[matchId].winner_id === $scope.matchScores[matchId].p1id && !playerFlag) && !$scope.isRRorSwiss($scope.tournament)) {
 								$alert.matchSameScr($scope, 'Warning: Possible Mismatched Winner', 'The winner you selected does not match the result of the scores you entered (assuming high score wins). Click \'Cancel\' to make changes or \'Continue\' to submit as-is.', function(arg) {
 									if (!arg) {
 										return false;
@@ -587,6 +602,13 @@ angular.module('challonger')
 			})
 			return total;
 		}
+
+		$scope.isRRorSwiss = function(tournament) {
+			if (tournament.tournament.tournament_type === 'round robin' || tournament.tournament.tournament_type === 'swiss') {
+				return true;
+			}
+			return false;
+		}
 	})
 	.directive('liveImage', function() {
 		return {
@@ -600,4 +622,17 @@ angular.module('challonger')
 				});
 			}
 		};
+	})
+	.directive('scoreCard', function(){
+		return {
+			restrict: 'EA',
+			link: function (scope, elem, attrs) {
+				scope.$watch('scoreCard', function(val) {
+					if (elem.children()) {
+						elem.children().remove();
+					}
+					elem.append(val);
+				});
+			}
+		}
 	});

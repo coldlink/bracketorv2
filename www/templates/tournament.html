@@ -174,74 +174,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="list card" ng-repeat="match in tournament.tournament.matches">
-              <div class="item row row-center">
-                <div class="col col-33 text-left">
-                  {{match.match.identifier}}
-                </div>
-                <div class="col col-33 text-center">
-                  {{match.match.state.charAt(0).toUpperCase() + match.match.state.substr(1).toLowerCase()}}
-                </div>
-                <div class="col col-33 text-right">
-                  {{match.match.round < 0 ? 'L'+  match.match.round.toString().substr(1) : match.match.round}}
-                </div>
-              </div>
-              <div class="item row row-center">
-                <div class="col text-center item-text-wrap">
-                  <button
-                    class="button button-clear"
-                    ng-class="match.match.player1_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-light'"
-                    ng-click="scrBtn.winSelect(match.match.id, match.match.player1_id)">{{match.match.player1_id
-                    ? listParticipants[match.match.player1_id].display_name : (match.match.player1_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player1_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player1_prereq_match_id].ident))}}</button>
-                </div>
-                <div class="col col-10 text-center">
-                  -
-                </div>
-                <div class="col text-center item-text-wrap">
-                  <button
-                    class="button button-clear"
-                    ng-class="match.match.player2_id === matchScores[match.match.id].winner_id && match.match.state !== 'pending' ? 'button-assertive' : 'button-light'"
-                    ng-click="scrBtn.winSelect(match.match.id, match.match.player2_id)">{{match.match.player2_id
-                    ? listParticipants[match.match.player2_id].display_name : (match.match.player2_is_prereq_match_loser ? ('Loser of ' + matchScores[match.match.player2_prereq_match_id].ident) : ('Winner of ' + matchScores[match.match.player2_prereq_match_id].ident))}}</button>
-                </div>
-              </div>
-              <div class="item row row-center" ng-if="match.match.state !== 'pending'" ng-repeat="score in matchScores[match.match.id] track by $index">
-                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="text-right">
-                  <button class="button button-clear button-light icon ion-minus-circled" ng-click="scrBtn.longClick(match.match.id, 'p1', $index)"></button>
-                </div>
-                <div class="col text-center item-text-wrap">
-                  <button class="button button-clear" ng-class="score.p1 > score.p2 ? 'button-assertive' : 'button-light'">
-                    {{score.p1}}
-                  </button>
-                </div>
-                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="text-left">
-                  <button class="button button-clear button-light icon ion-plus-circled" ng-click="scrBtn.click(match.match.id, 'p1', $index)"></button>
-                </div>
-                <div ng-hide="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="col text-center">
-                  -
-                </div>
-                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="text-right">
-                  <button class="button button-clear button-light icon ion-minus-circled" ng-click="scrBtn.longClick(match.match.id, 'p2', $index)"></button>
-                </div>
-                <div class="col text-center item-text-wrap">
-                  <button class="button button-clear" ng-class="score.p2 > score.p1 ? 'button-assertive' : 'button-light'">
-                    {{score.p2}}
-                  </button>
-                </div>
-                <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'" class="text-left">
-                  <button class="button button-clear button-light icon ion-plus-circled" ng-click="scrBtn.click(match.match.id, 'p2', $index)"></button>
-                </div>
-              </div>
-              <div ng-if="editEnabled && match.match.state !== 'pending' && tournament.tournament.state !== 'complete'">
-                <div class="item row row-center">
-                  <div class="col text-center">
-                    <button class="button button-clear button-light icon ion-plus-circled" ng-click="scrBtn.addSet(match.match.id)"></button>
-                    <button class="button button-clear button-light icon ion-minus-circled" ng-click="scrBtn.rmSet(match.match.id)" ng-if="matchScores[match.match.id].length > 1"></button>
-                    <button class="button button-clear button-light icon ion-checkmark-circled" ng-click="scrBtn.saveMatch(match.match.id, false, false, false)" ng-if="matchScores[match.match.id].dirty"></button>
-                  </div>
-                </div>
-              </div>
-            </div> -->
           </div>
         </ion-content>
       </ion-view>
@@ -259,6 +191,19 @@
           </div>
           <ion-scroll ng-if="tournament.tournament.participants_count > 1" zooming="true" direction="xy" style="height: 100%;">
             <div style="width: 100%; height: 100%" live-image></div>
+          </ion-scroll>
+        </ion-content>
+      </ion-view>
+    </ion-tab>
+
+    <ion-tab icon="ion-ios-list-outline" title="Current Standings">
+      <ion-view title="Current Standings">
+        <ion-content>
+          <div class="bar bar-header bar-light">
+            <h1 class="title">Current Standings</h1>
+          </div>
+          <ion-scroll zooming="true" direction="xy" style="height: 100%;">
+            <div style="width: 100%; height: 100%" score-card></div>
           </ion-scroll>
         </ion-content>
       </ion-view>

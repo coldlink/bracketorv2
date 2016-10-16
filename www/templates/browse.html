@@ -36,7 +36,7 @@
             <i></i>
             <b>Tournaments by Organization</b>
           </div>
-          <div class="collapsible-body">
+          <form class="collapsible-body">
             <p>Find tournaments created by any organization using a Challonge subdomain.</p>
             <div class="input-field padding-1rem-left-right">
               <input name="subdomain" type="text" ng-model="subdomain">
@@ -52,17 +52,17 @@
               </code>
             </p>
             <p class="center-align">
-              <a class="waves-effect btn orange darken-4" ng-click="click('subdomain', subdomain)">
-                <i class="material-icons left">cloud_download</i>Get Tournaments</a>
+              <button class="waves-effect btn orange darken-4" ng-click="click('subdomain', subdomain)" type="submit">
+                <i class="material-icons left">cloud_download</i>Get Tournaments</button>
             </p>
-          </div>
+          </form>
         </li>
         <li class="z-depth-0">
           <div class="collapsible-header">
             <i></i>
             <b>Single Tournament</b>
           </div>
-          <div class="collapsible-body">
+          <form class="collapsible-body">
             <p class="no-margin-top">Find a single tournament from a Challonge URL.</p>
             <p class="switch">
               <label class="input-field">
@@ -89,10 +89,10 @@
               </code>
             </p>
             <p class="center-align">
-              <a class="waves-effect btn orange darken-4" ng-click="click('single', subdomain, url, incSubdomain)">
-                <i class="material-icons left">cloud_download</i>Get Tournaments</a>
+              <button class="waves-effect btn orange darken-4" ng-click="click('single', subdomain, url, incSubdomain)" type="submit">
+                <i class="material-icons left">cloud_download</i>Get Tournaments</button>
             </p>
-          </div>
+          </form>
         </li>
         <li class="z-depth-0">
           <div class="collapsible-header">
